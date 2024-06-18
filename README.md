@@ -5,22 +5,18 @@
 ---
 
 ## 사용 기술
-
----
 Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search, AWS, Docker
 
 ---
 
 ## ERD
 
----
 
 <img src="./ERD.png"/>
 
 
 ## 프로젝트 기능 및 설계
 
----
 
 ### [회원가입 & 로그인]
 - Naver OAuth2를 사용해 로그인 할 수 있다.

@@ -5,7 +5,7 @@
 ---
 
 ## 사용 기술
-Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search, AWS, Docker
+Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search
 
 ---
 
@@ -21,7 +21,8 @@ Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search, AWS,
 ### [회원가입 & 로그인]
 - Naver OAuth2를 사용해 로그인 할 수 있다.
   - 로그인할 시 Naver에서 이름, 성별을 가져오며 데이터베이스에 회원 정보가 추가된다.
-- 닉네임은 최초 가입 시 단어 조합으로 랜덤 닉네임이 부여되며 추후 유저가 닉네임 정보를 수정할 수 있다.
+- 닉네임은 최초 가입 시 단어 조합으로 랜덤 닉네임이 부여되며 추후 유저가 닉네임 정보를 수정할 수 있다.<br/>
+Naver Login api 명세 : https://developers.naver.com/docs/login/api/api.md
 
 
 ### [마이페이지]
@@ -38,6 +39,8 @@ Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search, AWS,
 - 운동 기록을 일기 형식으로 등록할 수 있다.
 - 등록한 운동 기록은 조회, 수정, 삭제가 가능하다.
 - 운동 기록 등록, 수정, 삭제 시 연속으로 운동한 일 수가 계산돼서 유저 정보에 업데이트 된다.
+- 운동 지속일은 운동을 계속할 경우 누적되고 운동을 쉬면 0일로 변경된다.
+  - 매일 자정에 스케쥴링을 통해 해당 일자의 운동 기록이 없는 유저의 경우 운동 일수를 초기화 한다.
 
 
 ### [몸무게 추이]
@@ -51,7 +54,8 @@ Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search, AWS,
 ### [식사 기록]
 
 - 공공데이터에서 제공된 음식정보를 데이터베이스에서 조회가 가능하다.
-  - 식품 데이터는 자정마다 데이터베이스로 업데이트된다.
+  - 식품의약품안전처_식품영양성분DB정보 open api : https://www.data.go.kr/data/15127578/openapi.do#tab_layer_detail_function
+  - 식품 데이터는 스케쥴러를 사용해 자정마다 데이터베이스로 업데이트된다.
   - 일부가 일치하는 검색어로 검색이 가능하다. (ex:  새우 -> 새우, 새우깡)
   - 10개씩 페이징 처리된다.
 
@@ -62,8 +66,7 @@ Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search, AWS,
   - 식사 종류에는 '아침, 점심, 저녁, 추가식사'가 있다.
 - 추가한 식사에는 섭취한 음식 정보를 추가할 수 있다.
   - 섭취 음식 정보 추가에는 음식코드, 섭취량(1/4, 1/2, 3/4, 1)이 필요하다.
-  - 섭취 음식 정보는 우선 redis에 저장하고, 삭제되는 장바구니 형태로 구현된다.
-  - 식사 정보 저장 시 redis에 있는 섭취 음식 정보가 데이터베이스에 등록된다
+
 - 식사 정보 추가 시 총 섭취한 칼로리, 탄수화물, 단백질, 지방 정보가 계산된다.
 - 식사 정보는 수정, 삭제할 수 있으며 수정, 삭제시 섭취한 영양성분의 정보가 업데이트 된다.
 
@@ -79,8 +82,17 @@ Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search, AWS,
   - 10개씩 페이징 처리된다.
 - 사용자는 모집글에 참여 요청을 할 수 있으며 이후 방장이 허가해야 참여가 가능하다.
 - 마감 기한까지 최소인원 미달시 모임은 자동으로 취소된다.
-- 참여자가 캘린더 등록 기능 호출 시 Naver calender api를 사용하여 네이버 캘린더에 자동 등록된다.
+  - 모임 마감기한은 일별로 설정 가능하다.
+  - 매일 자정에 스케쥴러를 이용하여 마감일이 지난 모임의 경우 모임 상태가 업데이트 된다.
+- 운동 모임의 상태에 따른 status 값은 아래와 같다.
+  - RECRUITING : 모집 중 
+  - FULL : 인원이 가득 참
+  - SCHEDULED : 최소 인원이 충족 & 모집이 마감
+  - CANCELED : 모집일까지 모집인원을 충족하지 못함
+  - CLOSED : 모임을 성공적으로 마침
+- 참여자가 캘린더 등록 기능 호출 시 Naver calender 일정 추가 api를 사용하여 네이버 캘린더에 자동 등록된다.<br/>
+Naver Calender api 명세 : https://developers.naver.com/docs/login/calendar-api/calendar-api.md
 - 방장은 모임에 참가 신청하고 참여하지 않은 참여자에게 벌점을 부과할 수 있다
-  - 벌점이 3점을 초과하면 해당 이용자는 블랙리스트 처리돼 운동 모임 서비스 이용이 불가능하다
+  - 벌점이 3점을 초과하면 해당 이용자는 블랙리스트 처리 돼 운동 모임 서비스 이용이 불가능하다
 
 ---

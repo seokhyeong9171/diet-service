@@ -5,7 +5,7 @@
 ---
 
 ## 사용 기술
-Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search, AWS, Docker
+Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search
 
 ---
 

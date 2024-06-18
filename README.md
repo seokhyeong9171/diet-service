@@ -1,13 +1,24 @@
-## 주제 : 다이어트 식단 & 운동 커뮤니티
+# 다이어트 식단 & 운동 커뮤니티
+
+내가 섭취한 식단의 정보를 관리하고 사용자들과 식단, 운동정보를 공유할 수 있는 서비스입니다
 
 ---
 
-### 사용 기술
-- Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search, AWS, Docker
+## 사용 기술
+
+---
+Spring boot, Spring Security, Naver OAuth2, MariaDB, Redis, Elastic Search, AWS, Docker
+
+---
+
+## ERD
 
 ---
 
 <img src="./ERD.png"/>
+
+
+## 프로젝트 기능 및 설계
 
 ---
 

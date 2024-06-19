@@ -1,6 +1,6 @@
 package com.health.entity;
 
-import com.prework.type.MealType;
+import com.health.type.MealType;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;

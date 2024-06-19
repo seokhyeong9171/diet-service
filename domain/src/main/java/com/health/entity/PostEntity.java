@@ -1,6 +1,6 @@
 package com.health.entity;
 
-import com.prework.type.PostCategory;
+import com.health.type.PostCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

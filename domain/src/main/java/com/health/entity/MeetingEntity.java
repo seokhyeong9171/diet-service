@@ -1,6 +1,6 @@
 package com.health.entity;
 
-import com.prework.type.MeetingStatus;
+import com.health.type.MeetingStatus;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;

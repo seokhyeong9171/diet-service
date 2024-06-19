@@ -1,6 +1,6 @@
 package com.health.entity;
 
-import com.prework.type.AdmissionStatus;
+import com.health.type.AdmissionStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

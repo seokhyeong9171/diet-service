@@ -1,7 +1,7 @@
 package com.health.entity;
 
-import com.prework.type.Gender;
-import com.prework.type.Region;
+import com.health.type.Gender;
+import com.health.type.Region;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

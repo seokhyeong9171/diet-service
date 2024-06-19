@@ -1,6 +1,6 @@
 package com.health.entity;
 
-import com.prework.type.ConsumeAmount;
+import com.health.type.ConsumeAmount;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

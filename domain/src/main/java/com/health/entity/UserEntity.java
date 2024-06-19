@@ -58,7 +58,7 @@ public class UserEntity extends BaseEntity{
     private List<UserWeightEntity> userWeightList;
 
     @OneToMany(mappedBy = "user")
-    private List<ExerciseRecord> exerciseRecordList;
+    private List<ExerciseRecordEntity> exerciseRecordEntityList;
 
     @OneToMany(mappedBy = "createUser")
     private List<PostEntity> postList;

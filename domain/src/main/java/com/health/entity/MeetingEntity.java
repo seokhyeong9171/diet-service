@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -67,5 +68,5 @@ public class MeetingEntity extends BaseEntity{
     private UserEntity establishedUser;
 
     @OneToMany(mappedBy = "meeting")
-    private List<MeetingParticipantEntity> participantList;
+    private List<MeetingParticipantEntity> participantList = new ArrayList<>();
 }

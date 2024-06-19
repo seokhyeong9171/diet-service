@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -55,13 +56,13 @@ public class UserEntity extends BaseEntity{
     private Integer demerit;
 
     @OneToMany(mappedBy = "user")
-    private List<UserWeightEntity> userWeightList;
+    private List<UserWeightEntity> userWeightList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<ExerciseRecordEntity> exerciseRecordEntityList;
+    private List<ExerciseRecordEntity> exerciseRecordEntityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "createUser")
-    private List<PostEntity> postList;
+    private List<PostEntity> postList = new ArrayList<>();
 
 
 }

@@ -40,7 +40,7 @@ public class PostEntity extends BaseEntity{
     @Column(name = "content")
     private String content;
 
-    @Column(name = "like")
+    @Column(name = "likes")
     private Integer like;
 
     @Column(name = "create_dt")

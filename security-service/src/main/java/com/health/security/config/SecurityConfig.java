@@ -1,4 +1,4 @@
-package com.health.config;
+package com.health.security.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.*;
 

@@ -1,3 +1,4 @@
 rootProject.name = 'diet-service'
 include 'domain'
+include 'security-service'
 

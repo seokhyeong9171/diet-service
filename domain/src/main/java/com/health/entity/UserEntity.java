@@ -2,6 +2,7 @@ package com.health.entity;
 
 import com.health.type.Gender;
 import com.health.type.Region;
+import com.health.type.RoleType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,10 +29,17 @@ public class UserEntity extends BaseEntity{
     @Column(name = "user_id")
     private Long id;
 
+    @Column(name = "auth_id")
+    private String authId;
+
     @Column(name = "name")
     private String username;
     @Column(name = "nickname")
     private String nickname;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "role")
+    private RoleType role;
 
     @Column(name = "birth")
     private LocalDate birth;

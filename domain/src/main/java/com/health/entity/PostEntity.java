@@ -41,7 +41,7 @@ public class PostEntity extends BaseEntity{
     private String content;
 
     @Column(name = "likes")
-    private Integer like;
+    private int like;
 
     @Column(name = "create_dt")
     private LocalDateTime postCreateDt;

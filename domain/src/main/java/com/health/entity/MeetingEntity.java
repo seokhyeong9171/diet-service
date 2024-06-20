@@ -51,8 +51,8 @@ public class MeetingEntity extends BaseEntity{
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "latitude", column = @Column(name = "area_lat")),
-            @AttributeOverride(name = "longitude", column = @Column(name = "area_lon"))
+            @AttributeOverride(name = "latitude", column = @Column(name = "area_latitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "area_longitude"))
     })
     private GeoInformation meetingArea;
 

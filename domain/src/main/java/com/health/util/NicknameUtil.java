@@ -1,11 +1,11 @@
-package com.health.type;
+package com.health.util;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import lombok.Getter;
 
-public class Nickname {
+public class NicknameUtil {
 
     private static final List<String> PREFIX_LIST =
             Arrays.stream(NicknamePrefix.values())
@@ -17,7 +17,7 @@ public class Nickname {
                     .map(NicknamePostfix::getValue)
                     .toList();
 
-    public static String createNickname() {
+    public static String createRandomNickname() {
 
         Random random = new Random();
         int pre = random.nextInt(19) + 1;

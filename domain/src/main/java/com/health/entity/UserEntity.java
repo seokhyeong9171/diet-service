@@ -57,7 +57,7 @@ public class UserEntity extends BaseEntity{
     private Double goalWeight;
     @Column(name = "region")
     private Region region;
-    @Column(name = "exer_duration")
+    @Column(name = "exercise_duration")
     private Integer exerciseDuration;
 
     @Column(name = "demerit")

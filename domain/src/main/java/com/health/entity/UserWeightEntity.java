@@ -31,7 +31,7 @@ public class UserWeightEntity extends BaseEntity{
     @Column(name = "amount")
     private Double weight;
 
-    @Column(name = "reg_dt")
+    @Column(name = "registration_dt")
     private LocalDate weightRegDt;
 
 

@@ -36,8 +36,8 @@ public class DailyMealEntity extends BaseEntity{
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "kCal", column = @Column(name = "total_kcal")),
-            @AttributeOverride(name = "carbohydrate", column = @Column(name = "total_carb")),
-            @AttributeOverride(name = "protein", column = @Column(name = "total_prot")),
+            @AttributeOverride(name = "carbohydrate", column = @Column(name = "total_carbohydrate")),
+            @AttributeOverride(name = "protein", column = @Column(name = "total_protein")),
             @AttributeOverride(name = "fat", column = @Column(name = "total_fat"))
     })
     private Nutrient nutrient;

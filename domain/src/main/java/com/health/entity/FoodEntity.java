@@ -32,7 +32,7 @@ public class FoodEntity extends BaseEntity{
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "kCal", column = @Column(name = "kcal")),
-            @AttributeOverride(name = "carbohydrate", column = @Column(name = "carbo")),
+            @AttributeOverride(name = "carbohydrate", column = @Column(name = "carbohydrate")),
             @AttributeOverride(name = "protein", column = @Column(name = "protein")),
             @AttributeOverride(name = "fat", column = @Column(name = "fat"))
     })

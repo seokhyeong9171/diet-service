@@ -1,8 +1,10 @@
 package com.health.entity;
 
+import com.health.dto.UserDomainDto;
 import com.health.type.Gender;
 import com.health.type.Region;
 import com.health.type.RoleType;
+import com.health.util.NicknameUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,8 +19,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity(name = "user_info")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -58,10 +62,10 @@ public class UserEntity extends BaseEntity{
     @Column(name = "region")
     private Region region;
     @Column(name = "exercise_duration")
-    private Integer exerciseDuration;
+    private int exerciseDuration;
 
     @Column(name = "demerit")
-    private Integer demerit;
+    private int demerit;
 
     @OneToMany(mappedBy = "user")
     private List<UserWeightEntity> userWeightList = new ArrayList<>();
@@ -72,5 +76,19 @@ public class UserEntity extends BaseEntity{
     @OneToMany(mappedBy = "createUser")
     private List<PostEntity> postList = new ArrayList<>();
 
+
+    public static UserEntity register(UserDomainDto userDomainDto) {
+        return UserEntity.builder()
+            .authId(userDomainDto.getAuthId())
+            .username(userDomainDto.getUsername())
+            .nickname(NicknameUtil.createRandomNickname())
+            .role(userDomainDto.getRole())
+            .birth(userDomainDto.getBirth())
+            .gender(userDomainDto.getGender())
+            .exerciseDuration(0)
+            .demerit(0)
+            .build();
+
+    }
 
 }

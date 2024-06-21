@@ -37,4 +37,4 @@ spring:
 
 jwt:
   secret: fjkdhnfaskjlhflasdfjgiodsfhglkhdfgkjbhdlfugbndkfjlbgdksujbglasbfgkjsdabjkhbg
-  expire-time: 36000
+  expire-ms: 36000

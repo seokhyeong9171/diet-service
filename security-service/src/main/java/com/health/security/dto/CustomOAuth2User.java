@@ -1,5 +1,6 @@
 package com.health.security.dto;
 
+import com.health.type.RoleType;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,17 @@ public class CustomOAuth2User implements OAuth2User {
     this.userSecurityDto = userSecurityDto;
   }
 
+  public static CustomOAuth2User forAuthentication(String authId, String role) {
+    return new CustomOAuth2User(authId, role);
+  }
+
+  private CustomOAuth2User(String authId, String role) {
+    this.userSecurityDto = UserSecurityDto.builder()
+        .authId(authId)
+        .role(RoleType.valueOf(role))
+        .build();
+  }
+
   @Override
   public Map<String, Object> getAttributes() {
     return null;
@@ -27,6 +39,10 @@ public class CustomOAuth2User implements OAuth2User {
 
   @Override
   public String getName() {
-    return userSecurityDto.getUsername();
+    return userSecurityDto.getAuthId();
+  }
+
+  public String getAuthId() {
+    return getName();
   }
 }

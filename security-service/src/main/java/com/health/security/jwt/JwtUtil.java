@@ -39,7 +39,8 @@ public class JwtUtil {
   }
 
   public boolean isExpired(String jwt) {
-    return getClaims(jwt).getExpiration().before(new Date());
+    Date expiration = getClaims(jwt).getExpiration();
+    return expiration.before(new Date(System.currentTimeMillis()));
   }
 
 

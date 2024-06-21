@@ -2,6 +2,8 @@ package com.health.security.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.*;
 
+import com.health.security.jwt.JwtFilter;
+import com.health.security.oauth2.CustomSuccessHandler;
 import com.health.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +24,8 @@ public class SecurityConfig {
   private final CustomOAuth2UserService oAuth2UserService;
   private final ClientRegistrationRepository clientRegistrationRepository;
   private final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
+  private final CustomSuccessHandler customSuccessHandler;
+  private final JwtFilter jwtFilter;
 
 
   @Bean
@@ -39,6 +43,7 @@ public class SecurityConfig {
             .authorizedClientService(oAuth2AuthorizedClientService)
             .userInfoEndpoint(userInfoEndpointConfig ->
                 userInfoEndpointConfig.userService(oAuth2UserService))
+            .successHandler(customSuccessHandler)
         );
 
     http
@@ -46,6 +51,9 @@ public class SecurityConfig {
             .requestMatchers("/", "/login/**", "/oauth2/**").permitAll()
             .anyRequest().authenticated()
         );
+
+    http
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }

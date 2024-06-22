@@ -1,0 +1,21 @@
+plugins {
+}
+
+
+repositories {
+}
+
+dependencies {
+
+    implementation project(":domain")
+    implementation project(":security-service")
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,5 +1,6 @@
 package com.health.domain.dto;
 
+import com.health.domain.entity.UserEntity;
 import com.health.domain.type.Gender;
 import com.health.domain.type.Region;
 import com.health.domain.type.RoleType;
@@ -44,4 +45,21 @@ public class UserDomainDto {
 
     private List<PostDomainDto> postList;
 
+    public static UserDomainDto fromEntity(UserEntity userEntity) {
+        return UserDomainDto.builder()
+            .id(userEntity.getId())
+            .authId(userEntity.getAuthId())
+            .username(userEntity.getUsername())
+            .nickname(userEntity.getNickname())
+            .role(userEntity.getRole())
+            .birth(userEntity.getBirth())
+            .gender(userEntity.getGender())
+            .height(userEntity.getHeight())
+            .weight(userEntity.getWeight())
+            .goalWeight(userEntity.getGoalWeight())
+            .region(userEntity.getRegion())
+            .exerciseDuration(userEntity.getExerciseDuration())
+            .demerit(userEntity.getDemerit())
+            .build();
+    }
 }

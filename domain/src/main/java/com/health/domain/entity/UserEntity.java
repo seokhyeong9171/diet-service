@@ -1,6 +1,7 @@
 package com.health.domain.entity;
 
-import com.health.domain.form.UserInfoDomainForm;
+import com.health.domain.form.UserDetailsDomainForm;
+import com.health.domain.form.UserNicknameDomainForm;
 import com.health.domain.type.Gender;
 import com.health.domain.type.Region;
 import com.health.domain.type.RoleType;
@@ -92,12 +93,15 @@ public class UserEntity extends BaseEntity{
 
     }
 
-    public void updateInfo(UserInfoDomainForm form) {
-        this.nickname = form.getNickname();
+    public void updateDetails(UserDetailsDomainForm form) {
         this.height = form.getHeight();
         this.weight = form.getWeight();
         this.goalWeight = form.getGoalWeight();
         this.region = form.getRegion();
+    }
+
+    public void updateNickname(UserNicknameDomainForm form) {
+        this.nickname = form.getNickname();
     }
 
 }

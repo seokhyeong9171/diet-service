@@ -10,7 +10,11 @@ public enum ErrorCode {
 
     USER_NOT_FOUND(BAD_REQUEST, "couldn't find user"),
 
-    USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication");
+    NICKNAME_DUPLICATED(BAD_REQUEST, "this nickname is duplicated"),
+
+    USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),
+
+    EXERCISE_RECORD_NOT_FOUND(BAD_REQUEST, "couldn't find exercise record");
 
     private final HttpStatus status;
     private final String message;

@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.domain.form.UserInfoDomainForm;
+import com.health.domain.form.UserDetailsDomainForm;
 import com.health.domain.type.Region;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -13,11 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserInfoForm {
+public class UserDetailsForm {
 
-  @NotBlank
-  @Size(max = 10)
-  private String nickname;
 
   private Double height;
 
@@ -27,9 +24,8 @@ public class UserInfoForm {
 
   private Region region;
 
-  public UserInfoDomainForm toDomainForm() {
-    return UserInfoDomainForm.builder()
-        .nickname(nickname)
+  public UserDetailsDomainForm toDomainForm() {
+    return UserDetailsDomainForm.builder()
         .height(height)
         .weight(weight)
         .goalWeight(goalWeight)

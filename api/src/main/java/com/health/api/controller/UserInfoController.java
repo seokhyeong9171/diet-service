@@ -1,6 +1,7 @@
 package com.health.api.controller;
 
-import com.health.api.form.UserInfoForm;
+import com.health.api.form.UserDetailsForm;
+import com.health.api.form.UserNicknameForm;
 import com.health.api.service.ApiUserInfoService;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.UserDomainDto;
@@ -16,14 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("{authId}")
+@RequestMapping("{authId}/mypage")
 @RequiredArgsConstructor
 public class UserInfoController {
 
   private final AuthValidatorComponent authValidatorComponent;
   private final ApiUserInfoService apiUserInfoService;
 
-  @GetMapping("/mypage")
+  /**
+   * user info 조회 end point
+   */
+  @GetMapping
   public ResponseEntity<?> getUserInfo(@PathVariable String authId) {
 
     authValidatorComponent.validateAuthId(authId);
@@ -35,9 +39,27 @@ public class UserInfoController {
     );
   }
 
+  /**
+   * user nickname 수정 end point
+   */
+  @PatchMapping("/nickname")
+  public ResponseEntity<?> updateUserNickname(@PathVariable String authId, UserNicknameForm form) {
+
+    authValidatorComponent.validateAuthId(authId);
+
+    String updatedNickname = apiUserInfoService.updateUserNickname(authId, form);
+
+    return ResponseEntity.ok(
+        SuccessResponse.of(updatedNickname)
+    );
+  }
+
+  /**
+   * user detail 수정 end point
+   */
   @PatchMapping("/userinfo")
-  public ResponseEntity<?> updateUserInfo(
-      @PathVariable String authId, @RequestBody UserInfoForm form) {
+  public ResponseEntity<?> updateUserDetails(
+      @PathVariable String authId, @RequestBody UserDetailsForm form) {
 
     authValidatorComponent.validateAuthId(authId);
 
@@ -47,5 +69,6 @@ public class UserInfoController {
         SuccessResponse.of(UserInfoResponse.fromDomainDto(userInfoDto))
     );
   }
+
 
 }

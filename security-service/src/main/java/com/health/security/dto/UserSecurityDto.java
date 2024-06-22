@@ -1,9 +1,9 @@
 package com.health.security.dto;
 
-import com.health.dto.UserDomainDto;
+import com.health.domain.dto.UserDomainDto;
 import com.health.security.response.OAuth2Response;
-import com.health.type.Gender;
-import com.health.type.RoleType;
+import com.health.domain.type.Gender;
+import com.health.domain.type.RoleType;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

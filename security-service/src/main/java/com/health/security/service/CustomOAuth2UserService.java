@@ -1,10 +1,10 @@
 package com.health.security.service;
 
-import static com.health.type.RoleType.*;
+import static com.health.domain.type.RoleType.*;
 
-import com.health.dto.UserDomainDto;
-import com.health.entity.UserEntity;
-import com.health.repository.UserRepository;
+import com.health.domain.dto.UserDomainDto;
+import com.health.domain.entity.UserEntity;
+import com.health.domain.repository.UserRepository;
 import com.health.security.dto.CustomOAuth2User;
 import com.health.security.dto.UserSecurityDto;
 import com.health.security.response.OAuth2Response;

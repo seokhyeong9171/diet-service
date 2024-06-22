@@ -1,7 +1,7 @@
 package com.health.security.response.impl;
 
 import com.health.security.response.OAuth2Response;
-import com.health.type.Gender;
+import com.health.domain.type.Gender;
 import java.time.LocalDate;
 import java.util.Map;
 

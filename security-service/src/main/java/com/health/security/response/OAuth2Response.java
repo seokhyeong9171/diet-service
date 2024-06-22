@@ -1,6 +1,6 @@
 package com.health.security.response;
 
-import com.health.type.Gender;
+import com.health.domain.type.Gender;
 import java.time.LocalDate;
 
 public interface OAuth2Response {

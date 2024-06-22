@@ -1,6 +1,6 @@
 package com.health.security.dto;
 
-import com.health.type.RoleType;
+import com.health.domain.type.RoleType;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

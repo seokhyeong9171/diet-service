@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,7 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-  private final JwtUtil jwtUtil;
+  private final JwtComponent jwtComponent;
 
 
   @Override
@@ -28,29 +29,22 @@ public class JwtFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    String authorization = null;
-    Cookie[] cookies = request.getCookies();
-    for (Cookie cookie : cookies) {
-      if (cookie.getName().equals(AUTHORIZATION_COOKIE_NAME)) {
-        authorization = cookie.getValue();
-      }
-    }
+    String jwtToken = getJwtTokenFromCookie(request);
 
-    if (authorization == null) {
+    if (jwtToken == null) {
       filterChain.doFilter(request, response);
 
       return;
     }
 
-    String jwtToken = authorization;
-
-    if (jwtUtil.isExpired(jwtToken)) {
+    if (jwtComponent.isExpired(jwtToken)) {
       filterChain.doFilter(request, response);
+
       return;
     }
 
-    String authId = jwtUtil.getAuthId(jwtToken);
-    String role = jwtUtil.getRole(jwtToken);
+    String authId = jwtComponent.getAuthId(jwtToken);
+    String role = jwtComponent.getRole(jwtToken);
 
     CustomOAuth2User customOAuth2User = CustomOAuth2User.forAuthentication(authId, role);
 
@@ -61,6 +55,13 @@ public class JwtFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
+  private String getJwtTokenFromCookie(HttpServletRequest request) {
+    return Arrays.stream(request.getCookies())
+        .filter(cookie -> cookie.getName().equals(AUTHORIZATION_COOKIE_NAME))
+        .map(Cookie::getValue)
+        .findAny()
+        .orElse(null);
+  }
 
 
   private UsernamePasswordAuthenticationToken getAuthentication(CustomOAuth2User customOAuth2User) {

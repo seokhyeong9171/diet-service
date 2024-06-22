@@ -3,7 +3,7 @@ package com.health.security.oauth2;
 import static com.health.security.constant.SecurityConstant.*;
 
 import com.health.security.dto.CustomOAuth2User;
-import com.health.security.jwt.JwtUtil;
+import com.health.security.jwt.JwtComponent;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-  private final JwtUtil jwtUtil;
+  private final JwtComponent jwtComponent;
 
   @Override
   public void onAuthenticationSuccess(
@@ -30,7 +30,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     String authId = oAuth2User.getAuthId();
     String role = oAuth2User.getAuthorities().iterator().next().getAuthority();
 
-    String jwtToken = jwtUtil.createToken(authId, role);
+    String jwtToken = jwtComponent.createToken(authId, role);
 
     Cookie cookie = createCookie(AUTHORIZATION_COOKIE_NAME, jwtToken);
 

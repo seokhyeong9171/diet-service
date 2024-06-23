@@ -52,9 +52,10 @@ subprojects {
 
 		testImplementation 'org.mockito:mockito-core:4.8.0'
 	}
+
+	tasks.named('test') {
+		useJUnitPlatform()
+	}
 }
 
 
-tasks.named('test') {
-	useJUnitPlatform()
-}

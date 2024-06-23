@@ -24,7 +24,8 @@ public class UserWeightRecordScheduler {
 
     allUserList.forEach(user -> {
 
-      if (!exerciseRecordRepository.existsByUserAndExerciseRecDt(user, LocalDate.now())) {
+      // 전날 exercise 데이터 없으면 duration 초기화
+      if (!exerciseRecordRepository.existsByUserAndExerciseRecDt(user, LocalDate.now().minusDays(1))) {
         user.resetExerciseDuration();
       }
 

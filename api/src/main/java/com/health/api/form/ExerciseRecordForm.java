@@ -2,6 +2,7 @@ package com.health.api.form;
 
 import com.health.domain.form.ExerciseRecordDomainForm;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ExerciseRecordForm {
 
-  @Size(max = 100)
-  @NotBlank
+  @Size(min = 1, max = 100)
+  @NotEmpty
   private String description;
 
 

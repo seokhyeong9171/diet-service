@@ -4,6 +4,7 @@ import static com.health.common.exception.ErrorCode.PARAMETER_INVALID;
 import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
 import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_ALREADY_POSTED;
 import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_NOT_OWNED_USER;
 
 import com.health.common.exception.CustomException;
 import com.health.domain.dto.UserWeightDomainDto;
@@ -41,7 +42,7 @@ public class UserWeightServiceImpl implements UserWeightService {
     Page<UserWeightEntity> weightEntityList =
         switch (scope) {
 
-          case "day" -> userWeightRepository.findAllByUser(findUser, pageable);
+          case "day" -> userWeightQueryRepository.findAllByUser(findUser, pageable);
           case "week" -> userWeightQueryRepository.findWeeklyByUser(findUser, pageable);
           case "month" -> userWeightQueryRepository.findMonthlyByUser(findUser, pageable);
 
@@ -56,15 +57,23 @@ public class UserWeightServiceImpl implements UserWeightService {
 
     UserEntity findUser = findUserById(authId);
 
-    if (userWeightRepository.existsByUserAndWeightRegDt(findUser, LocalDate.now())) {
-      throw new CustomException(WEIGHT_RECORD_ALREADY_POSTED);
-    }
+    // 오늘 이미 몸무게 정보 등록 했는지 확인
+    validateAlreadyPostToday(findUser);
 
     UserWeightEntity createdWeight = UserWeightEntity.createByForm(findUser, form);
     UserWeightEntity savedWeight = userWeightRepository.save(createdWeight);
+
     findUser.getUserWeightList().add(savedWeight);
+    // 유저의 몸무게 정보 업데이트
+    findUser.updateWeight(savedWeight);
 
     return UserWeightDomainDto.fromEntity(savedWeight);
+  }
+
+  private void validateAlreadyPostToday(UserEntity findUser) {
+    if (userWeightRepository.existsByUserAndWeightRegDt(findUser, LocalDate.now())) {
+      throw new CustomException(WEIGHT_RECORD_ALREADY_POSTED);
+    }
   }
 
   @Override
@@ -72,6 +81,10 @@ public class UserWeightServiceImpl implements UserWeightService {
       (String authId, Long recordId, UserWeightDomainForm form) {
 
     UserWeightEntity findWeight = findWeightRecordById(recordId);
+
+    // 해당 유저의 몸무게 정보인지 확인
+    validateAccurateUser(authId, findWeight);
+
     findWeight.updateByForm(form);
 
     return UserWeightDomainDto.fromEntity(findWeight);
@@ -80,12 +93,15 @@ public class UserWeightServiceImpl implements UserWeightService {
   @Override
   public Long deleteWeightRecord(String authId, Long recordId) {
     UserEntity findUser = findUserById(authId);
-    UserWeightEntity findWeightRecord = findWeightRecordById(recordId);
+    UserWeightEntity findWeight = findWeightRecordById(recordId);
 
-    findUser.getUserWeightList().remove(findWeightRecord);
-    userWeightRepository.delete(findWeightRecord);
+    // 해당 유저의 몸무게 정보인지 확인
+    validateAccurateUser(authId, findWeight);
 
-    return findWeightRecord.getId();
+    findUser.getUserWeightList().remove(findWeight);
+    userWeightRepository.delete(findWeight);
+
+    return findWeight.getId();
   }
 
   private UserWeightEntity findWeightRecordById(Long recordId) {
@@ -93,9 +109,14 @@ public class UserWeightServiceImpl implements UserWeightService {
         .orElseThrow(() -> new CustomException(WEIGHT_RECORD_NOT_FOUND));
   }
 
-
   private UserEntity findUserById(String authId) {
     return userRepository.findByAuthId(authId)
         .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+  }
+
+  private void validateAccurateUser(String authId, UserWeightEntity findWeight) {
+    if (!findWeight.getUser().getAuthId().equals(authId)) {
+      throw new CustomException(WEIGHT_RECORD_NOT_OWNED_USER);
+    }
   }
 }

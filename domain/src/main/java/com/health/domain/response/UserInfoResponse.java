@@ -43,6 +43,7 @@ public class UserInfoResponse {
         .goalWeight(dto.getGoalWeight())
         .region(dto.getRegion())
         .exerciseDuration(dto.getExerciseDuration())
+        .demerit(dto.getDemerit())
         .build();
   }
 

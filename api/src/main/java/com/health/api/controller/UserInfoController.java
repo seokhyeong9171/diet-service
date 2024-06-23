@@ -43,7 +43,8 @@ public class UserInfoController {
    * user nickname 수정 end point
    */
   @PatchMapping("/nickname")
-  public ResponseEntity<?> updateUserNickname(@PathVariable String authId, UserNicknameForm form) {
+  public ResponseEntity<?> updateUserNickname(
+      @PathVariable String authId, @RequestBody UserNicknameForm form) {
 
     authValidatorComponent.validateAuthId(authId);
 

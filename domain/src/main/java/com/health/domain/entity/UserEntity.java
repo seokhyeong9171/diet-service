@@ -18,7 +18,6 @@ import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity(name = "user_info")
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor/*(access = AccessLevel.PROTECTED)*/
 @Builder
 public class UserEntity extends BaseEntity{
 
@@ -61,8 +60,11 @@ public class UserEntity extends BaseEntity{
     private Double weight;
     @Column(name = "goal_weight")
     private Double goalWeight;
+
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "region")
     private Region region;
+
     @Column(name = "exercise_duration")
     private int exerciseDuration;
 
@@ -102,6 +104,24 @@ public class UserEntity extends BaseEntity{
 
     public void updateNickname(UserNicknameDomainForm form) {
         this.nickname = form.getNickname();
+    }
+
+    public void updateWeight(UserWeightEntity weightEntity) {
+        this.weight = weightEntity.getWeight();
+    }
+
+
+
+    public void increaseExerciseDuration() {
+        this.exerciseDuration++;
+    }
+
+    public void decreaseExerciseDuration() {
+        this.exerciseDuration--;
+    }
+
+    public void resetExerciseDuration() {
+        this.exerciseDuration = 0;
     }
 
 }

@@ -32,10 +32,10 @@
 - [x] 등록 POST = /{id}/weight
 		- @RequestBody UserWeightForm
 
-- [ ] 수정 PATCH = /{id}/weight/{weightId}
+- [x] 수정 PATCH = /{id}/weight/{weightId}
 		- @RequestBody UserWeightForm
 
-- [ ] 삭제 DELETE = /{id}/weight/{weightId}
+- [x] 삭제 DELETE = /{id}/weight/{weightId}
 
 [식사 칼로리 계산]
 

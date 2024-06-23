@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -51,7 +52,7 @@ public class UserExerciseController {
    */
   @PostMapping("/exercise")
   public ResponseEntity<?> createExerciseRecord(
-      @PathVariable String authId, @RequestBody ExerciseRecordForm form) {
+      @PathVariable String authId, @Validated @RequestBody ExerciseRecordForm form) {
 
     // 올바른 user의 접근인지 확인
     authValidatorComponent.validateAuthId(authId);
@@ -93,6 +94,8 @@ public class UserExerciseController {
 
     // 올바른 user의 접근인지 확인
     authValidatorComponent.validateAuthId(authId);
+
+    apiUserExerciseService.deleteExerciseRecord(authId, recordId);
 
     return ResponseEntity.ok(SuccessResponse.of("Delete complete. recordId: " + recordId));
   }

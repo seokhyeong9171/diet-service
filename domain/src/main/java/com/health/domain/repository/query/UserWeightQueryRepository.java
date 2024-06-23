@@ -20,6 +20,16 @@ public class UserWeightQueryRepository {
 
   private final JPAQueryFactory queryFactory;
 
+  // 값 전체 가져오는 메서드
+  public Page<UserWeightEntity> findAllByUser(UserEntity user, Pageable pageable) {
+    List<UserWeightEntity> allList = getAllWeightRecordList(user);
+
+    // 페이징 처리
+    List<UserWeightEntity> pagenatedList = getPagenatedList(pageable, allList);
+
+    return new PageImpl<>(pagenatedList, pageable, allList.size());
+  }
+
   // 매주 일요일의 값만 추출하는 메서드
   public Page<UserWeightEntity> findWeeklyByUser(UserEntity user, Pageable pageable) {
 
@@ -27,6 +37,7 @@ public class UserWeightQueryRepository {
 
     List<UserWeightEntity> sundayList = extractSundayList(allList);
 
+    // 페이징 처리
     List<UserWeightEntity> pagenatedList = getPagenatedList(pageable, sundayList);
 
     // 페이징 처리해서 반환
@@ -40,6 +51,7 @@ public class UserWeightQueryRepository {
 
     List<UserWeightEntity> lastDayOfMonthList = extractLastDayOfMonthList(allList);
 
+    // 페이징 처리
     List<UserWeightEntity> pagenatedList = getPagenatedList(pageable, lastDayOfMonthList);
 
     // 페이징 처리해서 반환
@@ -69,6 +81,7 @@ public class UserWeightQueryRepository {
     return allList.stream().filter(this::isLastDayOfMonth).toList();
   }
 
+  // 해당 데이터가 매월 마지막 일자의 데이터인지 확인
   private boolean isLastDayOfMonth(UserWeightEntity userWeightEntity) {
     LocalDate date = userWeightEntity.getWeightRegDt();
     YearMonth yearMonth = YearMonth.of(date.getYear(), date.getMonth());

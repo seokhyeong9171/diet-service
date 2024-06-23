@@ -16,6 +16,7 @@ public class ExceptionHandlerAdvice {
     // 커스텀 exception 핸들러
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<?> handleCustomException(CustomException e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(e.getErrorCode().getStatus())
                 .body(ErrorResponse.of(e));
@@ -35,6 +36,7 @@ public class ExceptionHandlerAdvice {
     // 그 외 exception 핸들러
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.of(e));

@@ -1,6 +1,9 @@
 package com.health.userservice.service.impl;
 
+import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_ALREADY_POSTED;
+import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_EXCEED_DELETE_DATE;
 import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_NOT_OWNED_USER;
 import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
 
 import com.health.common.exception.CustomException;
@@ -11,6 +14,8 @@ import com.health.domain.form.ExerciseRecordDomainForm;
 import com.health.domain.repository.ExerciseRecordRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.userservice.service.UserExerciseService;
+import java.time.LocalDate;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,12 +47,17 @@ public class UserExerciseServiceImpl implements UserExerciseService {
 
     UserEntity findUser = findUserById(authId);
 
+    // 오늘 이미 등록한 상태인지 확인
+    validatePostRecordToday(findUser);
+
     // form으로 부터 record 생성
     ExerciseRecordEntity createdRecord = ExerciseRecordEntity.createRecord(findUser, form);
     // record 저장
     ExerciseRecordEntity savedRecord = exerciseRecordRepository.save(createdRecord);
     // user 엔티티의 record list에 저장
     findUser.getExerciseRecordEntityList().add(savedRecord);
+    // user의 exercise duration 증가
+    findUser.increaseExerciseDuration();
 
     // dto로 반환
     return ExerciseRecordDomainDto.fromEntity(savedRecord);
@@ -62,6 +72,9 @@ public class UserExerciseServiceImpl implements UserExerciseService {
 
     ExerciseRecordEntity findRecord = findExerciseRecordById(recordId);
 
+    // 올바른 소유자의 기록인지 확인
+    validateAccurateUser(authId, findRecord);
+
     // record 업데이트
     findRecord.updateRecord(form);
 
@@ -75,15 +88,46 @@ public class UserExerciseServiceImpl implements UserExerciseService {
     UserEntity findUser = findUserById(authId);
     ExerciseRecordEntity findRecord = findExerciseRecordById(recordId);
 
+    // exercise record는 당일에만 삭제 가능
+    validateIsToday(findRecord);
+
+    // 올바른 소유자의 기록인지 확인
+    validateAccurateUser(authId, findRecord);
+
     // user 엔티티의 record list에서 삭제
     findUser.getExerciseRecordEntityList().remove(findRecord);
+
+    // user의 exercise duration 감소
+    findUser.decreaseExerciseDuration();
     exerciseRecordRepository.delete(findRecord);
+
   }
 
 
   private void validateExistUser(String authId) {
     if (!userRepository.existsByAuthId(authId)) {
       throw new CustomException(USER_NOT_FOUND);
+    }
+  }
+
+  private void validateAccurateUser(String authId, ExerciseRecordEntity findRecord) {
+    if (!findRecord.getUser().getAuthId().equals(authId)) {
+      throw new CustomException(EXERCISE_RECORD_NOT_OWNED_USER);
+    }
+  }
+
+  private void validatePostRecordToday(UserEntity findUser) {
+    boolean existToday =
+        exerciseRecordRepository.existsByUserAndExerciseRecDt(findUser, LocalDate.now());
+
+    if (existToday) {
+      throw new CustomException(EXERCISE_RECORD_ALREADY_POSTED);
+    }
+  }
+
+  private void validateIsToday(ExerciseRecordEntity findRecord) {
+    if (!Objects.equals(findRecord.getExerciseRecDt(), LocalDate.now())) {
+      throw new CustomException(EXERCISE_RECORD_EXCEED_DELETE_DATE);
     }
   }
 

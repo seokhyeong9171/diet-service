@@ -16,7 +16,7 @@ public interface UserWeightRepository extends JpaRepository<UserWeightEntity, Lo
   @EntityGraph(attributePaths = {"user"})
   Optional<UserWeightEntity> findWithUserInfoById(Long id);
 
-  Page<UserWeightEntity> findAllByUser(UserEntity user, Pageable pageable);
+  Page<UserWeightEntity> findAllByUserOrderByWeightRegDtDesc(UserEntity user, Pageable pageable);
 
   boolean existsByUserAndWeightRegDt(UserEntity user, LocalDate date);
 

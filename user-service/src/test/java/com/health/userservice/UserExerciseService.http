@@ -1,0 +1,28 @@
+### exercise record list 조회 (day)
+GET localhost:8080/naver_s6l2d3WzMpsNC5LDfilFIYmqepWMAvwEa5THTVL6kEQ/exercise?size=10&page=1
+Cookie: Authorization=eyJhbGciOiJIUzI1NiJ9.eyJhdXRoSWQiOiJuYXZlcl9zNmwyZDNXek1wc05DNUxEZmlsRklZbXFlcFdNQXZ3RWE1VEhUVkw2a0VRIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTcxOTEzODE2NSwiZXhwIjoxNzE5MTQxNzY1fQ.bzi5sWbaD6zWIa3NmDgY-yha3X2gU6lCdQzc_vl852c
+
+
+### exercise record 등록
+POST localhost:8080/naver_s6l2d3WzMpsNC5LDfilFIYmqepWMAvwEa5THTVL6kEQ/exercise
+Cookie: Authorization=eyJhbGciOiJIUzI1NiJ9.eyJhdXRoSWQiOiJuYXZlcl9zNmwyZDNXek1wc05DNUxEZmlsRklZbXFlcFdNQXZ3RWE1VEhUVkw2a0VRIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTcxOTEzODE2NSwiZXhwIjoxNzE5MTQxNzY1fQ.bzi5sWbaD6zWIa3NmDgY-yha3X2gU6lCdQzc_vl852c
+Content-Type: application/json
+
+{
+  "description": "수정된 설명"
+}
+
+
+### exercise record 수정
+POST localhost:8080/naver_s6l2d3WzMpsNC5LDfilFIYmqepWMAvwEa5THTVL6kEQ/exercise
+Cookie: Authorization=eyJhbGciOiJIUzI1NiJ9.eyJhdXRoSWQiOiJuYXZlcl9zNmwyZDNXek1wc05DNUxEZmlsRklZbXFlcFdNQXZ3RWE1VEhUVkw2a0VRIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTcxOTEzODE2NSwiZXhwIjoxNzE5MTQxNzY1fQ.bzi5sWbaD6zWIa3NmDgY-yha3X2gU6lCdQzc_vl852c
+Content-Type: application/json
+
+{
+  "description": "수정된 설명"
+}
+
+
+### exercise record 삭제
+DELETE localhost:8080/naver_s6l2d3WzMpsNC5LDfilFIYmqepWMAvwEa5THTVL6kEQ/exercise/21
+Cookie: Authorization=eyJhbGciOiJIUzI1NiJ9.eyJhdXRoSWQiOiJuYXZlcl9zNmwyZDNXek1wc05DNUxEZmlsRklZbXFlcFdNQXZ3RWE1VEhUVkw2a0VRIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTcxOTEzODE2NSwiZXhwIjoxNzE5MTQxNzY1fQ.bzi5sWbaD6zWIa3NmDgY-yha3X2gU6lCdQzc_vl852c

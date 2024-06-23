@@ -27,9 +27,9 @@
 
 [몸무게]
 
-- [ ] 조회 GET = /{id}/weight?scope=day , /{id}/weight?scope=week , /{id}/weight?scope=month
+- [x] 조회 GET = /{id}/weight?scope=day , /{id}/weight?scope=week , /{id}/weight?scope=month
 
-- [ ] 등록 POST = /{id}/weight
+- [x] 등록 POST = /{id}/weight
 		- @RequestBody UserWeightForm
 
 - [ ] 수정 PATCH = /{id}/weight/{weightId}

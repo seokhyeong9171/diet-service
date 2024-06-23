@@ -1,5 +1,7 @@
 package com.health.domain.entity;
 
+import com.health.domain.dto.UserWeightDomainDto;
+import com.health.domain.form.UserWeightDomainForm;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,6 +39,15 @@ public class UserWeightEntity extends BaseEntity{
     private LocalDate weightRegDt;
 
 
+    public static UserWeightEntity createByForm(UserEntity user, UserWeightDomainForm form) {
+        return UserWeightEntity.builder()
+            .user(user)
+            .weight(form.getWeight())
+            .weightRegDt(LocalDate.now())
+            .build();
+    }
 
-
+    public void updateByForm(UserWeightDomainForm form) {
+        this.weight = form.getWeight();
+    }
 }

@@ -9,12 +9,15 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     USER_NOT_FOUND(BAD_REQUEST, "couldn't find user"),
-
     NICKNAME_DUPLICATED(BAD_REQUEST, "this nickname is duplicated"),
 
-    USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),
+    EXERCISE_RECORD_NOT_FOUND(BAD_REQUEST, "couldn't find exercise record"),
 
-    EXERCISE_RECORD_NOT_FOUND(BAD_REQUEST, "couldn't find exercise record");
+    WEIGHT_RECORD_ALREADY_POSTED(BAD_REQUEST, "today's weight info already posted"),
+    WEIGHT_RECORD_NOT_FOUND(BAD_REQUEST, "couldn't find weight info"),
+
+    USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),
+    PARAMETER_INVALID(BAD_REQUEST, "this is wrong parameter");
 
     private final HttpStatus status;
     private final String message;

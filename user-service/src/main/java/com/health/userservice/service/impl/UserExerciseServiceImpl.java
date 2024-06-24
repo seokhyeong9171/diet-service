@@ -1,10 +1,6 @@
 package com.health.userservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_ALREADY_POSTED;
-import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_EXCEED_DELETE_DATE;
-import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_NOT_FOUND;
-import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_NOT_OWNED_USER;
-import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.*;
 
 import com.health.common.exception.CustomException;
 import com.health.domain.dto.ExerciseRecordDomainDto;

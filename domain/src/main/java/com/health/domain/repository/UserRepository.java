@@ -13,7 +13,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
   boolean existsByNickname(String nickname);
 
-  @Query("select u from com.health.domain.entity.UserEntity u where u.authId = :authId")
   Optional<UserEntity> findByAuthId(String authId);
 
 }

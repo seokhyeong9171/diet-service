@@ -70,12 +70,6 @@ public class UserWeightServiceImpl implements UserWeightService {
     return UserWeightDomainDto.fromEntity(savedWeight);
   }
 
-  private void validateAlreadyPostToday(UserEntity findUser) {
-    if (userWeightRepository.existsByUserAndWeightRegDt(findUser, LocalDate.now())) {
-      throw new CustomException(WEIGHT_RECORD_ALREADY_POSTED);
-    }
-  }
-
   @Override
   public UserWeightDomainDto updateWeightRecord
       (String authId, Long recordId, UserWeightDomainForm form) {
@@ -112,6 +106,12 @@ public class UserWeightServiceImpl implements UserWeightService {
   private UserEntity findUserById(String authId) {
     return userRepository.findByAuthId(authId)
         .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+  }
+
+  private void validateAlreadyPostToday(UserEntity findUser) {
+    if (userWeightRepository.existsByUserAndWeightRegDt(findUser, LocalDate.now())) {
+      throw new CustomException(WEIGHT_RECORD_ALREADY_POSTED);
+    }
   }
 
   private void validateAccurateUser(String authId, UserWeightEntity findWeight) {

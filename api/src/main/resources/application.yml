@@ -13,3 +13,7 @@ spring:
 jwt:
   secret: fjkdhnfaskjlhflasdfjgiodsfhglkhdfgkjbhdlfugbndkfjlbgdksujbglasbfgkjsdabjkhbg
   expire-ms: 3600000
+
+public-data:
+  url: https://apis.data.go.kr/1471000/FoodNtrCpntDbInfo/getFoodNtrCpntDbInq
+  key: Y5LtLLSt92cEIrjBX%2BczFOpNqQ8QKJw%2F8QymE51tsgoP5n4g3MKBPHJmgyqpNt0zTHu3tiaQE80Lx%2FX28cXDzw%3D%3D

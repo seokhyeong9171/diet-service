@@ -8,12 +8,16 @@ repositories {
 dependencies {
 
     implementation project(":domain")
+    implementation project(":common")
     implementation project(":security-service")
+    implementation project(":user-service")
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'com.h2database:h2'
+    testImplementation 'com.h2database:h2'
 }
 
 test {

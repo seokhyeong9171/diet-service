@@ -48,7 +48,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
       UserDomainDto userDomainDto = userSecurityDto.toDomainDto();
       UserEntity registeredUser = UserEntity.register(userDomainDto);
       userRepository.save(registeredUser);
-
     }
 
     return new CustomOAuth2User(userSecurityDto);

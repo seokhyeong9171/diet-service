@@ -6,6 +6,7 @@ import com.health.security.jwt.JwtFilter;
 import com.health.security.oauth2.CustomSuccessHandler;
 import com.health.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -49,6 +50,8 @@ public class SecurityConfig {
     http
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/", "/login/**", "/oauth2/**").permitAll()
+            .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+            .permitAll()
             .anyRequest().authenticated()
         );
 

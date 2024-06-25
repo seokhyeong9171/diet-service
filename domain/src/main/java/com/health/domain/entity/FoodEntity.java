@@ -23,6 +23,9 @@ public class FoodEntity extends BaseEntity{
     @Column(name = "food_id")
     private Long id;
 
+    @Column(name = "code")
+    private String foodCode;
+
     @Column(name = "name")
     private String foodName;
 

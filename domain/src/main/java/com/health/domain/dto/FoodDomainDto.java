@@ -13,6 +13,8 @@ public class FoodDomainDto {
 
     private String foodName;
 
+    private String foodCode;
+
     private Integer foodAmount;
 
     private NutrientDomainDto nutrientDomainDto;

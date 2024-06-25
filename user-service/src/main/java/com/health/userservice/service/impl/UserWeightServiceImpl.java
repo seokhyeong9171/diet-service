@@ -5,6 +5,7 @@ import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
 import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_ALREADY_POSTED;
 import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_NOT_FOUND;
 import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_NOT_OWNED_USER;
+import static com.health.userservice.type.Scope.DAY;
 
 import com.health.common.exception.CustomException;
 import com.health.domain.dto.UserWeightDomainDto;
@@ -15,6 +16,7 @@ import com.health.domain.repository.UserRepository;
 import com.health.domain.repository.UserWeightRepository;
 import com.health.domain.repository.query.UserWeightQueryRepository;
 import com.health.userservice.service.UserWeightService;
+import com.health.userservice.type.Scope;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,13 +42,12 @@ public class UserWeightServiceImpl implements UserWeightService {
     UserEntity findUser = findUserById(authId);
 
     Page<UserWeightEntity> weightEntityList =
-        switch (scope) {
+        switch (Scope.fromValue(scope)) {
 
-          case "day" -> userWeightQueryRepository.findAllByUser(findUser, pageable);
-          case "week" -> userWeightQueryRepository.findWeeklyByUser(findUser, pageable);
-          case "month" -> userWeightQueryRepository.findMonthlyByUser(findUser, pageable);
+          case DAY -> userWeightQueryRepository.findAllByUser(findUser, pageable);
+          case WEEK -> userWeightQueryRepository.findWeeklyByUser(findUser, pageable);
+          case MONTH -> userWeightQueryRepository.findMonthlyByUser(findUser, pageable);
 
-          default -> throw new CustomException(PARAMETER_INVALID);
         };
 
     return weightEntityList.map(UserWeightDomainDto::fromEntity);

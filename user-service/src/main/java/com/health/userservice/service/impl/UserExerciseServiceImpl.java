@@ -113,10 +113,8 @@ public class UserExerciseServiceImpl implements UserExerciseService {
   }
 
   private void validatePostRecordToday(UserEntity findUser) {
-    boolean existToday =
-        exerciseRecordRepository.existsByUserAndExerciseRecDt(findUser, LocalDate.now());
 
-    if (existToday) {
+    if (exerciseRecordRepository.existsByUserAndExerciseRecDt(findUser, LocalDate.now())) {
       throw new CustomException(EXERCISE_RECORD_ALREADY_POSTED);
     }
   }

@@ -58,9 +58,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 
   private UserEntity getFindUser(String authId) {
-    Optional<UserEntity> byAuthId = userRepository.findByAuthId(authId);
-    UserEntity userEntity = byAuthId.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-    return userEntity;
+    return userRepository.findByAuthId(authId)
+        .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
   }
 
   private void validUniqueNickname(UserNicknameDomainForm form) {

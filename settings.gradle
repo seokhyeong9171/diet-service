@@ -4,4 +4,6 @@ include 'security-service'
 include 'api'
 include 'common'
 include 'user-service'
+include 'food-service'
+include 'meal-service'
 

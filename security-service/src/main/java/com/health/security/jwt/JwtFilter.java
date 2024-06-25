@@ -1,6 +1,6 @@
 package com.health.security.jwt;
 
-import static com.health.security.constant.SecurityConstant.*;
+import static com.health.security.constant.SecurityConstant.AUTHORIZATION_COOKIE_NAME;
 
 import com.health.security.dto.CustomOAuth2User;
 import jakarta.servlet.FilterChain;

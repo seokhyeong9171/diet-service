@@ -1,6 +1,6 @@
 package com.health.security.config;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.*;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import com.health.security.jwt.JwtFilter;
 import com.health.security.oauth2.CustomSuccessHandler;

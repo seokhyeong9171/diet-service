@@ -5,15 +5,11 @@ import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
 
 import com.health.common.exception.CustomException;
 import com.health.domain.dto.UserDomainDto;
-import com.health.domain.entity.ExerciseRecordEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.form.UserDetailsDomainForm;
 import com.health.domain.form.UserNicknameDomainForm;
-import com.health.domain.repository.ExerciseRecordRepository;
 import com.health.domain.repository.UserRepository;
-import com.health.domain.repository.query.UserQueryRepository;
 import com.health.userservice.service.UserInfoService;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

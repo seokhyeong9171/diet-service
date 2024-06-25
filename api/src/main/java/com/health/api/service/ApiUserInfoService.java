@@ -3,10 +3,10 @@ package com.health.api.service;
 import com.health.api.form.UserDetailsForm;
 import com.health.api.form.UserNicknameForm;
 import com.health.domain.dto.UserDomainDto;
+import com.health.userservice.service.UserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.health.userservice.service.UserInfoService;
 
 @Service
 @Transactional

@@ -1,6 +1,6 @@
 package com.health.security.oauth2;
 
-import static com.health.security.constant.SecurityConstant.*;
+import static com.health.security.constant.SecurityConstant.AUTHORIZATION_COOKIE_NAME;
 
 import com.health.security.dto.CustomOAuth2User;
 import com.health.security.jwt.JwtComponent;

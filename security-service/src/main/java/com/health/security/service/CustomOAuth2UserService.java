@@ -1,6 +1,6 @@
 package com.health.security.service;
 
-import static com.health.domain.type.RoleType.*;
+import static com.health.domain.type.RoleType.ROLE_USER;
 
 import com.health.domain.dto.UserDomainDto;
 import com.health.domain.entity.UserEntity;

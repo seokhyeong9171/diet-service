@@ -2,8 +2,6 @@ package com.health.api.form;
 
 import com.health.domain.form.UserDetailsDomainForm;
 import com.health.domain.type.Region;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

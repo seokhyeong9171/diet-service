@@ -1,7 +1,5 @@
 package com.health.api;
 
-import com.health.domain.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

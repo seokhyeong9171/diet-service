@@ -1,6 +1,5 @@
 package com.health.domain.entity;
 
-import com.health.domain.dto.UserWeightDomainDto;
 import com.health.domain.form.UserWeightDomainForm;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,6 +1,6 @@
 package com.health.security.authentication;
 
-import static com.health.common.exception.ErrorCode.*;
+import static com.health.common.exception.ErrorCode.USER_INVALID_ACCESS;
 
 import com.health.common.exception.CustomException;
 import lombok.RequiredArgsConstructor;

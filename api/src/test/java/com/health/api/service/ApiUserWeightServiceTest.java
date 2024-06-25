@@ -1,13 +1,12 @@
 package com.health.api.service;
 
-import static com.health.common.exception.ErrorCode.*;
+import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_ALREADY_POSTED;
+import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_NOT_OWNED_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
 
 import com.health.api.form.UserWeightForm;
 import com.health.common.exception.CustomException;
-import com.health.common.exception.ErrorCode;
 import com.health.domain.dto.UserWeightDomainDto;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.entity.UserWeightEntity;

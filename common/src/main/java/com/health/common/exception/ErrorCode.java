@@ -1,6 +1,7 @@
 package com.health.common.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import lombok.Getter;
@@ -21,9 +22,10 @@ public enum ErrorCode {
     WEIGHT_RECORD_NOT_FOUND(BAD_REQUEST, "couldn't find weight info"),
     WEIGHT_RECORD_NOT_OWNED_USER(BAD_REQUEST, "this user couldn't access this record"),
 
-
     USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),
-    PARAMETER_INVALID(BAD_REQUEST, "this is wrong parameter");
+    PARAMETER_INVALID(BAD_REQUEST, "this is wrong parameter"),
+
+    API_NOT_WORKING(INTERNAL_SERVER_ERROR, "api is not working now");
 
     private final HttpStatus status;
     private final String message;

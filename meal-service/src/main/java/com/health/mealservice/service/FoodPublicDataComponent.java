@@ -1,11 +1,13 @@
 package com.health.mealservice.service;
 
+import static com.health.common.exception.ErrorCode.*;
 import static com.health.mealservice.type.FoodPublicDataKey.*;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.health.common.exception.CustomException;
 import com.health.mealservice.client.FoodPublicDataClient;
 import com.health.mealservice.dto.FoodPublicDataDto;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -41,8 +44,11 @@ public class FoodPublicDataComponent {
     String json =
         foodPublicDataClient.getFoodList(serviceKey, 1, 1, "json").getBody();
 
-    JsonObject asJsonObject;
+    if (!StringUtils.hasText(json)) {
+      throw new CustomException(API_NOT_WORKING);
+    }
 
+    JsonObject asJsonObject;
     try {
       asJsonObject = JsonParser.parseString(json).getAsJsonObject().get("body").getAsJsonObject();
 

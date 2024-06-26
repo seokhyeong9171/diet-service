@@ -36,5 +36,6 @@ public class ConsumeFoodEntity extends BaseEntity{
     private ConsumeAmount consumeAmount;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "food_code")
     private FoodEntity food;
 }

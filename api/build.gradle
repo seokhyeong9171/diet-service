@@ -11,6 +11,7 @@ dependencies {
     implementation project(":common")
     implementation project(":security-service")
     implementation project(":user-service")
+    implementation project(":meal-service")
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation platform('org.junit:junit-bom:5.10.0')

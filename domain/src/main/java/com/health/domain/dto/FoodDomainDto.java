@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FoodDomainDto {
 
-    private Long id;
+    private String foodCode;
 
     private String foodName;
 

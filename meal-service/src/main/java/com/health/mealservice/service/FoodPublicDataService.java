@@ -1,6 +1,5 @@
 package com.health.mealservice.service;
 
-import com.health.domain.entity.FoodEntity;
 import com.health.domain.repository.FoodRepository;
 import com.health.mealservice.dto.FoodPublicDataDto;
 import java.util.List;
@@ -16,21 +15,22 @@ public class FoodPublicDataService {
   private final FoodPublicDataComponent foodPublicDataComponent;
   private final FoodRepository foodRepository;
 
-  public void getFoodData() {
+  public void getAndSaveFoodData() {
 
     // 공공데이터에서 한번에 식품 정보 최대 100개 까지 가져올 수 있음
-    int totalNum = foodPublicDataComponent.getTotalNum();
-    int lastNum = totalNum / 100 + 1;
+    int index = 1;
 
-    for (int i = 1; i < lastNum + 1; i++) {
+    while (true) {
 
-      List<FoodPublicDataDto> foodInfoList = foodPublicDataComponent.getApiDtoList(i);
+      List<FoodPublicDataDto> foodInfoList = foodPublicDataComponent.getApiDtoList(index++);
 
-      List<FoodEntity> entityList = foodInfoList.stream().map(FoodPublicDataDto::toEntity).toList();
+      // 리스트가 빈 상태이면 모든 데이터 조회 완료 상태
+      if (foodInfoList.isEmpty()) break;
 
-      foodRepository.saveAll(entityList);
+      foodRepository.saveAll(
+          foodInfoList.stream().map(FoodPublicDataDto::toEntity).toList()
+      );
     }
-
   }
 
 }

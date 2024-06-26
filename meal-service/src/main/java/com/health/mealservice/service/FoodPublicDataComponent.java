@@ -1,22 +1,15 @@
 package com.health.mealservice.service;
 
-import static com.health.common.exception.ErrorCode.*;
-import static com.health.mealservice.type.FoodPublicDataKey.*;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.health.common.exception.CustomException;
 import com.health.mealservice.client.FoodPublicDataClient;
 import com.health.mealservice.dto.FoodPublicDataDto;
-import java.util.ArrayList;
+import com.health.mealservice.dto.FoodPublicDataMap;
+import com.health.mealservice.dto.FoodPublicDataMap.Item;
+import com.health.mealservice.dto.ItemDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -31,109 +24,72 @@ public class FoodPublicDataComponent {
 
   public List<FoodPublicDataDto> getApiDtoList(int pageNum) {
 
-    String json =
+    FoodPublicDataMap jsonMap =
         foodPublicDataClient.getFoodList(serviceKey, pageNum, 100, "json").getBody();
 
 //    log.info("{}", pageNum);
 
-    return getFoodDto(json);
+    return getFoodDto(jsonMap);
   }
 
-  public Integer getTotalNum() {
+  private List<FoodPublicDataDto> getFoodDto(FoodPublicDataMap map) {
 
-    String json =
-        foodPublicDataClient.getFoodList(serviceKey, 1, 1, "json").getBody();
-
-    if (!StringUtils.hasText(json)) {
-      throw new CustomException(API_NOT_WORKING);
-    }
-
-    JsonObject asJsonObject;
-    try {
-      asJsonObject = JsonParser.parseString(json).getAsJsonObject().get("body").getAsJsonObject();
-
-    } catch (Exception e) {
-      log.error(e.getMessage());
-      return 0;
-    }
-
-    return asJsonObject.get("totalCount").getAsInt();
+    return map.getBody().getItems().stream()
+        .map(this::mappingFoodPublicDataDto)
+        .toList();
   }
 
-  private List<FoodPublicDataDto> getFoodDto(String json) {
+  private FoodPublicDataDto mappingFoodPublicDataDto(Item item) {
 
-    List<FoodPublicDataDto> list = new ArrayList<>();
-
-    JsonArray jsonFoodList;
-
-    try {
-      jsonFoodList = JsonParser.parseString(json)
-          .getAsJsonObject().get("body")
-          .getAsJsonObject().get("items")
-          .getAsJsonArray();
-
-    } catch (Exception e) {
-      log.error(e.getMessage());
-      return list;
-    }
-
-    for (JsonElement item : jsonFoodList) {
-      try {
-
-        JsonObject itemObject = item.getAsJsonObject();
-
-        FoodPublicDataDto foodPublicDataDto = mappingFoodPublicDataDto(itemObject);
-
-        list.add(foodPublicDataDto);
-
-      } catch (Exception e) {
-        log.error(e.getMessage());
-        continue;
-      }
-    }
-
-    return list;
+    return FoodPublicDataDto.fromItemDto(convertValueFromItem(item));
   }
 
-  private FoodPublicDataDto mappingFoodPublicDataDto(JsonObject itemObject) {
+  private Integer getNutrientValue(String str) {
 
-    String code = itemObject.get(CODE.key()).getAsString();
-    String name = itemObject.get(NAME.key()).getAsString();
-//        log.info("{}", name);
+    return Integer.parseInt(str.isEmpty() || str.isBlank() ? "0" : str);
+  }
 
-    Integer weight = getAmountValue(itemObject.get(WEIGHT.key()));
-    Integer kcal = getNutrientValue(itemObject.get(KCAL.key()));
-    Integer protein = getNutrientValue(itemObject.get(PROTEIN.key()));
-    Integer fat = getNutrientValue(itemObject.get(FAT.key()));
-    Integer carbohydrate = getNutrientValue(itemObject.get(CARBOHYDRATE.key()));
+  private Integer getAmountValue(String str) {
+    // 값에서 단위(g, ml...)를 제거한 숫자만 추출
+    if (str == null) {
+      str = "";
+    } else {
+      str = str.replaceAll("[^0-9]", "");
+    }
 
-    return FoodPublicDataDto.builder()
+    // 총 중량 데이터 없는 식품들은 100g당 열량 데이터만 들어 있음으로 중량을 100으로 설정
+    return Integer.parseInt(str.isEmpty() || str.isBlank() ? "100" : str);
+  }
+
+  private ItemDto convertValueFromItem(Item item) {
+    String code = item.getFoodCode();
+    String name = item.getName();
+    log.info("{}", name);
+
+    Integer weight = getAmountValue(item.getWeight());
+    Integer kcal = getNutrientValue(item.getKCal());
+    Integer protein = getNutrientValue(item.getProtein());
+    Integer fat = getNutrientValue(item.getFat());
+    Integer carbohydrate = getNutrientValue(item.getCarbohydrate());
+
+    // 총 중량이 100이 아닌 경우 총 중량에 맞춰서 영양성분 업데이트
+    if (weight != 100) {
+      Double ratio = weight / 100.0;
+      kcal = (int) (ratio * kcal);
+      protein = (int) (ratio * protein);
+      fat = (int) (ratio * fat);
+      carbohydrate = (int) (ratio * carbohydrate);
+    }
+
+    return ItemDto.builder()
         .foodCode(code)
-        .foodName(name)
-        .foodAmount(weight)
+        .name(name)
+        .weight(weight)
         .kCal(kcal)
         .protein(protein)
         .fat(fat)
         .carbohydrate(carbohydrate)
         .build();
-  }
-
-  private Integer getNutrientValue(JsonElement jsonElement) {
-    String str = getStringValue(jsonElement);
-
-    return Integer.parseInt(str.isEmpty() || str.isBlank() ? "0" : str);
-  }
-
-  private Integer getAmountValue(JsonElement jsonElement) {
-    // 값에서 단위(g, ml...)를 제거한 숫자만 추출
-    String str = getStringValue(jsonElement).replaceAll("[^0-9]", "");
-
-    // 총 중량 데이터 없는 식품들은 100g당 열량 데이터 들어 있음으로 중량을 100으로 설정
-    return Integer.parseInt(str.isEmpty() || str.isBlank() ? "100" : str);
-  }
-
-  private String getStringValue(JsonElement jsonElement) {
-    return jsonElement.isJsonNull() ? "" : jsonElement.getAsString();
   }
 
 

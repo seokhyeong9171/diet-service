@@ -1,5 +1,6 @@
 package com.health.mealservice.client;
 
+import com.health.mealservice.dto.FoodPublicDataMap;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface FoodPublicDataClient {
 
   @GetMapping("")
-  ResponseEntity<String> getFoodList(
+  ResponseEntity<FoodPublicDataMap> getFoodList(
       @RequestParam String serviceKey,
       @RequestParam Integer pageNo, @RequestParam Integer numOfRows,
       @RequestParam String type

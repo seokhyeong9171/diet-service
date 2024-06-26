@@ -19,11 +19,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FoodEntity extends BaseEntity{
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "food_id")
-    private Long id;
+//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "food_id")
+//    private Long id;
 
-    @Column(name = "code")
+    @Id
+    @Column(name = "food_code")
     private String foodCode;
 
     @Column(name = "name")

@@ -29,6 +29,15 @@ public class FoodPublicDataDto {
 
   private Integer fat;
 
+  private Nutrient toNutrientEntity() {
+    return Nutrient.builder()
+        .kCal(kCal)
+        .carbohydrate(carbohydrate.doubleValue())
+        .protein(protein.doubleValue())
+        .fat(fat.doubleValue())
+        .build();
+  }
+
   public FoodEntity toEntity() {
     return FoodEntity.builder()
         .foodCode(foodCode)
@@ -38,12 +47,15 @@ public class FoodPublicDataDto {
         .build();
   }
 
-  private Nutrient toNutrientEntity() {
-    return Nutrient.builder()
-        .kCal(kCal)
-        .carbohydrate(carbohydrate.doubleValue())
-        .protein(protein.doubleValue())
-        .fat(fat.doubleValue())
+  public static FoodPublicDataDto fromItemDto(ItemDto convertedItem) {
+    return FoodPublicDataDto.builder()
+        .foodCode(convertedItem.getFoodCode())
+        .foodName(convertedItem.getName())
+        .foodAmount(convertedItem.getWeight())
+        .kCal(convertedItem.getKCal())
+        .protein(convertedItem.getProtein())
+        .fat(convertedItem.getFat())
+        .carbohydrate(convertedItem.getCarbohydrate())
         .build();
   }
 

@@ -22,7 +22,7 @@ public class MealForm {
   private MealType mealType;
 
   public MealDomainForm toDomainForm() {
-    return MealDomainForm.builder().localDate(localDate).mealType(mealType).build();
+    return MealDomainForm.builder().consumeDt(localDate).mealType(mealType).build();
   }
 
 }

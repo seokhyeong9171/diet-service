@@ -12,6 +12,7 @@ import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,8 @@ public class MealController {
 
   private final AuthValidatorComponent authValidatorComponent;
   private final ApiMealService apiMealService;
+
+  @GetMapping()
 
   @PostMapping
   public ResponseEntity<?> addMeal(

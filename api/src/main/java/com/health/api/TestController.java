@@ -1,6 +1,6 @@
 package com.health.api;
 
-import com.health.mealservice.service.FoodPublicDataService;
+import com.health.mealservice.service.FoodDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TestController {
 
-  private final FoodPublicDataService foodPublicDataService;
+  private final FoodDataService foodDataService;
 
   @GetMapping("/test")
   public String test() {
@@ -22,7 +22,7 @@ public class TestController {
   //  추후 스케쥴러로 실행 예정
   @GetMapping("/food-openapi-test")
   public ResponseEntity<?> foodOpenApiTest() {
-    foodPublicDataService.getAndSaveFoodData();
+    foodDataService.getAndSaveFoodData();
     return ResponseEntity.ok(null);
   }
 

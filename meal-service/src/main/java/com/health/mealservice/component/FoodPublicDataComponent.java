@@ -1,4 +1,4 @@
-package com.health.mealservice.service;
+package com.health.mealservice.component;
 
 import com.health.mealservice.client.FoodPublicDataClient;
 import com.health.mealservice.dto.FoodPublicDataDto;

@@ -1,7 +1,9 @@
-package com.health.mealservice.service;
+package com.health.mealservice.service.impl;
 
 import com.health.domain.repository.FoodRepository;
 import com.health.mealservice.dto.FoodPublicDataDto;
+import com.health.mealservice.service.FoodDataService;
+import com.health.mealservice.component.FoodPublicDataComponent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class FoodPublicDataService {
+public class FoodPublicDataServiceImpl implements FoodDataService {
 
   private final FoodPublicDataComponent foodPublicDataComponent;
   private final FoodRepository foodRepository;

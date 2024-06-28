@@ -18,4 +18,8 @@ public class Nutrient {
     private Double carbohydrate;
     private Double protein;
     private Double fat;
+
+    public static Nutrient createNew() {
+        return Nutrient.builder().kCal(0).carbohydrate(0.0).protein(0.0).fat(0.0).build();
+    }
 }

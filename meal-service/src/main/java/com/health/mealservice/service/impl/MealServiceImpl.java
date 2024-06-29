@@ -67,6 +67,24 @@ public class MealServiceImpl implements MealService {
   }
 
 
+  @Override
+  public Long deleteMeal(String authId, LocalDate dailyMealDt, Long mealId) {
+    UserEntity findUser = findUserByAuthId(authId);
+
+    DailyMealEntity findDailyMeal = findDailyMealByUserAndDt(findUser, dailyMealDt);
+
+    MealEntity findMeal = findMealById(mealId);
+
+    validateProperMeal(findMeal, findDailyMeal);
+
+    // TODO
+    //  추후 food service 개발 후 관련된 ConsumeFood도 삭제
+
+    mealRepository.delete(findMeal);
+
+    return findMeal.getId();
+  }
+
   private UserEntity findUserByAuthId(String authId) {
     return userRepository.findByAuthId(authId)
         .orElseThrow(() -> new CustomException(USER_NOT_FOUND));

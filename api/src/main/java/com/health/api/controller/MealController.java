@@ -78,6 +78,20 @@ public class MealController {
     );
   }
 
+  @DeleteMapping("/{mealId}")
+  public ResponseEntity<?> deleteMeal(
+      @PathVariable String authId,
+      @PathVariable @DateTimeFormat(iso = DATE) LocalDate dailyMealDt,
+      @PathVariable Long mealId
+  ) {
+
+    authValidatorComponent.validateAuthId(authId);
+
+    Long deletedMealId = apiMealService.deleteMeal(authId, dailyMealDt, mealId);
+
+    return ResponseEntity.ok(SuccessResponse.of(null));
+  }
+
 
 
 }

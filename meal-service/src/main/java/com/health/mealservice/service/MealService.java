@@ -12,4 +12,6 @@ public interface MealService {
   MealDomainDto getMealInfo(String authId, LocalDate dailyMealDt, Long mealId);
 
   List<MealDomainDto> getMealList(String authId, LocalDate dailyMealDt);
+
+  Long deleteMeal(String authId, LocalDate dailyMealDt, Long mealId);
 }

@@ -26,4 +26,8 @@ public class ApiMealService {
   public List<MealDomainDto> getMealList(String authId, LocalDate dailyMealDt) {
     return mealService.getMealList(authId, dailyMealDt);
   }
+
+  public Long deleteMeal(String authId, LocalDate dailyMealDt, Long mealId) {
+    return mealService.deleteMeal(authId, dailyMealDt, mealId);
+  }
 }

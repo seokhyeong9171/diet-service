@@ -4,7 +4,6 @@ import static com.health.common.exception.ErrorCode.*;
 
 import com.health.common.exception.CustomException;
 import com.health.domain.dto.DailyMealDomainDto;
-import com.health.domain.dto.MealDomainDto;
 import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.repository.DailyMealRepository;
@@ -44,9 +43,7 @@ public class DailyMealServiceImpl implements DailyMealService {
 
     UserEntity findUser = findUserByAuthId(authId);
 
-    if (dailyMealRepository.existsByUserAndDailyMealDt(findUser, dailyMealDt)) {
-      throw new CustomException(DAILY_MEAL_ALREADY_EXIST);
-    }
+    validateIsExistDailyMeal(dailyMealDt, findUser);
 
     DailyMealEntity dailyMealEntity = DailyMealEntity.createNew(findUser, dailyMealDt);
     DailyMealEntity savedDailyMeal = dailyMealRepository.save(dailyMealEntity);
@@ -58,9 +55,7 @@ public class DailyMealServiceImpl implements DailyMealService {
   public LocalDate deleteDailyMeal(String authId, LocalDate dailyMealDt) {
 
     UserEntity findUser = findUserByAuthId(authId);
-    DailyMealEntity findDailyMeal = dailyMealRepository.findByUserAndDailyMealDt(findUser,
-            dailyMealDt)
-        .orElseThrow(() -> new CustomException(DAILY_MEAL_NOT_FOUND));
+    DailyMealEntity findDailyMeal = findDailyMealByUserAndDt(dailyMealDt, findUser);
 
     // TODO
     //  추후 food service 개발 후 관련된 ConsumeFood도 삭제
@@ -74,5 +69,17 @@ public class DailyMealServiceImpl implements DailyMealService {
   private UserEntity findUserByAuthId(String authId) {
     return userRepository.findByAuthId(authId)
         .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+  }
+
+  private DailyMealEntity findDailyMealByUserAndDt(LocalDate dailyMealDt, UserEntity findUser) {
+    return dailyMealRepository.findByUserAndDailyMealDt(findUser,
+            dailyMealDt)
+        .orElseThrow(() -> new CustomException(DAILY_MEAL_NOT_FOUND));
+  }
+
+  private void validateIsExistDailyMeal(LocalDate dailyMealDt, UserEntity findUser) {
+    if (dailyMealRepository.existsByUserAndDailyMealDt(findUser, dailyMealDt)) {
+      throw new CustomException(DAILY_MEAL_ALREADY_EXIST);
+    }
   }
 }

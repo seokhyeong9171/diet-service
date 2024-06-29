@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DailyMealRepository extends JpaRepository<DailyMealEntity, Long> {
 
+  boolean existsByUserAndDailyMealDt(UserEntity user, LocalDate date);
+
   Optional<DailyMealEntity> findByUserAndDailyMealDt(UserEntity user, LocalDate date);
 
   Page<DailyMealEntity> findByUserOrderByDailyMealDtDesc(UserEntity user, Pageable pageable);

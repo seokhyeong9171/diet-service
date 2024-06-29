@@ -10,6 +10,7 @@ import com.health.domain.entity.UserEntity;
 import com.health.domain.repository.DailyMealRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.mealservice.service.DailyMealService;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,21 @@ public class DailyMealServiceImpl implements DailyMealService {
         findUser, pageable);
 
     return mealList.map(DailyMealDomainDto::fromEntity);
+  }
+
+  @Override
+  public DailyMealDomainDto createDailyMeal(String authId, LocalDate dailyMealDt) {
+
+    UserEntity findUser = findUserByAuthId(authId);
+
+    if (dailyMealRepository.existsByUserAndDailyMealDt(findUser, dailyMealDt)) {
+      throw new CustomException(DAILY_MEAL_ALREADY_EXIST);
+    }
+
+    DailyMealEntity dailyMealEntity = DailyMealEntity.createNew(findUser, dailyMealDt);
+    DailyMealEntity savedDailyMeal = dailyMealRepository.save(dailyMealEntity);
+
+    return DailyMealDomainDto.fromEntity(savedDailyMeal);
   }
 
   private UserEntity findUserByAuthId(String authId) {

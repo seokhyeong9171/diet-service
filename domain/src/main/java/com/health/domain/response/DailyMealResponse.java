@@ -2,7 +2,6 @@ package com.health.domain.response;
 
 import com.health.domain.dto.DailyMealDomainDto;
 import com.health.domain.dto.NutrientDomainDto;
-import com.health.domain.response.MealResponse.Nutrient;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,13 +14,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DailyMealResponse {
 
-  private Long id;
   private LocalDate dailyMealDt;
   private Nutrient nutrient;
 
   public static DailyMealResponse fromDomainDto(DailyMealDomainDto domainDto) {
     return DailyMealResponse.builder()
-        .id(domainDto.getId())
         .dailyMealDt(domainDto.getDailyMealDt())
         .nutrient(Nutrient.fromDomainDto(domainDto.getNutrientDomainDto()))
         .build();

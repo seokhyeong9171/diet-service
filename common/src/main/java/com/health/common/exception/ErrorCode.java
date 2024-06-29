@@ -22,6 +22,8 @@ public enum ErrorCode {
     WEIGHT_RECORD_NOT_FOUND(BAD_REQUEST, "couldn't find weight info"),
     WEIGHT_RECORD_NOT_OWNED_USER(BAD_REQUEST, "this user couldn't access this record"),
 
+    DAILY_MEAL_ALREADY_EXIST(BAD_REQUEST, "daily meal on that date is already exist"),
+
     USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),
     PARAMETER_INVALID(BAD_REQUEST, "this is wrong parameter"),
 

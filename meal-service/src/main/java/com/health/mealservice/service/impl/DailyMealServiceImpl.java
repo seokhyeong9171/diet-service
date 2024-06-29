@@ -8,6 +8,7 @@ import com.health.domain.dto.MealDomainDto;
 import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.repository.DailyMealRepository;
+import com.health.domain.repository.MealRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.mealservice.service.DailyMealService;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DailyMealServiceImpl implements DailyMealService {
 
   private final UserRepository userRepository;
+  private final MealRepository mealRepository;
   private final DailyMealRepository dailyMealRepository;
 
   @Override
@@ -31,8 +33,8 @@ public class DailyMealServiceImpl implements DailyMealService {
 
     UserEntity findUser = findUserByAuthId(authId);
 
-    Page<DailyMealEntity> mealList = dailyMealRepository.findByUserOrderByDailyMealDtDesc(
-        findUser, pageable);
+    Page<DailyMealEntity> mealList =
+        dailyMealRepository.findByUserOrderByDailyMealDtDesc(findUser, pageable);
 
     return mealList.map(DailyMealDomainDto::fromEntity);
   }
@@ -50,6 +52,23 @@ public class DailyMealServiceImpl implements DailyMealService {
     DailyMealEntity savedDailyMeal = dailyMealRepository.save(dailyMealEntity);
 
     return DailyMealDomainDto.fromEntity(savedDailyMeal);
+  }
+
+  @Override
+  public LocalDate deleteDailyMeal(String authId, LocalDate dailyMealDt) {
+
+    UserEntity findUser = findUserByAuthId(authId);
+    DailyMealEntity findDailyMeal = dailyMealRepository.findByUserAndDailyMealDt(findUser,
+            dailyMealDt)
+        .orElseThrow(() -> new CustomException(DAILY_MEAL_NOT_FOUND));
+
+    // TODO
+    //  추후 food service 개발 후 관련된 ConsumeFood도 삭제
+
+    mealRepository.deleteAll(findDailyMeal.getMeals());
+    dailyMealRepository.delete(findDailyMeal);
+
+    return findDailyMeal.getDailyMealDt();
   }
 
   private UserEntity findUserByAuthId(String authId) {

@@ -1,5 +1,7 @@
 package com.health.api.controller;
 
+import static org.springframework.format.annotation.DateTimeFormat.ISO.*;
+
 import com.health.api.service.ApiDailyMealService;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.DailyMealDomainDto;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +45,7 @@ public class DailyMealController {
   @PostMapping("/{dailyMealDt}")
   public ResponseEntity<?> createDailyMeal(
       @PathVariable String authId,
-      @PathVariable @DateTimeFormat(iso = ISO.DATE) LocalDate dailyMealDt
+      @PathVariable @DateTimeFormat(iso = DATE) LocalDate dailyMealDt
   ) {
 
     authValidatorComponent.validateAuthId(authId);
@@ -50,6 +53,19 @@ public class DailyMealController {
     DailyMealDomainDto dailyMeal = apiDailyMealService.createDailyMeal(authId, dailyMealDt);
 
     return ResponseEntity.ok(SuccessResponse.of(DailyMealResponse.fromDomainDto(dailyMeal)));
+  }
+
+  @DeleteMapping("/{dailyMealDt}")
+  public ResponseEntity<?> deleteDailyMeal(
+      @PathVariable String authId,
+      @PathVariable @DateTimeFormat(iso = DATE) LocalDate dailyMealDt
+  ) {
+
+    authValidatorComponent.validateAuthId(authId);
+
+    LocalDate deletedDailyMealDt = apiDailyMealService.deleteDailyMeal(authId, dailyMealDt);
+
+    return ResponseEntity.ok(SuccessResponse.of(deletedDailyMealDt));
   }
 
 }

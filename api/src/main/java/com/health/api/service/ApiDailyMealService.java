@@ -21,4 +21,8 @@ public class ApiDailyMealService {
   public DailyMealDomainDto createDailyMeal(String authId, LocalDate dailyMealDt) {
     return dailyMealService.createDailyMeal(authId, dailyMealDt);
   }
+
+  public LocalDate deleteDailyMeal(String authId, LocalDate dailyMealDt) {
+    return dailyMealService.deleteDailyMeal(authId, dailyMealDt);
+  }
 }

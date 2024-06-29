@@ -11,4 +11,6 @@ public interface DailyMealService {
   Page<DailyMealDomainDto> getDailyMealList(String authId, Pageable pageable);
 
   DailyMealDomainDto createDailyMeal(String authId, LocalDate dailyMealDt);
+
+  LocalDate deleteDailyMeal(String authId, LocalDate dailyMealDt);
 }

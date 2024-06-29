@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MealDomainForm {
 
-  private LocalDate consumeDt;
-
   private MealType mealType;
 
 }

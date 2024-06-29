@@ -16,13 +16,10 @@ import lombok.NoArgsConstructor;
 public class MealForm {
 
   @NotNull
-  private LocalDate localDate;
-
-  @NotNull
   private MealType mealType;
 
   public MealDomainForm toDomainForm() {
-    return MealDomainForm.builder().consumeDt(localDate).mealType(mealType).build();
+    return MealDomainForm.builder().mealType(mealType).build();
   }
 
 }

@@ -3,7 +3,6 @@ package com.health.mealservice.service.impl;
 import static com.health.common.exception.ErrorCode.*;
 
 import com.health.common.exception.CustomException;
-import com.health.common.exception.ErrorCode;
 import com.health.domain.dto.MealDomainDto;
 import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.MealEntity;
@@ -30,14 +29,13 @@ public class MealServiceImpl implements MealService {
   private final DailyMealRepository dailyMealRepository;
 
   @Override
-  public MealDomainDto createMeal(String authId, MealDomainForm domainForm) {
+  public MealDomainDto createMeal(String authId, LocalDate dailyMealDt, MealDomainForm domainForm) {
 
     UserEntity findUser = findUserByAuthId(authId);
-    LocalDate mealConsumeDate = domainForm.getConsumeDt();
 
-    DailyMealEntity dailyMealEntity = getUserDailyMeal(findUser, mealConsumeDate);
+    DailyMealEntity dailyMealEntity = getUserDailyMeal(findUser, dailyMealDt);
 
-    MealEntity mealEntity = MealEntity.createNew(dailyMealEntity, domainForm);
+    MealEntity mealEntity = MealEntity.createNew(dailyMealEntity, dailyMealDt, domainForm);
     MealEntity savedMealEntity = mealRepository.save(mealEntity);
 
     dailyMealEntity.getMeals().add(savedMealEntity);
@@ -51,11 +49,8 @@ public class MealServiceImpl implements MealService {
         .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
   }
 
-  private DailyMealEntity getUserDailyMeal(UserEntity findUser, LocalDate mealConsumeDate) {
-    return dailyMealRepository.findByUserAndDailyMealDt(findUser, mealConsumeDate)
-        .orElseGet(() -> {
-          DailyMealEntity mealEntity = DailyMealEntity.createNew(findUser, mealConsumeDate);
-          return dailyMealRepository.save(mealEntity);
-        });
+  private DailyMealEntity getUserDailyMeal(UserEntity findUser, LocalDate dailyMealDt) {
+    return dailyMealRepository.findByUserAndDailyMealDt(findUser, dailyMealDt)
+        .orElseThrow(() -> new CustomException(DAILY_MEAL_NOT_FOUND));
   }
 }

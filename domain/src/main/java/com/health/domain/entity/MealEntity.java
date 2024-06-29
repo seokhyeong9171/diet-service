@@ -59,11 +59,12 @@ public class MealEntity extends BaseEntity{
     @OneToMany(mappedBy = "meal")
     private List<ConsumeFoodEntity> consumeFoodList = new ArrayList<>();
 
-    public static MealEntity createNew(DailyMealEntity dailyMeal, MealDomainForm form) {
+    public static MealEntity createNew
+        (DailyMealEntity dailyMeal, LocalDate dailyMealDt, MealDomainForm form) {
         return MealEntity.builder()
             .mealType(form.getMealType())
             .nutrient(Nutrient.createNew())
-            .mealDt(form.getConsumeDt())
+            .mealDt(dailyMealDt)
             .dailyMeal(dailyMeal)
             .build();
 

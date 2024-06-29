@@ -27,10 +27,6 @@ public class MealResponse {
 
     private LocalDate mealDt;
 
-    private DailyMealDomainDto dailyMeal;
-
-    private List<ConsumeFoodDomainDto> consumeFoodList;
-
     public static MealResponse fromDto(MealDomainDto domainDto) {
         return MealResponse.builder()
             .id(domainDto.getId())

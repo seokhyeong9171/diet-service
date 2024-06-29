@@ -25,6 +25,9 @@ public enum ErrorCode {
     DAILY_MEAL_NOT_FOUND(BAD_REQUEST, "daily meal on that date is not found"),
     DAILY_MEAL_ALREADY_EXIST(BAD_REQUEST, "daily meal on that date is already exist"),
 
+    MEAL_NOT_FOUND(BAD_REQUEST, "this meal couldn't find"),
+    MEAL_AND_DAILY_MEAL_NOT_MATCH(BAD_REQUEST, "this meal is not owned by that daily meal"),
+
     USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),
     PARAMETER_INVALID(BAD_REQUEST, "this is wrong parameter"),
 

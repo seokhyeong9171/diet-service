@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/{authId}/meal/{dailyMealDt}")
+@RequestMapping("/{authId}/dailymeal/{dailyMealDt}/meal")
 @RequiredArgsConstructor
 public class MealController {
 
@@ -89,7 +89,7 @@ public class MealController {
 
     Long deletedMealId = apiMealService.deleteMeal(authId, dailyMealDt, mealId);
 
-    return ResponseEntity.ok(SuccessResponse.of(null));
+    return ResponseEntity.ok(SuccessResponse.of(deletedMealId));
   }
 
 

@@ -10,6 +10,26 @@ spring:
     hibernate:
       ddl-auto: update
 
+  elasticsearch:
+    username: elastic
+    password: lf1F4MF1+G2jLZTJLvWW
+    ssl: 38adca41d2966aba6cf57b2f8f2bda331929829b04bc8c4ffc959d943692c494
+    uris:
+      - localhost:9200
+
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+
+    redis:
+      host: redis-17192.c244.us-east-1-2.ec2.redns.redis-cloud.com
+      port: 17192
+      username: default
+      password: AAp61mDXJemGKf1x6YYAHhisfzVJHHpx
+
+
+
 jwt:
   secret: fjkdhnfaskjlhflasdfjgiodsfhglkhdfgkjbhdlfugbndkfjlbgdksujbglasbfgkjsdabjkhbg
   expire-ms: 3600000

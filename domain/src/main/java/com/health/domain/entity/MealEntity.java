@@ -1,5 +1,6 @@
 package com.health.domain.entity;
 
+import com.health.domain.form.MealDomainForm;
 import com.health.domain.type.MealType;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -21,8 +22,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity(name = "meal")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -55,4 +58,15 @@ public class MealEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "meal")
     private List<ConsumeFoodEntity> consumeFoodList = new ArrayList<>();
+
+    public static MealEntity createNew
+        (DailyMealEntity dailyMeal, LocalDate dailyMealDt, MealDomainForm form) {
+        return MealEntity.builder()
+            .mealType(form.getMealType())
+            .nutrient(Nutrient.createNew())
+            .mealDt(dailyMealDt)
+            .dailyMeal(dailyMeal)
+            .build();
+
+    }
 }

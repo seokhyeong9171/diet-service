@@ -18,8 +18,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity(name = "daily_meal")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -48,4 +50,12 @@ public class DailyMealEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "dailyMeal")
     private List<MealEntity> meals = new ArrayList<>();
+
+    public static DailyMealEntity createNew(UserEntity userEntity, LocalDate date) {
+        return DailyMealEntity.builder()
+            .dailyMealDt(date)
+            .nutrient(Nutrient.createNew())
+            .user(userEntity)
+            .build();
+    }
 }

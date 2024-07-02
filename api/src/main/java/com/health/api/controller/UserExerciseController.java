@@ -1,5 +1,7 @@
 package com.health.api.controller;
 
+import static org.springframework.http.HttpStatus.*;
+
 import com.health.api.form.ExerciseRecordForm;
 import com.health.api.service.UserExerciseApplication;
 import com.health.common.model.SuccessResponse;
@@ -60,7 +62,7 @@ public class UserExerciseController {
     ExerciseRecordDomainDto exerciseRecordDto =
         userExerciseApplication.createExerciseRecord(authId, form);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(
+    return ResponseEntity.status(CREATED).body(
         SuccessResponse.of(ExerciseRecordResponse.fromDomainDto(exerciseRecordDto))
     );
   }
@@ -79,7 +81,7 @@ public class UserExerciseController {
     ExerciseRecordDomainDto updatedExerciseRecordDto =
         userExerciseApplication.updateExerciseRecord(authId, recordId, form);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(
+    return ResponseEntity.status(CREATED).body(
         SuccessResponse.of(ExerciseRecordResponse.fromDomainDto(updatedExerciseRecordDto))
     );
   }

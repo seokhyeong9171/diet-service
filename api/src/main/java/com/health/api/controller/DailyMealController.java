@@ -1,6 +1,7 @@
 package com.health.api.controller;
 
 import static org.springframework.format.annotation.DateTimeFormat.ISO.*;
+import static org.springframework.http.HttpStatus.*;
 
 import com.health.api.service.DailyMealApplication;
 import com.health.common.model.SuccessResponse;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,7 +53,8 @@ public class DailyMealController {
 
     DailyMealDomainDto dailyMeal = dailyMealApplication.createDailyMeal(authId, dailyMealDt);
 
-    return ResponseEntity.ok(SuccessResponse.of(DailyMealResponse.fromDomainDto(dailyMeal)));
+    return ResponseEntity.status(CREATED)
+        .body(SuccessResponse.of(DailyMealResponse.fromDomainDto(dailyMeal)));
   }
 
   @DeleteMapping("/{dailyMealDt}")

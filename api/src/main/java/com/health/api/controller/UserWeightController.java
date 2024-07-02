@@ -3,7 +3,7 @@ package com.health.api.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.UserWeightForm;
-import com.health.api.service.ApiUserWeightService;
+import com.health.api.service.UserWeightApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.UserWeightDomainDto;
 import com.health.domain.response.UserWeightResponse;
@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/{authId}/weight")
+@RequestMapping("/authid/{authId}/weights")
 @RequiredArgsConstructor
 public class UserWeightController {
 
   private final AuthValidatorComponent authValidatorComponent;
-  private final ApiUserWeightService apiUserWeightService;
+  private final UserWeightApplication userWeightApplication;
 
   @GetMapping
   public ResponseEntity<?> getWeightList
@@ -37,7 +37,7 @@ public class UserWeightController {
     authValidatorComponent.validateAuthId(authId);
 
     Page<UserWeightResponse> weightResponseList =
-        apiUserWeightService.getUserWeightList(authId, scope, pageable)
+        userWeightApplication.getUserWeightList(authId, scope, pageable)
             .map(UserWeightResponse::fromDomainDto);
 
     return ResponseEntity.ok(SuccessResponse.of(weightResponseList));
@@ -49,7 +49,7 @@ public class UserWeightController {
 
     authValidatorComponent.validateAuthId(authId);
 
-    UserWeightDomainDto userWeightDto = apiUserWeightService.createWeightRecord(authId, form);
+    UserWeightDomainDto userWeightDto = userWeightApplication.createWeightRecord(authId, form);
 
     return ResponseEntity.status(CREATED).body(
         SuccessResponse.of(UserWeightResponse.fromDomainDto(userWeightDto))
@@ -64,7 +64,7 @@ public class UserWeightController {
     authValidatorComponent.validateAuthId(authId);
 
     UserWeightDomainDto userWeightDto =
-        apiUserWeightService.updateWeightRecord(authId, recordId, form);
+        userWeightApplication.updateWeightRecord(authId, recordId, form);
 
     return ResponseEntity.ok(
         SuccessResponse.of(UserWeightResponse.fromDomainDto(userWeightDto))
@@ -78,7 +78,7 @@ public class UserWeightController {
 
     authValidatorComponent.validateAuthId(authId);
 
-    Long deletedRecordId = apiUserWeightService.deleteWeightRecord(authId, recordId);
+    Long deletedRecordId = userWeightApplication.deleteWeightRecord(authId, recordId);
 
     return ResponseEntity.ok(
         SuccessResponse.of("delete weight record complete. recordId: " + deletedRecordId)

@@ -22,4 +22,18 @@ public class Nutrient {
     public static Nutrient createNew() {
         return Nutrient.builder().kCal(0).carbohydrate(0.0).protein(0.0).fat(0.0).build();
     }
+
+    public void addNutrient(Nutrient nutrient) {
+        this.kCal += nutrient.getKCal();
+        this.carbohydrate += nutrient.getCarbohydrate();
+        this.protein += nutrient.getProtein();
+        this.fat += nutrient.getFat();
+    }
+
+    public void minusNutrient(Nutrient nutrient) {
+        this.kCal -= nutrient.getKCal();
+        this.carbohydrate -= nutrient.getCarbohydrate();
+        this.protein -= nutrient.getProtein();
+        this.fat -= nutrient.getFat();
+    }
 }

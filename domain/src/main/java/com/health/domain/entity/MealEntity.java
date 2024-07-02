@@ -67,6 +67,15 @@ public class MealEntity extends BaseEntity{
             .mealDt(dailyMealDt)
             .dailyMeal(dailyMeal)
             .build();
+    }
 
+    public void addNutrient(ConsumeFoodEntity consumeFood) {
+        this.nutrient.addNutrient(consumeFood.getNutrient());
+    }
+
+    public void minusNutrient(ConsumeFoodEntity consumeFood) {
+        this.nutrient.minusNutrient(consumeFood.getNutrient());
     }
 }
+
+

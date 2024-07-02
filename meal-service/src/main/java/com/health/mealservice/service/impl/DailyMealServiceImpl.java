@@ -4,13 +4,17 @@ import static com.health.common.exception.ErrorCode.*;
 
 import com.health.common.exception.CustomException;
 import com.health.domain.dto.DailyMealDomainDto;
+import com.health.domain.entity.ConsumeFoodEntity;
 import com.health.domain.entity.DailyMealEntity;
+import com.health.domain.entity.MealEntity;
 import com.health.domain.entity.UserEntity;
+import com.health.domain.repository.ConsumeFoodRepository;
 import com.health.domain.repository.DailyMealRepository;
 import com.health.domain.repository.MealRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.mealservice.service.DailyMealService;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +28,7 @@ public class DailyMealServiceImpl implements DailyMealService {
 
   private final UserRepository userRepository;
   private final MealRepository mealRepository;
+  private final ConsumeFoodRepository consumeFoodRepository;
   private final DailyMealRepository dailyMealRepository;
 
   @Override
@@ -57,10 +62,11 @@ public class DailyMealServiceImpl implements DailyMealService {
     UserEntity findUser = findUserByAuthId(authId);
     DailyMealEntity findDailyMeal = findDailyMealByUserAndDt(dailyMealDt, findUser);
 
-    // TODO
-    //  추후 food service 개발 후 관련된 ConsumeFood도 삭제
 
-    mealRepository.deleteAll(findDailyMeal.getMeals());
+    List<MealEntity> meals = findDailyMeal.getMeals();
+    meals.forEach(meal -> consumeFoodRepository.deleteAll(meal.getConsumeFoodList()));
+
+    mealRepository.deleteAll(meals);
     dailyMealRepository.delete(findDailyMeal);
 
     return findDailyMeal.getDailyMealDt();

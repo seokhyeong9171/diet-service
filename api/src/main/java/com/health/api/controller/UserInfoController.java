@@ -2,7 +2,7 @@ package com.health.api.controller;
 
 import com.health.api.form.UserDetailsForm;
 import com.health.api.form.UserNicknameForm;
-import com.health.api.service.ApiUserInfoService;
+import com.health.api.service.UserInfoApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.UserDomainDto;
 import com.health.domain.response.UserInfoResponse;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("{authId}/mypage")
+@RequestMapping("/authid{authId}/mypage")
 @RequiredArgsConstructor
 public class UserInfoController {
 
   private final AuthValidatorComponent authValidatorComponent;
-  private final ApiUserInfoService apiUserInfoService;
+  private final UserInfoApplication userInfoApplication;
 
   /**
    * user info 조회 end point
@@ -32,7 +32,7 @@ public class UserInfoController {
 
     authValidatorComponent.validateAuthId(authId);
 
-    UserDomainDto userInfoDto = apiUserInfoService.getUserInfo(authId);
+    UserDomainDto userInfoDto = userInfoApplication.getUserInfo(authId);
 
     return ResponseEntity.ok(
         SuccessResponse.of(UserInfoResponse.fromDomainDto(userInfoDto))
@@ -48,7 +48,7 @@ public class UserInfoController {
 
     authValidatorComponent.validateAuthId(authId);
 
-    String updatedNickname = apiUserInfoService.updateUserNickname(authId, form);
+    String updatedNickname = userInfoApplication.updateUserNickname(authId, form);
 
     return ResponseEntity.ok(
         SuccessResponse.of(updatedNickname)
@@ -64,7 +64,7 @@ public class UserInfoController {
 
     authValidatorComponent.validateAuthId(authId);
 
-    UserDomainDto userInfoDto = apiUserInfoService.updateUserInfo(authId, form);
+    UserDomainDto userInfoDto = userInfoApplication.updateUserInfo(authId, form);
 
     return ResponseEntity.ok(
         SuccessResponse.of(UserInfoResponse.fromDomainDto(userInfoDto))

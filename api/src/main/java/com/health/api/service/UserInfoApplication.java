@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ApiUserInfoService {
+public class UserInfoApplication {
 
   private final UserInfoService userInfoService;
 

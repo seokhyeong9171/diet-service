@@ -1,7 +1,7 @@
 package com.health.api.controller;
 
 import com.health.api.form.ExerciseRecordForm;
-import com.health.api.service.ApiUserExerciseService;
+import com.health.api.service.UserExerciseApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.ExerciseRecordDomainDto;
 import com.health.domain.response.ExerciseRecordResponse;
@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/{authId}")
+@RequestMapping("/authid/{authId}")
 @RequiredArgsConstructor
 public class UserExerciseController {
 
   private final AuthValidatorComponent authValidatorComponent;
-  private final ApiUserExerciseService apiUserExerciseService;
+  private final UserExerciseApplication userExerciseApplication;
 
 
   /**
@@ -40,7 +40,7 @@ public class UserExerciseController {
     authValidatorComponent.validateAuthId(authId);
 
     Page<ExerciseRecordDomainDto> exerciseList =
-        apiUserExerciseService.getExerciseList(authId, pageable);
+        userExerciseApplication.getExerciseList(authId, pageable);
 
     return ResponseEntity.ok(
         SuccessResponse.of(exerciseList.map(ExerciseRecordResponse::fromDomainDto))
@@ -58,7 +58,7 @@ public class UserExerciseController {
     authValidatorComponent.validateAuthId(authId);
 
     ExerciseRecordDomainDto exerciseRecordDto =
-        apiUserExerciseService.createExerciseRecord(authId, form);
+        userExerciseApplication.createExerciseRecord(authId, form);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(
         SuccessResponse.of(ExerciseRecordResponse.fromDomainDto(exerciseRecordDto))
@@ -77,7 +77,7 @@ public class UserExerciseController {
     authValidatorComponent.validateAuthId(authId);
 
     ExerciseRecordDomainDto updatedExerciseRecordDto =
-        apiUserExerciseService.updateExerciseRecord(authId, recordId, form);
+        userExerciseApplication.updateExerciseRecord(authId, recordId, form);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(
         SuccessResponse.of(ExerciseRecordResponse.fromDomainDto(updatedExerciseRecordDto))
@@ -95,7 +95,7 @@ public class UserExerciseController {
     // 올바른 user의 접근인지 확인
     authValidatorComponent.validateAuthId(authId);
 
-    apiUserExerciseService.deleteExerciseRecord(authId, recordId);
+    userExerciseApplication.deleteExerciseRecord(authId, recordId);
 
     return ResponseEntity.ok(SuccessResponse.of("Delete complete. recordId: " + recordId));
   }

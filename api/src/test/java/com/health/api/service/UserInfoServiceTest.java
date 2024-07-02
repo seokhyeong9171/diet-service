@@ -31,7 +31,7 @@ class UserInfoServiceTest {
   @Autowired
   private UserRepository userRepository;
   @Autowired
-  private ApiUserInfoService apiUserInfoService;
+  private UserInfoApplication userInfoApplication;
 
   @Test
   @DisplayName("유저 정보 조회 - 성공")
@@ -45,7 +45,7 @@ class UserInfoServiceTest {
     UserEntity saved2 = userRepository.save(userEntity2);
 
     // when
-    UserDomainDto domainDto = apiUserInfoService.getUserInfo(authId1);
+    UserDomainDto domainDto = userInfoApplication.getUserInfo(authId1);
 
     // then
     assertThat(domainDto.getId()).isEqualTo(saved1.getId());
@@ -80,7 +80,7 @@ class UserInfoServiceTest {
 
     // when
     UserDomainDto domainDto =
-        apiUserInfoService.updateUserInfo(savedUser.getAuthId(), userDetailsForm);
+        userInfoApplication.updateUserInfo(savedUser.getAuthId(), userDetailsForm);
 
     // then
     assertThat(domainDto.getHeight()).isEqualTo(userDetailsForm.getHeight());
@@ -115,7 +115,7 @@ class UserInfoServiceTest {
 
     // when
     // then
-    assertThatThrownBy(() -> apiUserInfoService.updateUserInfo("authId2", userDetailsForm))
+    assertThatThrownBy(() -> userInfoApplication.updateUserInfo("authId2", userDetailsForm))
         .isInstanceOf(CustomException.class)
         .hasMessage(ErrorCode.USER_NOT_FOUND.getMessage());
   }
@@ -133,7 +133,7 @@ class UserInfoServiceTest {
 
     // when
     String updatedNickname =
-        apiUserInfoService.updateUserNickname(savedUser.getAuthId(), userNicknameForm);
+        userInfoApplication.updateUserNickname(savedUser.getAuthId(), userNicknameForm);
 
     // then
     assertThat(updatedNickname).isEqualTo(userNicknameForm.getNickname());
@@ -155,7 +155,7 @@ class UserInfoServiceTest {
 
     // when
     // then
-    assertThatThrownBy(() -> apiUserInfoService.updateUserInfo("authId2", userDetailsForm))
+    assertThatThrownBy(() -> userInfoApplication.updateUserInfo("authId2", userDetailsForm))
         .isInstanceOf(CustomException.class)
         .hasMessage(ErrorCode.USER_NOT_FOUND.getMessage());
   }
@@ -175,7 +175,7 @@ class UserInfoServiceTest {
 
     // when
     // then
-    assertThatThrownBy(() -> apiUserInfoService.updateUserNickname(savedUser.getAuthId(), userNicknameForm))
+    assertThatThrownBy(() -> userInfoApplication.updateUserNickname(savedUser.getAuthId(), userNicknameForm))
         .isInstanceOf(CustomException.class)
         .hasMessage(ErrorCode.NICKNAME_DUPLICATED.getMessage());
   }

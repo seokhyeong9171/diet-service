@@ -35,14 +35,14 @@ import org.springframework.transaction.annotation.Transactional;
 @ComponentScan("com.health")
 @Transactional
 @EntityScan(basePackages = "com.health.domain")
-class ApiUserExerciseServiceTest {
+class UserExerciseApplicationTest {
 
   @Autowired
   private UserRepository userRepository;
   @Autowired
   private ExerciseRecordRepository exerciseRecordRepository;
   @Autowired
-  private ApiUserExerciseService apiUserExerciseService;
+  private UserExerciseApplication userExerciseApplication;
 
   @Test
   @DisplayName("운동 정보 조회 - 성공")
@@ -62,7 +62,7 @@ class ApiUserExerciseServiceTest {
 
     // when
     Page<ExerciseRecordDomainDto> exerciseList =
-        apiUserExerciseService.getExerciseList(savedUser1.getAuthId(), pageable);
+        userExerciseApplication.getExerciseList(savedUser1.getAuthId(), pageable);
 
     // then
     assertThat(exerciseList.getSize()).isEqualTo(10);
@@ -85,7 +85,7 @@ class ApiUserExerciseServiceTest {
 
     // when
     ExerciseRecordDomainDto recordDomainDto =
-        apiUserExerciseService.createExerciseRecord(savedUser1.getAuthId(), exerciseRecordForm);
+        userExerciseApplication.createExerciseRecord(savedUser1.getAuthId(), exerciseRecordForm);
 
     // then
     assertThat(recordDomainDto.getDescription()).isEqualTo(exerciseRecordForm.getDescription());
@@ -109,7 +109,7 @@ class ApiUserExerciseServiceTest {
 
     // when
     // then
-    assertThatThrownBy(() -> apiUserExerciseService
+    assertThatThrownBy(() -> userExerciseApplication
         .createExerciseRecord(savedUser1.getAuthId(), exerciseRecordForm)
     ).isInstanceOf(CustomException.class)
         .hasMessage(EXERCISE_RECORD_ALREADY_POSTED.getMessage());
@@ -132,7 +132,7 @@ class ApiUserExerciseServiceTest {
         ExerciseRecordForm.builder().description("updated description").build();
 
     // when
-    ExerciseRecordDomainDto recordDomainDto = apiUserExerciseService.updateExerciseRecord
+    ExerciseRecordDomainDto recordDomainDto = userExerciseApplication.updateExerciseRecord
         (savedUser1.getAuthId(), savedRecord.getId(), exerciseRecordForm);
 
     // then
@@ -157,7 +157,7 @@ class ApiUserExerciseServiceTest {
     // when
     // then
     assertThatThrownBy(() ->
-        apiUserExerciseService.updateExerciseRecord
+        userExerciseApplication.updateExerciseRecord
             ("authId3", savedRecord.getId(), exerciseRecordForm)
     ).isInstanceOf(CustomException.class)
         .hasMessage(USER_NOT_FOUND.getMessage());
@@ -181,7 +181,7 @@ class ApiUserExerciseServiceTest {
     // when
     // then
     assertThatThrownBy(() ->
-        apiUserExerciseService.updateExerciseRecord
+        userExerciseApplication.updateExerciseRecord
             (savedUser2.getAuthId(), savedRecord.getId(), exerciseRecordForm)
     ).isInstanceOf(CustomException.class)
         .hasMessage(EXERCISE_RECORD_NOT_OWNED_USER.getMessage());
@@ -199,7 +199,7 @@ class ApiUserExerciseServiceTest {
 
 
     // when
-    apiUserExerciseService.deleteExerciseRecord(savedUser1.getAuthId(), savedRecord.getId());
+    userExerciseApplication.deleteExerciseRecord(savedUser1.getAuthId(), savedRecord.getId());
 
     Optional<ExerciseRecordEntity> optionalExercise =
         exerciseRecordRepository.findById(savedRecord.getId());
@@ -222,7 +222,7 @@ class ApiUserExerciseServiceTest {
 
     // when
     // then
-    assertThatThrownBy(() -> apiUserExerciseService.deleteExerciseRecord
+    assertThatThrownBy(() -> userExerciseApplication.deleteExerciseRecord
         (savedUser1.getAuthId(), savedRecord.getId())
     ).isInstanceOf(CustomException.class)
         .hasMessage(EXERCISE_RECORD_EXCEED_DELETE_DATE.getMessage());
@@ -243,7 +243,7 @@ class ApiUserExerciseServiceTest {
 
     // when
     // then
-    assertThatThrownBy(() -> apiUserExerciseService.deleteExerciseRecord
+    assertThatThrownBy(() -> userExerciseApplication.deleteExerciseRecord
         (savedUser2.getAuthId(), savedRecord.getId())
     ).isInstanceOf(CustomException.class)
         .hasMessage(EXERCISE_RECORD_NOT_OWNED_USER.getMessage());

@@ -23,10 +23,18 @@ public enum ErrorCode {
     WEIGHT_RECORD_NOT_OWNED_USER(BAD_REQUEST, "this user couldn't access this record"),
 
     DAILY_MEAL_NOT_FOUND(BAD_REQUEST, "daily meal on that date is not found"),
+    DAILY_MEAL_AND_DT_UN_MATCH(BAD_REQUEST, "daily meal and that date is not match"),
     DAILY_MEAL_ALREADY_EXIST(BAD_REQUEST, "daily meal on that date is already exist"),
 
     MEAL_NOT_FOUND(BAD_REQUEST, "this meal couldn't find"),
+    MEAL_USER_INVALID(BAD_REQUEST, "this meal is not owned by that user"),
     MEAL_AND_DAILY_MEAL_NOT_MATCH(BAD_REQUEST, "this meal is not owned by that daily meal"),
+
+    FOOD_NOT_FOUND(BAD_REQUEST, "couldn't find food"),
+
+    CONSUME_FOOD_NOT_FOUND(BAD_REQUEST, "couldn't find consumeFood"),
+    CONSUME_FOOD_AND_MEAL_UN_MATCH(BAD_REQUEST, "this consumeFood and that meal is not match"),
+
 
     USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),
     PARAMETER_INVALID(BAD_REQUEST, "this is wrong parameter"),

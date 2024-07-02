@@ -1,6 +1,9 @@
 package com.health.mealservice.service.impl;
 
+import com.health.domain.entity.FoodElasticEntity;
+import com.health.domain.entity.FoodEntity;
 import com.health.domain.repository.FoodRepository;
+import com.health.domain.repository.elastic.FoodElasticRepository;
 import com.health.mealservice.dto.FoodPublicDataDto;
 import com.health.mealservice.service.FoodDataService;
 import com.health.mealservice.component.FoodPublicDataComponent;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class FoodPublicDataServiceImpl implements FoodDataService {
 
   private final FoodPublicDataComponent foodPublicDataComponent;
+  private final FoodElasticRepository foodElasticRepository;
   private final FoodRepository foodRepository;
 
   public void getAndSaveFoodData() {
@@ -29,9 +33,14 @@ public class FoodPublicDataServiceImpl implements FoodDataService {
       // 리스트가 빈 상태이면 모든 데이터 조회 완료 상태
       if (foodInfoList.isEmpty()) break;
 
-      foodRepository.saveAll(
-          foodInfoList.stream().map(FoodPublicDataDto::toEntity).toList()
+      List<FoodEntity> FoodEntityList =
+          foodInfoList.stream().map(FoodPublicDataDto::toEntity).toList();
+
+      foodElasticRepository.saveAll(
+          FoodEntityList.stream().map(FoodElasticEntity::fromEntity).toList()
       );
+
+      foodRepository.saveAll(FoodEntityList);
     }
   }
 

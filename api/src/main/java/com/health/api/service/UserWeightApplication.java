@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ApiUserWeightService {
+public class UserWeightApplication {
 
   private final UserWeightService userWeightService;
 

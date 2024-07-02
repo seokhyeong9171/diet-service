@@ -29,9 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 @ComponentScan("com.health")
 @Transactional
 @EntityScan(basePackages = "com.health.domain")
-class ApiUserWeightServiceTest {
+class UserWeightApplicationTest {
 
-  @Autowired ApiUserWeightService apiUserWeightService;
+  @Autowired
+  UserWeightApplication userWeightApplication;
   @Autowired UserRepository userRepository;
   @Autowired UserWeightRepository userWeightRepository;
 
@@ -57,7 +58,7 @@ class ApiUserWeightServiceTest {
 
     // when
     Page<UserWeightDomainDto> userWeightList =
-        apiUserWeightService.getUserWeightList(savedUser.getAuthId(), "day", pageable);
+        userWeightApplication.getUserWeightList(savedUser.getAuthId(), "day", pageable);
 
     // then
     assertThat(userWeightList.getTotalElements()).isEqualTo(3);
@@ -89,7 +90,7 @@ class ApiUserWeightServiceTest {
 
     // when
     Page<UserWeightDomainDto> userWeightList =
-        apiUserWeightService.getUserWeightList(savedUser.getAuthId(), "week", pageable);
+        userWeightApplication.getUserWeightList(savedUser.getAuthId(), "week", pageable);
 
     // then
     assertThat(userWeightList.getTotalElements()).isEqualTo(1);
@@ -117,7 +118,7 @@ class ApiUserWeightServiceTest {
 
     // when
     Page<UserWeightDomainDto> userWeightList =
-        apiUserWeightService.getUserWeightList(savedUser.getAuthId(), "month", pageable);
+        userWeightApplication.getUserWeightList(savedUser.getAuthId(), "month", pageable);
 
     // then
     assertThat(userWeightList.getTotalElements()).isEqualTo(1);
@@ -136,7 +137,7 @@ class ApiUserWeightServiceTest {
 
     // when
     UserWeightDomainDto weightRecord =
-        apiUserWeightService.createWeightRecord(savedUser.getAuthId(), weightForm);
+        userWeightApplication.createWeightRecord(savedUser.getAuthId(), weightForm);
 
     // then
     assertThat(weightRecord.getWeightRegDt()).isEqualTo(LocalDate.now());
@@ -161,7 +162,7 @@ class ApiUserWeightServiceTest {
 
     // when
     // then
-    assertThatThrownBy(() -> apiUserWeightService.createWeightRecord
+    assertThatThrownBy(() -> userWeightApplication.createWeightRecord
         (savedUser.getAuthId(), weightForm)
     ).isInstanceOf(CustomException.class).hasMessage(WEIGHT_RECORD_ALREADY_POSTED.getMessage());
   }
@@ -180,7 +181,7 @@ class ApiUserWeightServiceTest {
 
       // when
     UserWeightDomainDto userWeightDomainDto =
-        apiUserWeightService.updateWeightRecord(savedUser.getAuthId(), savedWeight.getId(), weightForm);
+        userWeightApplication.updateWeightRecord(savedUser.getAuthId(), savedWeight.getId(), weightForm);
 
     // then
     assertThat(userWeightDomainDto.getWeight()).isEqualTo(weightForm.getWeight());
@@ -203,7 +204,7 @@ class ApiUserWeightServiceTest {
     // when
     // then
 
-    assertThatThrownBy(() -> apiUserWeightService.updateWeightRecord
+    assertThatThrownBy(() -> userWeightApplication.updateWeightRecord
         (savedUser2.getAuthId(), savedWeight.getId(), weightForm)
     ).isInstanceOf(CustomException.class)
         .hasMessage(WEIGHT_RECORD_NOT_OWNED_USER.getMessage());
@@ -219,10 +220,10 @@ class ApiUserWeightServiceTest {
     UserWeightForm weightForm = UserWeightForm.builder().weight(321.321).build();
 
     UserWeightDomainDto weightRecord =
-        apiUserWeightService.createWeightRecord(savedUser.getAuthId(), weightForm);
+        userWeightApplication.createWeightRecord(savedUser.getAuthId(), weightForm);
 
     // when
-    Long id = apiUserWeightService.deleteWeightRecord(savedUser.getAuthId(), weightRecord.getId());
+    Long id = userWeightApplication.deleteWeightRecord(savedUser.getAuthId(), weightRecord.getId());
 
     // then
     assertThat(userWeightRepository.findById(id)).isEmpty();
@@ -244,7 +245,7 @@ class ApiUserWeightServiceTest {
 
     // when
     // then
-    assertThatThrownBy(() -> apiUserWeightService.deleteWeightRecord
+    assertThatThrownBy(() -> userWeightApplication.deleteWeightRecord
         (savedUser2.getAuthId(), savedWeight.getId())
     ).isInstanceOf(CustomException.class)
         .hasMessage(WEIGHT_RECORD_NOT_OWNED_USER.getMessage());

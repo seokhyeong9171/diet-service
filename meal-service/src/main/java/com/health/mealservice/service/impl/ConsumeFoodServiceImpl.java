@@ -26,8 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ConsumeFoodServiceImpl implements ConsumeFoodService {
 
-  private final UserRepository userRepository;
-  private final DailyMealRepository dailyMealRepository;
   private final MealRepository mealRepository;
   private final FoodRepository foodRepository;
   private final ConsumeFoodRepository consumeFoodRepository;
@@ -54,7 +52,6 @@ public class ConsumeFoodServiceImpl implements ConsumeFoodService {
     // nutrient 업데이트
     findMeal.addNutrient(createdConsumeFood);
     findDailyMeal.addNutrient(createdConsumeFood);
-
 
     return ConsumeFoodDomainDto.fromEntity(createdConsumeFood);
   }

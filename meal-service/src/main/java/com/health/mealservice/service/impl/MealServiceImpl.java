@@ -8,6 +8,7 @@ import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.MealEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.form.MealDomainForm;
+import com.health.domain.repository.ConsumeFoodRepository;
 import com.health.domain.repository.DailyMealRepository;
 import com.health.domain.repository.MealRepository;
 import com.health.domain.repository.UserRepository;
@@ -25,6 +26,7 @@ public class MealServiceImpl implements MealService {
 
   private final UserRepository userRepository;
   private final MealRepository mealRepository;
+  private final ConsumeFoodRepository consumeFoodRepository;
   private final DailyMealRepository dailyMealRepository;
 
   @Override
@@ -77,8 +79,7 @@ public class MealServiceImpl implements MealService {
 
     validateProperMeal(findMeal, findDailyMeal);
 
-    // TODO
-    //  추후 food service 개발 후 관련된 ConsumeFood도 삭제
+    consumeFoodRepository.deleteAll(findMeal.getConsumeFoodList());
 
     mealRepository.delete(findMeal);
 

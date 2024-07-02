@@ -17,12 +17,15 @@ public class UserCalorieComponent {
       case UNDEFINED -> variableValue = -78;
     }
 
-    double bmr =
-        10 * user.getWeight() + 6.25 * user.getHeight() -5 * getAge(user.getBirth()) + variableValue;
+    double bmr = calculateBmr(user, variableValue);
 
-    double tdee = bmr * 1.5;
+    // tdee - 500;
+    return (int) (bmr * 1.5) - 500;
+  }
 
-    return (int) tdee - 500;
+  private double calculateBmr(UserEntity user, int variableValue) {
+    return 10 * user.getWeight() + 6.25 * user.getHeight() - 5 * getAge(user.getBirth())
+        + variableValue;
   }
 
   public static int getAge(LocalDate birth) {
@@ -34,8 +37,9 @@ public class UserCalorieComponent {
 
     int age = currentYear - birth.getYear();
 
-    if (birth.getMonthValue() * 100 + birth.getDayOfMonth() > currentMonth * 100 + currentDay)
+    if (birth.getMonthValue() * 100 + birth.getDayOfMonth() > currentMonth * 100 + currentDay) {
       age--;
+    }
 
     return age;
   }

@@ -4,17 +4,15 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.*;
 import static org.springframework.http.HttpStatus.*;
 
 import com.health.api.form.MealForm;
-import com.health.api.service.ApiMealService;
+import com.health.api.service.MealApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.MealDomainDto;
-import com.health.domain.form.MealDomainForm;
-import com.health.domain.response.MealResponse;
+import com.health.domain.response.MealInfoResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,12 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/{authId}/dailymeal/{dailyMealDt}/meal")
+@RequestMapping("/authid/{authId}/dailymeals/{dailyMealDt}/meals")
 @RequiredArgsConstructor
 public class MealController {
 
   private final AuthValidatorComponent authValidatorComponent;
-  private final ApiMealService apiMealService;
+  private final MealApplication mealApplication;
 
   @GetMapping
   public ResponseEntity<?> getMealList(
@@ -41,10 +39,10 @@ public class MealController {
 
     authValidatorComponent.validateAuthId(authId);
 
-    List<MealDomainDto> mealList = apiMealService.getMealList(authId, dailyMealDt);
+    List<MealDomainDto> mealList = mealApplication.getMealList(authId, dailyMealDt);
 
     return ResponseEntity.ok(
-        SuccessResponse.of(mealList.stream().map(MealResponse::fromDto))
+        SuccessResponse.of(mealList.stream().map(MealInfoResponse::fromDto))
     );
   }
 
@@ -57,9 +55,9 @@ public class MealController {
 
     authValidatorComponent.validateAuthId(authId);
 
-    MealDomainDto meal = apiMealService.getMealInfo(authId, dailyMealDt, mealId);
+    MealDomainDto meal = mealApplication.getMealInfo(authId, dailyMealDt, mealId);
 
-    return ResponseEntity.ok(SuccessResponse.of(MealResponse.fromDto(meal)));
+    return ResponseEntity.ok(SuccessResponse.of(MealInfoResponse.fromDto(meal)));
   }
 
   @PostMapping
@@ -71,10 +69,10 @@ public class MealController {
 
     authValidatorComponent.validateAuthId(authId);
 
-    MealDomainDto mealDomainDto =  apiMealService.createMeal(authId, dailyMealDt, mealForm);
+    MealDomainDto mealDomainDto =  mealApplication.createMeal(authId, dailyMealDt, mealForm);
 
     return ResponseEntity.status(CREATED).body(
-        SuccessResponse.of(MealResponse.fromDto(mealDomainDto))
+        SuccessResponse.of(MealInfoResponse.fromDto(mealDomainDto))
     );
   }
 
@@ -87,7 +85,7 @@ public class MealController {
 
     authValidatorComponent.validateAuthId(authId);
 
-    Long deletedMealId = apiMealService.deleteMeal(authId, dailyMealDt, mealId);
+    Long deletedMealId = mealApplication.deleteMeal(authId, dailyMealDt, mealId);
 
     return ResponseEntity.ok(SuccessResponse.of(deletedMealId));
   }

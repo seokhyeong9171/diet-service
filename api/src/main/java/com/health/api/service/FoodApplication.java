@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ApiFoodService {
+public class FoodApplication {
 
   private final FoodService foodService;
 

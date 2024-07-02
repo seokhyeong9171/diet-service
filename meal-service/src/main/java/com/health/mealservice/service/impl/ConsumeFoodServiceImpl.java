@@ -46,8 +46,8 @@ public class ConsumeFoodServiceImpl implements ConsumeFoodService {
 
     FoodEntity findFood = findFoodByCode(foodDomainForm.getFoodCode());
 
-    ConsumeFoodEntity createdConsumeFood = ConsumeFoodEntity.create(findMeal, findFood,
-        foodDomainForm.getConsumeAmount());
+    ConsumeFoodEntity createdConsumeFood =
+        ConsumeFoodEntity.create(findMeal, findFood, foodDomainForm.getConsumeAmount());
 
     findMeal.getConsumeFoodList().add(createdConsumeFood);
 

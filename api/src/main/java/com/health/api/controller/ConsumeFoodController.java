@@ -4,7 +4,7 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.FoodConsumeForm;
-import com.health.api.service.ApiConsumeFoodService;
+import com.health.api.service.ConsumeFoodApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.ConsumeFoodDomainDto;
 import com.health.domain.response.ConsumeFoodResponse;
@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/{authId}/dailymeal/{dailyMealDt}/meal/{mealId}")
+@RequestMapping("/authid/{authId}/dailymeals/{dailyMealDt}/meals/{mealId}")
 @RequiredArgsConstructor
 public class ConsumeFoodController {
 
   private final AuthValidatorComponent authValidatorComponent;
-  private final ApiConsumeFoodService apiConsumeFoodService;
+  private final ConsumeFoodApplication consumeFoodApplication;
 
 
   @PostMapping
@@ -41,7 +41,7 @@ public class ConsumeFoodController {
     authValidatorComponent.validateAuthId(authId);
 
     ConsumeFoodDomainDto consumeFoodDomainDto =
-        apiConsumeFoodService.addFoodToMeal(authId, dailyMealDt, mealId, foodConsumeForm);
+        consumeFoodApplication.addFoodToMeal(authId, dailyMealDt, mealId, foodConsumeForm);
 
     return ResponseEntity.status(CREATED).body(
         SuccessResponse.of(ConsumeFoodResponse.fromDomainDto(consumeFoodDomainDto))
@@ -59,7 +59,7 @@ public class ConsumeFoodController {
     authValidatorComponent.validateAuthId(authId);
 
     Long deletedConsumeFoodId =
-        apiConsumeFoodService.deleteConsumeFood(authId, dailyMealDt, mealId, consumeFoodId);
+        consumeFoodApplication.deleteConsumeFood(authId, dailyMealDt, mealId, consumeFoodId);
 
     return ResponseEntity.ok(SuccessResponse.of(deletedConsumeFoodId));
   }

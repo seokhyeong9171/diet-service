@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ApiDailyMealService {
+public class DailyMealApplication {
 
   private final DailyMealService dailyMealService;
 

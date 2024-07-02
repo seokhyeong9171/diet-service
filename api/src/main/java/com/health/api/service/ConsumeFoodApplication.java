@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ApiConsumeFoodService {
+public class ConsumeFoodApplication {
 
   private final ConsumeFoodService consumeFoodService;
 

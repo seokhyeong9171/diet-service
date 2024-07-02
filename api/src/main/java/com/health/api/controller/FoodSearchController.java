@@ -1,6 +1,6 @@
 package com.health.api.controller;
 
-import com.health.api.service.ApiFoodService;
+import com.health.api.service.FoodApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.FoodDomainDto;
 import com.health.domain.response.FoodResponse;
@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/food")
+@RequestMapping("/foods")
 @RequiredArgsConstructor
 public class FoodSearchController {
 
-  private final ApiFoodService apiFoodService;
+  private final FoodApplication foodApplication;
 
   @GetMapping
   public ResponseEntity<?> searchFood(@RequestParam String searchName, @RequestParam int page) {
 
-    Page<FoodDomainDto> foodDtoList = apiFoodService.searchFood(searchName, page);
+    Page<FoodDomainDto> foodDtoList = foodApplication.searchFood(searchName, page);
 
     return ResponseEntity.ok(SuccessResponse.of(foodDtoList.map(FoodResponse::fromDomainDto)));
   }

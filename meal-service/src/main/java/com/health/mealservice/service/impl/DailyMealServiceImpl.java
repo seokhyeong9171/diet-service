@@ -64,9 +64,10 @@ public class DailyMealServiceImpl implements DailyMealService {
 
 
     List<MealEntity> meals = findDailyMeal.getMeals();
-    meals.forEach(meal -> consumeFoodRepository.deleteAll(meal.getConsumeFoodList()));
+    meals.forEach(meal -> consumeFoodRepository.deleteByMeals(meals));
 
-    mealRepository.deleteAll(meals);
+//    mealRepository.deleteAll(meals);
+    mealRepository.deleteByDailyMeal(findDailyMeal);
     dailyMealRepository.delete(findDailyMeal);
 
     return findDailyMeal.getDailyMealDt();

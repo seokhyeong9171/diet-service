@@ -79,7 +79,7 @@ public class MealServiceImpl implements MealService {
 
     validateProperMeal(findMeal, findDailyMeal);
 
-    consumeFoodRepository.deleteAll(findMeal.getConsumeFoodList());
+    consumeFoodRepository.deleteByMeals(List.of(findMeal));
 
     mealRepository.delete(findMeal);
 

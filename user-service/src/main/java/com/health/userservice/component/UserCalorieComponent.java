@@ -4,10 +4,10 @@ import com.health.domain.entity.UserEntity;
 import java.time.LocalDate;
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class UserCalorieComponent {
 
-  public Integer calculateAbleCalorie(UserEntity user) {
+  public static Integer calculateAbleCalorie(UserEntity user) {
 
     int variableValue = 0;
 
@@ -23,12 +23,12 @@ public class UserCalorieComponent {
     return (int) (bmr * 1.5) - 500;
   }
 
-  private double calculateBmr(UserEntity user, int variableValue) {
+  private static double calculateBmr(UserEntity user, int variableValue) {
     return 10 * user.getWeight() + 6.25 * user.getHeight() - 5 * getAge(user.getBirth())
         + variableValue;
   }
 
-  public static int getAge(LocalDate birth) {
+  private static int getAge(LocalDate birth) {
     LocalDate now = LocalDate.now();
 
     int currentYear = now.getYear();

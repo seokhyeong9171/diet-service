@@ -24,7 +24,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 public class RedisConfig {
 
-  private final ObjectMapper objectMapper;
   private final Environment env;
 
   @Bean
@@ -35,32 +34,6 @@ public class RedisConfig {
     redisConfig.setUsername(getRedisUsername());
     redisConfig.setPassword(getRedisPassword());
     return new LettuceConnectionFactory(redisConfig);
-  }
-
-  @Bean
-  public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-    objectMapper.registerModule(new JavaTimeModule());
-
-    RedisTemplate<String, Object> template = new RedisTemplate<>();
-    template.setConnectionFactory(redisConnectionFactory);
-    template.setKeySerializer(new StringRedisSerializer());
-    template.setValueSerializer(new StringRedisSerializer());
-    template.setHashKeySerializer(new StringRedisSerializer());
-    template.setHashValueSerializer(new StringRedisSerializer());
-    return template;
-  }
-
-  @Bean
-  public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-
-    RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-        .serializeKeysWith(RedisSerializationContext
-            .SerializationPair.fromSerializer(new StringRedisSerializer()))
-        .serializeValuesWith(RedisSerializationContext
-            .SerializationPair.fromSerializer(new StringRedisSerializer()));
-
-    return RedisCacheManager
-        .builder(redisConnectionFactory).cacheDefaults(redisCacheConfiguration).build();
   }
 
   private String getRedisHost() {

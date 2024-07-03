@@ -1,7 +1,6 @@
 package com.health.userservice.service.impl;
 
 import static com.health.common.exception.ErrorCode.*;
-import static com.health.common.redis.RedisKeyUtil.*;
 import static com.health.userservice.util.UserCalorieUtil.*;
 
 import com.health.common.exception.CustomException;
@@ -17,6 +16,7 @@ import com.health.domain.repository.UserRepository;
 import com.health.userservice.service.UserInfoService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,11 +42,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
   @Override
   @Transactional(readOnly = true)
-  public IntakeDomainDto getIntakeInfo(String authId) {
-
-    IntakeDomainDto cacheData =
-        redisComponent.getData(intakeKey(authId, LocalDate.now()), IntakeDomainDto.class);
-    if (cacheData != null) return cacheData;
+  @Cacheable(cacheNames = "user", key = "@redisKeyComponent.intakeKey(#authId, #date)")
+  public IntakeDomainDto getIntakeInfo(String authId, LocalDate date) {
 
     UserEntity findUser = findUserByAuthId(authId);
     DailyMealEntity findDailyMeal = findTodayDailyMeal(findUser);
@@ -54,11 +51,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     Integer availKCal = calculateAbleCalorie(findUser);
     Integer intakeCalorie = getIntakeCalorie(findDailyMeal);
 
-    IntakeDomainDto intakeDomainDto =
-        createIntakeDomainDto(findUser, availKCal, intakeCalorie);
-
-    return redisComponent.setData(intakeKey(authId, LocalDate.now()), intakeDomainDto);
-
+    return createIntakeDomainDto(findUser, availKCal, intakeCalorie);
   }
 
   @Override

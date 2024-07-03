@@ -1,7 +1,6 @@
 package com.health.mealservice.service.impl;
 
 import static com.health.common.exception.ErrorCode.*;
-import static com.health.common.redis.RedisKeyUtil.intakeKey;
 
 import com.health.common.exception.CustomException;
 import com.health.common.redis.RedisComponent;
@@ -18,6 +17,7 @@ import com.health.mealservice.service.MealService;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +74,8 @@ public class MealServiceImpl implements MealService {
 
 
   @Override
+  // nutrient 정보 업데이트 위해 기존 캐시 삭제
+  @CacheEvict(cacheNames = "user", key = "@redisKeyComponent.intakeKey(#authId, #dailyMealDt)")
   public Long deleteMeal(String authId, LocalDate dailyMealDt, Long mealId) {
     UserEntity findUser = findUserByAuthId(authId);
 
@@ -87,8 +89,6 @@ public class MealServiceImpl implements MealService {
 
     mealRepository.delete(findMeal);
 
-    // nutrient 정보 업데이트 위해 기존 캐시 삭제
-    redisComponent.deleteData(intakeKey(authId, dailyMealDt));
 
     return findMeal.getId();
   }

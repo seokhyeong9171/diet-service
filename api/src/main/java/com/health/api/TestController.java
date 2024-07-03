@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.health.domain.dto.IntakeDomainDto;
 import com.health.mealservice.service.FoodDataService;
 import com.health.userservice.service.UserInfoService;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,8 @@ public class TestController {
 //        "naver_s6l2d3WzMpsNC5LDfilFIYmqepWMAvwEa5THTVL6kEQ");
 
 //    log.info(dto.toString());
-    IntakeDomainDto dto = userInfoService.getIntakeInfo("naver_s6l2d3WzMpsNC5LDfilFIYmqepWMAvwEa5THTVL6kEQ");
+    IntakeDomainDto dto = userInfoService.getIntakeInfo("naver_s6l2d3WzMpsNC5LDfilFIYmqepWMAvwEa5THTVL6kEQ",
+        LocalDate.now());
     log.info("{}", dto.toString());
 
     return dto.toString();

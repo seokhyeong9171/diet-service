@@ -1,11 +1,10 @@
-package com.health.userservice.component;
+package com.health.userservice.util;
 
 import com.health.domain.entity.UserEntity;
 import java.time.LocalDate;
-import org.springframework.stereotype.Component;
 
 
-public class UserCalorieComponent {
+public class UserCalorieUtil {
 
   public static Integer calculateAbleCalorie(UserEntity user) {
 

@@ -1,5 +1,6 @@
 package com.health.userservice.service;
 
+import com.health.domain.dto.PossibleIntakeDomainDto;
 import com.health.domain.dto.UserWeightDomainDto;
 import com.health.domain.form.UserWeightDomainForm;
 import org.springframework.data.domain.Page;
@@ -14,4 +15,6 @@ public interface UserWeightService {
   UserWeightDomainDto updateWeightRecord(String authId, Long recordId, UserWeightDomainForm form);
 
   Long deleteWeightRecord(String authId, Long recordId);
+
+
 }

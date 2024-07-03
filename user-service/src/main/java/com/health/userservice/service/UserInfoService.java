@@ -1,6 +1,7 @@
 package com.health.userservice.service;
 
 
+import com.health.domain.dto.PossibleIntakeDomainDto;
 import com.health.domain.dto.UserDomainDto;
 import com.health.domain.form.UserDetailsDomainForm;
 import com.health.domain.form.UserNicknameDomainForm;
@@ -12,4 +13,6 @@ public interface UserInfoService {
   UserDomainDto updateUserDetails(String authId, UserDetailsDomainForm form);
 
   String updateUserNickname(String authId, UserNicknameDomainForm form);
+
+  PossibleIntakeDomainDto getIntakeInfo(String authId);
 }

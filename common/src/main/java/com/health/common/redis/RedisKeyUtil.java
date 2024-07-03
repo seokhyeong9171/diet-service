@@ -1,4 +1,4 @@
-package com.health.common.util;
+package com.health.common.redis;
 
 import java.time.LocalDate;
 

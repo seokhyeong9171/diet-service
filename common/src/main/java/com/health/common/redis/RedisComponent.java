@@ -1,4 +1,4 @@
-package com.health.common.util;
+package com.health.common.redis;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +41,10 @@ public class RedisComponent {
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public Boolean deleteData(String key) {
+    return redisTemplate.delete(key);
   }
 
 }

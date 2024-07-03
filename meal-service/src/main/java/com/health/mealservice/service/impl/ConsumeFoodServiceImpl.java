@@ -1,8 +1,11 @@
 package com.health.mealservice.service.impl;
 
 import static com.health.common.exception.ErrorCode.*;
+import static com.health.common.redis.RedisKeyUtil.*;
 
 import com.health.common.exception.CustomException;
+import com.health.common.redis.RedisComponent;
+import com.health.common.redis.RedisKeyUtil;
 import com.health.domain.dto.ConsumeFoodDomainDto;
 import com.health.domain.entity.ConsumeFoodEntity;
 import com.health.domain.entity.DailyMealEntity;
@@ -29,6 +32,7 @@ public class ConsumeFoodServiceImpl implements ConsumeFoodService {
   private final MealRepository mealRepository;
   private final FoodRepository foodRepository;
   private final ConsumeFoodRepository consumeFoodRepository;
+  private final RedisComponent redisComponent;
 
 
   @Override
@@ -53,6 +57,9 @@ public class ConsumeFoodServiceImpl implements ConsumeFoodService {
     findMeal.addNutrient(createdConsumeFood);
     findDailyMeal.addNutrient(createdConsumeFood);
 
+    // nutrient 정보 업데이트 위해 기존 캐시 삭제
+    redisComponent.deleteData(intakeKey(authId, dailyMealDt));
+
     return ConsumeFoodDomainDto.fromEntity(createdConsumeFood);
   }
 
@@ -76,7 +83,11 @@ public class ConsumeFoodServiceImpl implements ConsumeFoodService {
     findDailyMeal.minusNutrient(findConsumeFood);
 
     findMeal.getConsumeFoodList().remove(findConsumeFood);
+
     consumeFoodRepository.delete(findConsumeFood);
+
+    // nutrient 정보 업데이트 위해 기존 캐시 삭제
+    redisComponent.deleteData(intakeKey(authId, dailyMealDt));
 
     return findConsumeFood.getId();
   }

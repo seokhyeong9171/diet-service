@@ -1,11 +1,11 @@
 package com.health.userservice.service.impl;
 
 import static com.health.common.exception.ErrorCode.*;
-import static com.health.common.util.RedisKeyUtil.*;
+import static com.health.common.redis.RedisKeyUtil.*;
 import static com.health.userservice.util.UserCalorieUtil.*;
 
 import com.health.common.exception.CustomException;
-import com.health.common.util.RedisComponent;
+import com.health.common.redis.RedisComponent;
 import com.health.domain.dto.IntakeDomainDto;
 import com.health.domain.dto.UserDomainDto;
 import com.health.domain.entity.DailyMealEntity;
@@ -95,8 +95,8 @@ public class UserInfoServiceImpl implements UserInfoService {
   }
 
   private DailyMealEntity findTodayDailyMeal(UserEntity findUser) {
-    return dailyMealRepository.findByUserAndDailyMealDt(findUser,
-            LocalDate.now())
+    return dailyMealRepository
+        .findByUserAndDailyMealDt(findUser, LocalDate.now())
         .orElse(null);
   }
 

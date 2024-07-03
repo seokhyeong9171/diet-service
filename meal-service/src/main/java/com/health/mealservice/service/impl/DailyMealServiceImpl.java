@@ -1,9 +1,10 @@
 package com.health.mealservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.*;
+import static com.health.common.exception.ErrorCode.DAILY_MEAL_ALREADY_EXIST;
+import static com.health.common.exception.ErrorCode.DAILY_MEAL_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
 
 import com.health.common.exception.CustomException;
-import com.health.common.redis.RedisComponent;
 import com.health.domain.dto.DailyMealDomainDto;
 import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.MealEntity;

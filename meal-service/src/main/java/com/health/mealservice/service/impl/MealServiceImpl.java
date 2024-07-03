@@ -1,6 +1,9 @@
 package com.health.mealservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.*;
+import static com.health.common.exception.ErrorCode.DAILY_MEAL_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.MEAL_AND_DAILY_MEAL_NOT_MATCH;
+import static com.health.common.exception.ErrorCode.MEAL_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
 
 import com.health.common.exception.CustomException;
 import com.health.common.redis.RedisComponent;

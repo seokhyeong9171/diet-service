@@ -1,9 +1,13 @@
 package com.health.mealservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.*;
+import static com.health.common.exception.ErrorCode.CONSUME_FOOD_AND_MEAL_UN_MATCH;
+import static com.health.common.exception.ErrorCode.CONSUME_FOOD_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.DAILY_MEAL_AND_DT_UN_MATCH;
+import static com.health.common.exception.ErrorCode.FOOD_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.MEAL_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.MEAL_USER_INVALID;
 
 import com.health.common.exception.CustomException;
-import com.health.common.redis.RedisComponent;
 import com.health.domain.dto.ConsumeFoodDomainDto;
 import com.health.domain.entity.ConsumeFoodEntity;
 import com.health.domain.entity.DailyMealEntity;

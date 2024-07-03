@@ -3,7 +3,6 @@ package com.health.api.form;
 import com.health.domain.form.MealDomainForm;
 import com.health.domain.type.MealType;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

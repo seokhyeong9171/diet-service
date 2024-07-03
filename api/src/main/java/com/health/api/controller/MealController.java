@@ -1,7 +1,7 @@
 package com.health.api.controller;
 
-import static org.springframework.format.annotation.DateTimeFormat.ISO.*;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
+import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.MealForm;
 import com.health.api.service.MealApplication;

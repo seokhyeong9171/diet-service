@@ -1,6 +1,12 @@
 package com.health.mealservice.dto;
 
-import static com.health.mealservice.type.FoodPublicDataConst.*;
+import static com.health.mealservice.type.FoodPublicDataConst.CARBOHYDRATE;
+import static com.health.mealservice.type.FoodPublicDataConst.CODE;
+import static com.health.mealservice.type.FoodPublicDataConst.FAT;
+import static com.health.mealservice.type.FoodPublicDataConst.KCAL;
+import static com.health.mealservice.type.FoodPublicDataConst.NAME;
+import static com.health.mealservice.type.FoodPublicDataConst.PROTEIN;
+import static com.health.mealservice.type.FoodPublicDataConst.WEIGHT;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;

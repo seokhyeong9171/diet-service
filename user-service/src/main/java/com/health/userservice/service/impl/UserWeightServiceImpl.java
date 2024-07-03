@@ -1,6 +1,9 @@
 package com.health.userservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.*;
+import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_ALREADY_POSTED;
+import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_NOT_OWNED_USER;
 
 import com.health.common.exception.CustomException;
 import com.health.common.redis.RedisComponent;

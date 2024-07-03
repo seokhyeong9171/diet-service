@@ -1,6 +1,6 @@
 package com.health.api.controller;
 
-import static org.springframework.format.annotation.DateTimeFormat.ISO.*;
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 
 import com.health.api.form.UserDetailsForm;
 import com.health.api.form.UserNicknameForm;
@@ -14,7 +14,6 @@ import com.health.security.authentication.AuthValidatorComponent;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;

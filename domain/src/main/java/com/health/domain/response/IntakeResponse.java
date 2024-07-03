@@ -1,7 +1,6 @@
 package com.health.domain.response;
 
 import com.health.domain.dto.IntakeDomainDto;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

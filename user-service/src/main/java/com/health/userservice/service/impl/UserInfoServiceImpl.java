@@ -1,7 +1,8 @@
 package com.health.userservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.*;
-import static com.health.userservice.util.UserCalorieUtil.*;
+import static com.health.common.exception.ErrorCode.NICKNAME_DUPLICATED;
+import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
+import static com.health.userservice.util.UserCalorieUtil.calculateAbleCalorie;
 
 import com.health.common.exception.CustomException;
 import com.health.common.redis.RedisComponent;

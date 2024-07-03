@@ -1,9 +1,11 @@
 package com.health.common.util;
 
+import java.time.LocalDate;
+
 public class RedisKeyUtil {
 
-  public static String intakeKey(String authId) {
-    return "user_intake_calorie:" + authId;
+  public static String intakeKey(String authId, LocalDate date) {
+    return "intake:" + date + ":" + authId;
   }
 
 }

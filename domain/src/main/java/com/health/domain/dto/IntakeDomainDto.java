@@ -12,12 +12,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class PossibleIntakeDomainDto {
+public class IntakeDomainDto {
 
 
   private String authId;
-
-  private LocalDate date;
 
   private Integer availKCal;
   private Integer intakeCalorie;

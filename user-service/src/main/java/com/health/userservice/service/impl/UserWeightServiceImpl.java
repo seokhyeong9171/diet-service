@@ -1,13 +1,10 @@
 package com.health.userservice.service.impl;
 
 import static com.health.common.exception.ErrorCode.*;
-import static com.health.common.util.RedisKeyUtil.*;
 
 import com.health.common.exception.CustomException;
 import com.health.common.util.RedisComponent;
-import com.health.domain.dto.PossibleIntakeDomainDto;
 import com.health.domain.dto.UserWeightDomainDto;
-import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.entity.UserWeightEntity;
 import com.health.domain.form.UserWeightDomainForm;

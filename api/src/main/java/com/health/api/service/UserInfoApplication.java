@@ -2,7 +2,7 @@ package com.health.api.service;
 
 import com.health.api.form.UserDetailsForm;
 import com.health.api.form.UserNicknameForm;
-import com.health.domain.dto.PossibleIntakeDomainDto;
+import com.health.domain.dto.IntakeDomainDto;
 import com.health.domain.dto.UserDomainDto;
 import com.health.userservice.service.UserInfoService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class UserInfoApplication {
     return userInfoService.getUserInfo(authId);
   }
 
-  public PossibleIntakeDomainDto getIntakeInfo(String authId) {
+  public IntakeDomainDto getIntakeInfo(String authId) {
     return userInfoService.getIntakeInfo(authId);
   }
 

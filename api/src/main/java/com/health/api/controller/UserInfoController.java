@@ -4,9 +4,9 @@ import com.health.api.form.UserDetailsForm;
 import com.health.api.form.UserNicknameForm;
 import com.health.api.service.UserInfoApplication;
 import com.health.common.model.SuccessResponse;
-import com.health.domain.dto.PossibleIntakeDomainDto;
+import com.health.domain.dto.IntakeDomainDto;
 import com.health.domain.dto.UserDomainDto;
-import com.health.domain.response.PossibleIntakeResponse;
+import com.health.domain.response.IntakeResponse;
 import com.health.domain.response.UserInfoResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
@@ -46,10 +46,10 @@ public class UserInfoController {
 
     authValidatorComponent.validateAuthId(authId);
 
-    PossibleIntakeDomainDto possibleIntake = userInfoApplication.getIntakeInfo(authId);
+    IntakeDomainDto possibleIntake = userInfoApplication.getIntakeInfo(authId);
 
     return ResponseEntity.ok(
-        SuccessResponse.of(PossibleIntakeResponse.fromDomainDto(possibleIntake))
+        SuccessResponse.of(IntakeResponse.fromDomainDto(possibleIntake))
     );
   }
 

@@ -6,7 +6,7 @@ import static com.health.userservice.util.UserCalorieUtil.*;
 
 import com.health.common.exception.CustomException;
 import com.health.common.util.RedisComponent;
-import com.health.domain.dto.PossibleIntakeDomainDto;
+import com.health.domain.dto.IntakeDomainDto;
 import com.health.domain.dto.UserDomainDto;
 import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.UserEntity;
@@ -42,10 +42,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 
   @Override
   @Transactional(readOnly = true)
-  public PossibleIntakeDomainDto getIntakeInfo(String authId) {
+  public IntakeDomainDto getIntakeInfo(String authId) {
 
-    PossibleIntakeDomainDto cacheData =
-        redisComponent.getData(intakeKey(authId), PossibleIntakeDomainDto.class);
+    IntakeDomainDto cacheData =
+        redisComponent.getData(intakeKey(authId, LocalDate.now()), IntakeDomainDto.class);
     if (cacheData != null) return cacheData;
 
     UserEntity findUser = findUserByAuthId(authId);
@@ -54,10 +54,10 @@ public class UserInfoServiceImpl implements UserInfoService {
     Integer availKCal = calculateAbleCalorie(findUser);
     Integer intakeCalorie = getIntakeCalorie(findDailyMeal);
 
-    PossibleIntakeDomainDto possibleIntakeDomainDto =
-        createPossibleIntakeDomainDto(findUser, availKCal, intakeCalorie);
+    IntakeDomainDto intakeDomainDto =
+        createIntakeDomainDto(findUser, availKCal, intakeCalorie);
 
-    return redisComponent.setData(intakeKey(authId), possibleIntakeDomainDto);
+    return redisComponent.setData(intakeKey(authId, LocalDate.now()), intakeDomainDto);
 
   }
 
@@ -104,12 +104,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     return dailyMeal == null ? 0 : dailyMeal.getNutrient().getKCal();
   }
 
-  private PossibleIntakeDomainDto createPossibleIntakeDomainDto
+  private IntakeDomainDto createIntakeDomainDto
       (UserEntity findUser, Integer availKCal, Integer intakeCalorie) {
 
-    return PossibleIntakeDomainDto.builder()
+    return IntakeDomainDto.builder()
         .authId(findUser.getAuthId())
-        .date(LocalDate.now())
         .availKCal(availKCal).intakeCalorie(intakeCalorie)
         .build();
   }

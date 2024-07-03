@@ -1,10 +1,8 @@
 package com.health.domain.dto;
 
 import com.health.domain.entity.DailyMealEntity;
-import com.health.domain.entity.Nutrient;
 import com.health.domain.entity.UserEntity;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

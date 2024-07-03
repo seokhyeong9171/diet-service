@@ -1,6 +1,11 @@
 package com.health.mealservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.*;
+import static com.health.common.exception.ErrorCode.CONSUME_FOOD_AND_MEAL_UN_MATCH;
+import static com.health.common.exception.ErrorCode.CONSUME_FOOD_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.DAILY_MEAL_AND_DT_UN_MATCH;
+import static com.health.common.exception.ErrorCode.FOOD_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.MEAL_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.MEAL_USER_INVALID;
 
 import com.health.common.exception.CustomException;
 import com.health.domain.dto.ConsumeFoodDomainDto;
@@ -11,13 +16,12 @@ import com.health.domain.entity.MealEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.form.FoodDomainForm;
 import com.health.domain.repository.ConsumeFoodRepository;
-import com.health.domain.repository.DailyMealRepository;
 import com.health.domain.repository.FoodRepository;
 import com.health.domain.repository.MealRepository;
-import com.health.domain.repository.UserRepository;
 import com.health.mealservice.service.ConsumeFoodService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +34,9 @@ public class ConsumeFoodServiceImpl implements ConsumeFoodService {
   private final FoodRepository foodRepository;
   private final ConsumeFoodRepository consumeFoodRepository;
 
-
   @Override
+  // nutrient 정보 업데이트 위해 기존 캐시 삭제
+  @CacheEvict(cacheNames = "user", key = "@redisKeyComponent.intakeKey(#authId, #dailyMealDt)")
   public ConsumeFoodDomainDto addFoodToMeal
       (String authId, LocalDate dailyMealDt, Long mealId, FoodDomainForm foodDomainForm) {
 
@@ -53,10 +58,13 @@ public class ConsumeFoodServiceImpl implements ConsumeFoodService {
     findMeal.addNutrient(createdConsumeFood);
     findDailyMeal.addNutrient(createdConsumeFood);
 
+
     return ConsumeFoodDomainDto.fromEntity(createdConsumeFood);
   }
 
   @Override
+  // nutrient 정보 업데이트 위해 기존 캐시 삭제
+  @CacheEvict(cacheNames = "user", key = "@redisKeyComponent.intakeKey(#authId, #dailyMealDt)")
   public Long deleteConsumeFood
       (String authId, LocalDate dailyMealDt, Long mealId, Long consumeFoodId) {
 
@@ -76,6 +84,7 @@ public class ConsumeFoodServiceImpl implements ConsumeFoodService {
     findDailyMeal.minusNutrient(findConsumeFood);
 
     findMeal.getConsumeFoodList().remove(findConsumeFood);
+
     consumeFoodRepository.delete(findConsumeFood);
 
     return findConsumeFood.getId();

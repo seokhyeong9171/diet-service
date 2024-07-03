@@ -1,8 +1,12 @@
 package com.health.mealservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.*;
+import static com.health.common.exception.ErrorCode.DAILY_MEAL_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.MEAL_AND_DAILY_MEAL_NOT_MATCH;
+import static com.health.common.exception.ErrorCode.MEAL_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
 
 import com.health.common.exception.CustomException;
+import com.health.common.redis.RedisComponent;
 import com.health.domain.dto.MealDomainDto;
 import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.MealEntity;
@@ -16,6 +20,7 @@ import com.health.mealservice.service.MealService;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +33,8 @@ public class MealServiceImpl implements MealService {
   private final MealRepository mealRepository;
   private final ConsumeFoodRepository consumeFoodRepository;
   private final DailyMealRepository dailyMealRepository;
+
+  private final RedisComponent redisComponent;
 
   @Override
   @Transactional(readOnly = true)
@@ -70,6 +77,8 @@ public class MealServiceImpl implements MealService {
 
 
   @Override
+  // nutrient 정보 업데이트 위해 기존 캐시 삭제
+  @CacheEvict(cacheNames = "user", key = "@redisKeyComponent.intakeKey(#authId, #dailyMealDt)")
   public Long deleteMeal(String authId, LocalDate dailyMealDt, Long mealId) {
     UserEntity findUser = findUserByAuthId(authId);
 
@@ -82,6 +91,7 @@ public class MealServiceImpl implements MealService {
     consumeFoodRepository.deleteByMeals(List.of(findMeal));
 
     mealRepository.delete(findMeal);
+
 
     return findMeal.getId();
   }

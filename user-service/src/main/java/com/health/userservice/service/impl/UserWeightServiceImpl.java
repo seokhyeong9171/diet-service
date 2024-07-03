@@ -6,6 +6,7 @@ import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_NOT_FOUND;
 import static com.health.common.exception.ErrorCode.WEIGHT_RECORD_NOT_OWNED_USER;
 
 import com.health.common.exception.CustomException;
+import com.health.common.redis.RedisComponent;
 import com.health.domain.dto.UserWeightDomainDto;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.entity.UserWeightEntity;
@@ -30,6 +31,7 @@ public class UserWeightServiceImpl implements UserWeightService {
   private final UserRepository userRepository;
   private final UserWeightRepository userWeightRepository;
   private final UserWeightQueryRepository userWeightQueryRepository;
+  private final RedisComponent redisComponent;
 
 
   @Override
@@ -37,7 +39,7 @@ public class UserWeightServiceImpl implements UserWeightService {
   public Page<UserWeightDomainDto> getUserWeightList
       (String authId, String scope, Pageable pageable) {
 
-    UserEntity findUser = findUserById(authId);
+    UserEntity findUser = findUserByAuthId(authId);
 
     Page<UserWeightEntity> weightEntityList =
         switch (Scope.fromValue(scope)) {
@@ -54,7 +56,7 @@ public class UserWeightServiceImpl implements UserWeightService {
   @Override
   public UserWeightDomainDto createWeightRecord(String authId, UserWeightDomainForm form) {
 
-    UserEntity findUser = findUserById(authId);
+    UserEntity findUser = findUserByAuthId(authId);
 
     // 오늘 이미 몸무게 정보 등록 했는지 확인
     validateAlreadyPostToday(findUser);
@@ -85,7 +87,7 @@ public class UserWeightServiceImpl implements UserWeightService {
 
   @Override
   public Long deleteWeightRecord(String authId, Long recordId) {
-    UserEntity findUser = findUserById(authId);
+    UserEntity findUser = findUserByAuthId(authId);
     UserWeightEntity findWeight = findWeightRecordById(recordId);
 
     // 해당 유저의 몸무게 정보인지 확인
@@ -102,7 +104,7 @@ public class UserWeightServiceImpl implements UserWeightService {
         .orElseThrow(() -> new CustomException(WEIGHT_RECORD_NOT_FOUND));
   }
 
-  private UserEntity findUserById(String authId) {
+  private UserEntity findUserByAuthId(String authId) {
     return userRepository.findByAuthId(authId)
         .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
   }

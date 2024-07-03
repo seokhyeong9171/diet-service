@@ -14,4 +14,6 @@ public interface UserWeightService {
   UserWeightDomainDto updateWeightRecord(String authId, Long recordId, UserWeightDomainForm form);
 
   Long deleteWeightRecord(String authId, Long recordId);
+
+
 }

@@ -3,6 +3,7 @@ package com.health.api.controller;
 import com.health.api.service.ForumApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.PostDomainDto;
+import com.health.domain.response.PostResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,15 +23,16 @@ public class ForumController {
   private final ForumApplication forumApplication;
 
 
-  @GetMapping
+  @GetMapping("/posts")
   public ResponseEntity<?> getPostList(@PathVariable String authId, Pageable pageable) {
 
     authValidatorComponent.validateAuthId(authId);
 
     Page<PostDomainDto> postDomainDtoList = forumApplication.getPostList(pageable);
 
-
-    return ResponseEntity.ok(SuccessResponse.of(postDomainDtoList));
+    return ResponseEntity.ok(
+        SuccessResponse.of(postDomainDtoList.map(PostResponse.PostListResponse::fromDomainDto))
+    );
   }
 
 }

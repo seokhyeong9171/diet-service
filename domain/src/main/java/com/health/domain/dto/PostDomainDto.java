@@ -29,7 +29,7 @@ public class PostDomainDto {
     private LocalDateTime postCreateDt;
     private LocalDateTime postUpdateDt;
 
-    private UserEntity createUser;
+    private CreatedUser createdUser;
 
     public static PostDomainDto fromEntity(PostEntity post, Integer like) {
         return PostDomainDto.builder()
@@ -38,7 +38,26 @@ public class PostDomainDto {
             .title(post.getTitle())
             .content(post.getContent())
             .like(like)
+            .postCreateDt(post.getPostCreateDt())
+            .postUpdateDt(post.getPostUpdateDt())
+            .createdUser(CreatedUser.fromUserEntity(post.getCreateUser()))
             .build();
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class CreatedUser {
+        private String authId;
+        private String nickname;
+
+        public static CreatedUser fromUserEntity(UserEntity user) {
+            return CreatedUser.builder()
+                .authId(user.getAuthId())
+                .nickname(user.getNickname())
+                .build();
+        }
     }
 
 }

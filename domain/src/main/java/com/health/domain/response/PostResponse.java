@@ -58,7 +58,7 @@ public class PostResponse {
 
         private String createdUserNickname;
 
-        public static PostResponse.PostContentResponse fromEntity(PostDomainDto postDomainDto) {
+        public static PostResponse.PostContentResponse fromDomainDto(PostDomainDto postDomainDto) {
             return PostContentResponse.builder()
                 .id(postDomainDto.getId())
                 .postCategory(postDomainDto.getPostCategory())

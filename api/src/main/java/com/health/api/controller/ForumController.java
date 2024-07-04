@@ -52,7 +52,7 @@ public class ForumController {
     PostDomainDto postDomainDto = forumApplication.createPost(authId, postForm);
 
     return ResponseEntity.status(CREATED).body(
-        SuccessResponse.of(PostContentResponse.fromEntity(postDomainDto))
+        SuccessResponse.of(PostContentResponse.fromDomainDto(postDomainDto))
     );
   }
 
@@ -67,7 +67,7 @@ public class ForumController {
     PostDomainDto postDomainDto = forumApplication.updatePost(authId, postId, postForm);
 
     return ResponseEntity.ok(
-        SuccessResponse.of(PostContentResponse.fromEntity(postDomainDto))
+        SuccessResponse.of(PostContentResponse.fromDomainDto(postDomainDto))
     );
   }
 

@@ -14,4 +14,6 @@ public interface PostService {
   PostDomainDto updatePost(String authId, Long postId, PostDomainForm domainForm);
 
   Long deletePost(String authId, Long postId);
+
+  Integer getPostLikeValue(Long postId);
 }

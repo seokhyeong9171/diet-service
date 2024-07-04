@@ -29,4 +29,8 @@ public class ForumApplication {
   public Long deletePost(String authId, Long postId) {
     return postService.deletePost(authId, postId);
   }
+
+  public Integer getPostLikeValue(Long postId) {
+    return postService.getPostLikeValue(postId);
+  }
 }

@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
 
     // Redis zSet에 넣어줌
     ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
-    zSetOps.add(postLikeValue(), savedPost.getId().toString(), 0);
+    zSetOps.add(postLikeValueKey(), savedPost.getId().toString(), 0);
 
     return PostDomainDto.fromEntity(savedPost);
   }
@@ -74,12 +74,30 @@ public class PostServiceImpl implements PostService {
     validateCreatedUser(findUser, findPost);
 
     postRepository.delete(findPost);
-    redisTemplate.opsForZSet().remove(postLikeValue(), postId.toString());
+    redisTemplate.opsForZSet().remove(postLikeValueKey(), postId.toString());
 
     // TODO
     //  해당 게시물에 좋아요 누른 유저 cache 제거
 
-    return 0L;
+    return findPost.getId();
+  }
+
+  @Override
+  public Integer getPostLikeValue(Long postId) {
+
+    ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
+    Double score = zSetOps.score(postLikeValueKey(), postId.toString());
+
+    if (score != null) {
+      return score.intValue();
+
+    } else {
+      // Redis에 해당 값이 없을 경우 DB에서 조회해서 가져옴
+      PostEntity postById = findPostById(postId);
+      int likeInDb = postById.getLike();
+      zSetOps.add(postLikeValueKey(), postId.toString(), likeInDb);
+      return likeInDb;
+    }
   }
 
   private UserEntity findUserByAuthId(String authId) {

@@ -12,13 +12,23 @@ public class RedisKeyComponent {
   }
 
   // 게시글 좋아요 수
-  public static String postLikeValue() {
+  public static String postLikeValueKey() {
     return "post:like";
   }
 
   // 유저 별 좋아요 누른 게시글
-  public static String userPostLike(String authId) {
+  public static String userPostLikeKey(String authId) {
     return "user:" + authId + "post:like";
+  }
+
+  // 게시글 조회 수
+  public static String postViewValueKey() {
+    return "post:view";
+  }
+
+  // 유저 별 조회한 게시글
+  public static String userPostViewKey(String authId) {
+    return "user:" + authId + "post:view";
   }
 
 }

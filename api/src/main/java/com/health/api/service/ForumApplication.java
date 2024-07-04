@@ -21,4 +21,8 @@ public class ForumApplication {
   public PostDomainDto createPost(String authId, PostForm postForm) {
     return postService.createPost(authId, postForm.toDomainForm());
   }
+
+  public PostDomainDto updatePost(String authId, Long postId, PostForm postForm) {
+    return postService.updatePost(authId, postId, postForm.toDomainForm());
+  }
 }

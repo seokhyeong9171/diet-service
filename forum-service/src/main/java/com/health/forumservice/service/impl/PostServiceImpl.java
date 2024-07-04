@@ -4,8 +4,6 @@ import static com.health.common.exception.ErrorCode.*;
 import static com.health.common.redis.RedisKeyComponent.*;
 
 import com.health.common.exception.CustomException;
-import com.health.common.exception.ErrorCode;
-import com.health.common.redis.RedisKeyComponent;
 import com.health.domain.dto.PostDomainDto;
 import com.health.domain.entity.PostEntity;
 import com.health.domain.entity.UserEntity;
@@ -36,7 +34,7 @@ public class PostServiceImpl implements PostService {
 
   public Page<PostDomainDto> getPostList(Pageable pageable) {
 
-    return postRepository.findAll(pageable).map(post -> PostDomainDto.fromEntity(post, null));
+    return postRepository.findAll(pageable).map(PostDomainDto::fromEntity);
   }
 
   @Override
@@ -47,15 +45,40 @@ public class PostServiceImpl implements PostService {
     PostEntity createdPost = PostEntity.createFromForm(findUser, form);
     PostEntity savedPost = postRepository.save(createdPost);
 
+    // Redis zSet에 넣어줌
     ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
     zSetOps.add(postLikeValue(), savedPost.getId().toString(), 0);
 
-    return PostDomainDto.fromEntity(savedPost, 0);
+    return PostDomainDto.fromEntity(savedPost);
+  }
+
+  @Override
+  public PostDomainDto updatePost(String authId, Long postId, PostDomainForm domainForm) {
+
+    UserEntity findUser = findUserByAuthId(authId);
+    PostEntity findPost = findPostById(postId);
+
+    validateCreatedUser(findUser, findPost);
+
+    findPost.updateFromForm(domainForm);
+
+    return PostDomainDto.fromEntity(findPost);
   }
 
   private UserEntity findUserByAuthId(String authId) {
     return userRepository.findByAuthId(authId)
         .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+  }
+
+  private PostEntity findPostById(Long postId) {
+    return postRepository.findById(postId)
+        .orElseThrow(() -> new CustomException(POST_NOT_FOUND));
+  }
+
+  private void validateCreatedUser(UserEntity findUser, PostEntity findPost) {
+    if (findUser != findPost.getCreateUser()) {
+      throw new CustomException(POST_NOT_CREATE_USER);
+    }
   }
 
 }

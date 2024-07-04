@@ -70,6 +70,14 @@ public class PostEntity extends BaseEntity{
             .build();
     }
 
+    public void updateFromForm(PostDomainForm form) {
+        this.title = form.getTitle();
+        this.content = form.getContent();
+        this.postUpdateDt = LocalDateTime.now();
+    }
+
+
+
     public void updateLike(int like) {
         this.like = like;
     }

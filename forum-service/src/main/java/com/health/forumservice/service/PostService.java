@@ -10,4 +10,6 @@ public interface PostService {
   Page<PostDomainDto> getPostList(Pageable pageable);
 
   PostDomainDto createPost(String authId, PostDomainForm form);
+
+  PostDomainDto updatePost(String authId, Long postId, PostDomainForm domainForm);
 }

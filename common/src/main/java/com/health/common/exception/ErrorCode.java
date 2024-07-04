@@ -35,6 +35,9 @@ public enum ErrorCode {
     CONSUME_FOOD_NOT_FOUND(BAD_REQUEST, "couldn't find consumeFood"),
     CONSUME_FOOD_AND_MEAL_UN_MATCH(BAD_REQUEST, "this consumeFood and that meal is not match"),
 
+    POST_NOT_FOUND(BAD_REQUEST, "couldn't find post"),
+    POST_NOT_CREATE_USER(BAD_REQUEST, "this post is not created by that user"),
+
 
     USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),
     PARAMETER_INVALID(BAD_REQUEST, "this is wrong parameter"),

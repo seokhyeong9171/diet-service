@@ -31,13 +31,13 @@ public class PostDomainDto {
 
     private CreatedUser createdUser;
 
-    public static PostDomainDto fromEntity(PostEntity post, Integer like) {
+    public static PostDomainDto fromEntity(PostEntity post) {
         return PostDomainDto.builder()
             .id(post.getId())
             .postCategory(post.getPostCategory())
             .title(post.getTitle())
             .content(post.getContent())
-            .like(like)
+            .like(post.getLike())
             .postCreateDt(post.getPostCreateDt())
             .postUpdateDt(post.getPostUpdateDt())
             .createdUser(CreatedUser.fromUserEntity(post.getCreateUser()))

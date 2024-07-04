@@ -1,8 +1,6 @@
 package com.health.domain.response;
 
 import com.health.domain.dto.PostDomainDto;
-import com.health.domain.entity.PostEntity;
-import com.health.domain.entity.UserEntity;
 import com.health.domain.type.PostCategory;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -10,10 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+
 public class PostResponse {
 
     @Getter
@@ -44,29 +39,36 @@ public class PostResponse {
         }
     }
 
-    private Long id;
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class PostContentResponse {
 
-    private PostCategory postCategory;
+        private Long id;
 
-    private String title;
+        private PostCategory postCategory;
 
-    private String content;
+        private String title;
 
-    private Integer like;
+        private String content;
 
-    private LocalDateTime postCreateDt;
-    private LocalDateTime postUpdateDt;
+        private LocalDateTime postCreateDt;
+        private LocalDateTime postUpdateDt;
 
-    private UserEntity createUser;
+        private String createdUserNickname;
 
-    public static PostResponse fromEntity(PostEntity post, Integer like) {
-        return PostResponse.builder()
-            .id(post.getId())
-            .postCategory(post.getPostCategory())
-            .title(post.getTitle())
-            .content(post.getContent())
-            .like(like)
-            .build();
+        public static PostResponse.PostContentResponse fromEntity(PostDomainDto postDomainDto) {
+            return PostContentResponse.builder()
+                .id(postDomainDto.getId())
+                .postCategory(postDomainDto.getPostCategory())
+                .title(postDomainDto.getTitle())
+                .content(postDomainDto.getContent())
+                .postCreateDt(postDomainDto.getPostCreateDt())
+                .postUpdateDt(postDomainDto.getPostUpdateDt())
+                .createdUserNickname(postDomainDto.getCreatedUser().getNickname())
+                .build();
+        }
     }
 
 }

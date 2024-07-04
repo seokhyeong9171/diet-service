@@ -1,5 +1,6 @@
 package com.health.api.controller;
 
+import static com.health.domain.response.PostResponse.*;
 import static org.springframework.http.HttpStatus.*;
 
 import com.health.api.form.PostForm;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,16 +34,12 @@ public class ForumController {
 
 
   @GetMapping("/posts")
-  public ResponseEntity<?> getPostList(
-      @CookieValue(name = "Authorization") String jwt, Pageable pageable
-  ) {
-
-    authValidatorComponent.validateAuthId(jwt);
+  public ResponseEntity<?> getPostList(Pageable pageable) {
 
     Page<PostDomainDto> postDomainDtoList = forumApplication.getPostList(pageable);
 
     return ResponseEntity.ok(
-        SuccessResponse.of(postDomainDtoList.map(PostResponse.PostListResponse::fromDomainDto))
+        SuccessResponse.of(postDomainDtoList.map(PostListResponse::fromDomainDto))
     );
   }
 
@@ -54,7 +52,28 @@ public class ForumController {
 
     PostDomainDto postDomainDto = forumApplication.createPost(authId, postForm);
 
-    return ResponseEntity.status(CREATED).body(SuccessResponse.of(null));
+    return ResponseEntity.status(CREATED).body(
+        SuccessResponse.of(PostContentResponse.fromEntity(postDomainDto))
+    );
   }
+
+  @PatchMapping("/posts/{postId}")
+  public ResponseEntity<?> updatePost(
+      @CookieValue(name = "Authorization") String jwt,
+      @PathVariable Long postId, @RequestBody @Validated PostForm postForm
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+
+    PostDomainDto postDomainDto = forumApplication.updatePost(authId, postId, postForm);
+
+    return ResponseEntity.ok(
+        SuccessResponse.of(PostContentResponse.fromEntity(postDomainDto))
+    );
+  }
+
+
+
+
 
 }

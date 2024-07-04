@@ -25,6 +25,7 @@ public class PostDomainDto {
     private String content;
 
     private Integer like;
+    private Integer view;
 
     private LocalDateTime postCreateDt;
     private LocalDateTime postUpdateDt;
@@ -38,6 +39,7 @@ public class PostDomainDto {
             .title(post.getTitle())
             .content(post.getContent())
             .like(post.getLike())
+            .view(post.getView())
             .postCreateDt(post.getPostCreateDt())
             .postUpdateDt(post.getPostUpdateDt())
             .createdUser(CreatedUser.fromUserEntity(post.getCreateUser()))

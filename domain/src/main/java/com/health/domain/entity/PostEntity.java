@@ -47,6 +47,9 @@ public class PostEntity extends BaseEntity{
     @Column(name = "likes")
     private int like;
 
+    @Column(name = "views")
+    private int view;
+
     @Column(name = "create_dt")
     private LocalDateTime postCreateDt;
     @Column(name = "update_dt")
@@ -65,6 +68,7 @@ public class PostEntity extends BaseEntity{
             .title(form.getTitle())
             .content(form.getContent())
             .like(0)
+            .view(0)
             .postCreateDt(LocalDateTime.now())
             .createUser(user)
             .build();

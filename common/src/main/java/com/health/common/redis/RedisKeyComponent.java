@@ -12,7 +12,7 @@ public class RedisKeyComponent {
   }
 
   // 게시글 좋아요 수
-  public static String postLikeValueKey() {
+  public static String postLikeCountKey() {
     return "post:like";
   }
 
@@ -22,7 +22,7 @@ public class RedisKeyComponent {
   }
 
   // 게시글 조회 수
-  public static String postViewValueKey() {
+  public static String postViewCountKey() {
     return "post:view";
   }
 

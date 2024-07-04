@@ -84,11 +84,19 @@ public class ForumController {
   }
 
   @GetMapping("/{postId}/like")
-  public ResponseEntity<?> getPostLikeValue(@PathVariable Long postId) {
+  public ResponseEntity<?> getPostLikeCount(@PathVariable Long postId) {
 
-    Integer like = forumApplication.getPostLikeValue(postId);
+    Integer like = forumApplication.getPostLikeCount(postId);
 
     return ResponseEntity.ok(SuccessResponse.of(like));
+  }
+
+  @GetMapping("/{postId}/view")
+  public ResponseEntity<?> getPostViewCount(@PathVariable Long postId) {
+
+    Integer viewCount = forumApplication.getPostViewCount(postId);
+
+    return ResponseEntity.ok(SuccessResponse.of(viewCount));
   }
 
 

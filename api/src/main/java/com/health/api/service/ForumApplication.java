@@ -30,7 +30,11 @@ public class ForumApplication {
     return postService.deletePost(authId, postId);
   }
 
-  public Integer getPostLikeValue(Long postId) {
-    return postService.getPostLikeValue(postId);
+  public Integer getPostLikeCount(Long postId) {
+    return postService.getPostLikeCount(postId);
+  }
+
+  public Integer getPostViewCount(Long postId) {
+    return postService.getPostViewCount(postId);
   }
 }

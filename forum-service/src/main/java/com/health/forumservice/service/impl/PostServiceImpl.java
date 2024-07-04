@@ -65,6 +65,23 @@ public class PostServiceImpl implements PostService {
     return PostDomainDto.fromEntity(findPost);
   }
 
+  @Override
+  public Long deletePost(String authId, Long postId) {
+
+    UserEntity findUser = findUserByAuthId(authId);
+    PostEntity findPost = findPostById(postId);
+
+    validateCreatedUser(findUser, findPost);
+
+    postRepository.delete(findPost);
+    redisTemplate.opsForZSet().remove(postLikeValue(), postId.toString());
+
+    // TODO
+    //  해당 게시물에 좋아요 누른 유저 cache 제거
+
+    return 0L;
+  }
+
   private UserEntity findUserByAuthId(String authId) {
     return userRepository.findByAuthId(authId)
         .orElseThrow(() -> new CustomException(USER_NOT_FOUND));

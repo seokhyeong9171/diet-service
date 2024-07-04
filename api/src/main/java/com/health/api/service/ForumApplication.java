@@ -25,4 +25,8 @@ public class ForumApplication {
   public PostDomainDto updatePost(String authId, Long postId, PostForm postForm) {
     return postService.updatePost(authId, postId, postForm.toDomainForm());
   }
+
+  public Long deletePost(String authId, Long postId) {
+    return postService.deletePost(authId, postId);
+  }
 }

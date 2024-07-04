@@ -72,6 +72,18 @@ public class ForumController {
     );
   }
 
+  @PatchMapping("/posts/{postId}")
+  public ResponseEntity<?> deletePost(
+      @CookieValue(name = "Authorization") String jwt, @PathVariable Long postId
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+
+    Long deletedPostId = forumApplication.deletePost(authId, postId);
+
+    return ResponseEntity.ok(SuccessResponse.of(deletedPostId));
+  }
+
 
 
 

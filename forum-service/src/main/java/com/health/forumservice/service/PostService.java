@@ -12,4 +12,6 @@ public interface PostService {
   PostDomainDto createPost(String authId, PostDomainForm form);
 
   PostDomainDto updatePost(String authId, Long postId, PostDomainForm domainForm);
+
+  Long deletePost(String authId, Long postId);
 }

@@ -31,7 +31,6 @@ public class PostServiceImpl implements PostService {
 
   @Override
   @Transactional(readOnly = true)
-
   public Page<PostDomainDto> getPostList(Pageable pageable) {
 
     return postRepository.findAll(pageable).map(PostDomainDto::fromEntity);
@@ -83,37 +82,35 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Integer getPostLikeCount(Long postId) {
 
-    ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
-    Double score = zSetOps.score(postLikeCountKey(), postId.toString());
+    Double likeCount = redisTemplate.opsForZSet().score(postLikeCountKey(), postId.toString());
 
-    if (score != null) {
-      return score.intValue();
+    if (likeCount != null) {
+      return likeCount.intValue();
 
     } else {
       // Redis에 해당 값이 없을 경우 DB에서 조회해서 가져옴
-      PostEntity postById = findPostById(postId);
-      int likeInDb = postById.getLike();
-      zSetOps.add(postLikeCountKey(), postId.toString(), likeInDb);
+      int likeInDb = findPostById(postId).getLike();
+      redisTemplate.opsForZSet().add(postLikeCountKey(), postId.toString(), likeInDb);
       return likeInDb;
     }
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Integer getPostViewCount(Long postId) {
 
-    ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
-    Double score = zSetOps.score(postViewCountKey(), postId.toString());
+    Double viewCount = redisTemplate.opsForZSet().score(postViewCountKey(), postId.toString());
 
-    if (score != null) {
-      return score.intValue();
+    if (viewCount != null) {
+      return viewCount.intValue();
 
     } else {
       // Redis에 해당 값이 없을 경우 DB에서 조회해서 가져옴
-      PostEntity postById = findPostById(postId);
-      int ViewInDb = postById.getView();
-      zSetOps.add(postViewCountKey(), postId.toString(), ViewInDb);
+      int ViewInDb = findPostById(postId).getView();
+      redisTemplate.opsForZSet().add(postViewCountKey(), postId.toString(), ViewInDb);
       return ViewInDb;
     }
   }

@@ -1,5 +1,6 @@
 package com.health.api.service;
 
+import com.health.api.form.PostForm;
 import com.health.domain.dto.PostDomainDto;
 import com.health.forumservice.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -15,5 +16,9 @@ public class ForumApplication {
 
   public Page<PostDomainDto> getPostList(Pageable pageable) {
     return postService.getPostList(pageable);
+  }
+
+  public PostDomainDto createPost(String authId, PostForm postForm) {
+    return postService.createPost(authId, postForm.toDomainForm());
   }
 }

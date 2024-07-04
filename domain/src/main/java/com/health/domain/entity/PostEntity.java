@@ -1,5 +1,6 @@
 package com.health.domain.entity;
 
+import com.health.domain.form.PostDomainForm;
 import com.health.domain.type.PostCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,17 @@ public class PostEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "post")
     private List<CommentEntity> commentList = new ArrayList<>();
+
+    public static PostEntity createFromForm(UserEntity user, PostDomainForm form) {
+        return PostEntity.builder()
+            .postCategory(form.getPostCategory())
+            .title(form.getTitle())
+            .content(form.getContent())
+            .like(0)
+            .postCreateDt(LocalDateTime.now())
+            .createUser(user)
+            .build();
+    }
 
     public void updateLike(int like) {
         this.like = like;

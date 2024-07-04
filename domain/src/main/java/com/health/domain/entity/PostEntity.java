@@ -18,8 +18,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity(name = "post")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,4 +56,8 @@ public class PostEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "post")
     private List<CommentEntity> commentList = new ArrayList<>();
+
+    public void updateLike(int like) {
+        this.like = like;
+    }
 }

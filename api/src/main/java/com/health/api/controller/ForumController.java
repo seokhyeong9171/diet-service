@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/authId/{authId}/forums")
+@RequestMapping("/forums")
 @RequiredArgsConstructor
 public class ForumController {
 
@@ -33,10 +33,10 @@ public class ForumController {
 
   @GetMapping("/posts")
   public ResponseEntity<?> getPostList(
-      @PathVariable String authId, Pageable pageable
+      @CookieValue(name = "Authorization") String jwt, Pageable pageable
   ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    authValidatorComponent.validateAuthId(jwt);
 
     Page<PostDomainDto> postDomainDtoList = forumApplication.getPostList(pageable);
 
@@ -47,10 +47,10 @@ public class ForumController {
 
   @PostMapping("/posts")
   public ResponseEntity<?> createPost(
-      @PathVariable String authId, @RequestBody @Validated PostForm postForm
+      @CookieValue(name = "Authorization") String jwt, @RequestBody @Validated PostForm postForm
   ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     PostDomainDto postDomainDto = forumApplication.createPost(authId, postForm);
 

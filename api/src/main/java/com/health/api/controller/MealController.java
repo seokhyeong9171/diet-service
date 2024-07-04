@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/authid/{authId}/dailymeals/{dailyMealDt}/meals")
+@RequestMapping("/dailymeals/{dailyMealDt}/meals")
 @RequiredArgsConstructor
 public class MealController {
 
@@ -33,11 +34,11 @@ public class MealController {
 
   @GetMapping
   public ResponseEntity<?> getMealList(
-      @PathVariable String authId,
+      @CookieValue(name = "Authorization") String jwt,
       @PathVariable @DateTimeFormat(iso = DATE) LocalDate dailyMealDt
   ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     List<MealDomainDto> mealList = mealApplication.getMealList(authId, dailyMealDt);
 
@@ -48,12 +49,12 @@ public class MealController {
 
   @GetMapping("/{mealId}")
   public ResponseEntity<?> getMealInfo(
-      @PathVariable String authId,
+      @CookieValue(name = "Authorization") String jwt,
       @PathVariable @DateTimeFormat(iso = DATE) LocalDate dailyMealDt,
       @PathVariable Long mealId
   ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     MealDomainDto meal = mealApplication.getMealInfo(authId, dailyMealDt, mealId);
 
@@ -62,12 +63,12 @@ public class MealController {
 
   @PostMapping
   public ResponseEntity<?> addMeal(
-      @PathVariable String authId,
+      @CookieValue(name = "Authorization") String jwt,
       @PathVariable @DateTimeFormat(iso = DATE) LocalDate dailyMealDt,
       @RequestBody @Validated MealForm mealForm
   ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     MealDomainDto mealDomainDto =  mealApplication.createMeal(authId, dailyMealDt, mealForm);
 
@@ -78,12 +79,12 @@ public class MealController {
 
   @DeleteMapping("/{mealId}")
   public ResponseEntity<?> deleteMeal(
-      @PathVariable String authId,
+      @CookieValue(name = "Authorization") String jwt,
       @PathVariable @DateTimeFormat(iso = DATE) LocalDate dailyMealDt,
       @PathVariable Long mealId
   ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     Long deletedMealId = mealApplication.deleteMeal(authId, dailyMealDt, mealId);
 

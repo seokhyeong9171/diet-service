@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/authid/{authId}")
+@RequestMapping("/exercise")
 @RequiredArgsConstructor
 public class UserExerciseController {
 
@@ -34,11 +35,13 @@ public class UserExerciseController {
   /**
    * exercise record list 조회하는 end point
    */
-  @GetMapping("/exercise")
-  public ResponseEntity<?> getExerciseList(@PathVariable String authId, Pageable pageable) {
+  @GetMapping
+  public ResponseEntity<?> getExerciseList(
+      @CookieValue(name = "Authorization") String jwt, Pageable pageable
+  ) {
 
     // 올바른 user의 접근인지 확인
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     Page<ExerciseRecordDomainDto> exerciseList =
         userExerciseApplication.getExerciseList(authId, pageable);
@@ -51,12 +54,14 @@ public class UserExerciseController {
   /**
    * exercise record 등록하는 end point
    */
-  @PostMapping("/exercise")
+  @PostMapping
   public ResponseEntity<?> createExerciseRecord(
-      @PathVariable String authId, @Validated @RequestBody ExerciseRecordForm form) {
+      @CookieValue(name = "Authorization") String jwt,
+      @Validated @RequestBody ExerciseRecordForm form
+  ) {
 
     // 올바른 user의 접근인지 확인
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     ExerciseRecordDomainDto exerciseRecordDto =
         userExerciseApplication.createExerciseRecord(authId, form);
@@ -69,13 +74,13 @@ public class UserExerciseController {
   /**
    * exercise record 수정하는 end point
    */
-  @PatchMapping("/exercise/{recordId}")
+  @PatchMapping("/{recordId}")
   public ResponseEntity<?> updateExerciseRecord(
-      @PathVariable String authId, @PathVariable Long recordId,
+      @CookieValue(name = "Authorization") String jwt, @PathVariable Long recordId,
       @RequestBody ExerciseRecordForm form) {
 
     // 올바른 user의 접근인지 확인
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     ExerciseRecordDomainDto updatedExerciseRecordDto =
         userExerciseApplication.updateExerciseRecord(authId, recordId, form);
@@ -88,13 +93,13 @@ public class UserExerciseController {
   /**
    * exercise record 삭제하는 end point
    */
-  @DeleteMapping("/exercise/{recordId}")
+  @DeleteMapping("/{recordId}")
   public ResponseEntity<?> deleteExerciseRecord(
-      @PathVariable String authId, @PathVariable Long recordId
+      @CookieValue(name = "Authorization") String jwt, @PathVariable Long recordId
   ) {
 
     // 올바른 user의 접근인지 확인
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     userExerciseApplication.deleteExerciseRecord(authId, recordId);
 

@@ -43,12 +43,6 @@ public class CommentEntity extends BaseEntity{
     @JoinColumn(name = "user_id")
     private UserEntity createdUser;
 
-    @Column(name = "create_dt")
-    private LocalDateTime createdDt;
-
-    @Column(name = "update_dt")
-    private LocalDateTime updateDt;
-
     @Column(name = "delete_yn")
     private Boolean isDeleted;
 
@@ -67,7 +61,6 @@ public class CommentEntity extends BaseEntity{
             .content(form.getContent())
             .post(post)
             .createdUser(user)
-            .createdDt(LocalDateTime.now())
             .isDeleted(false)
             .build();
     }
@@ -79,7 +72,6 @@ public class CommentEntity extends BaseEntity{
             .content(form.getContent())
             .post(comment.getPost())
             .createdUser(user)
-            .createdDt(LocalDateTime.now())
             .isDeleted(false)
             .parent(comment)
             .build();
@@ -87,7 +79,6 @@ public class CommentEntity extends BaseEntity{
 
     public void updateComment(CommentDomainForm form) {
         this.content = form.getContent();
-        this.updateDt = LocalDateTime.now();
     }
 
 

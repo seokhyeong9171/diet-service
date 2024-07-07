@@ -37,7 +37,7 @@ public class CommentDomainDto {
             .content(comment.getContent())
             .createdUserAuthId(comment.getCreatedUser().getAuthId())
             .createdDt(comment.getCreatedDt())
-            .updateDt(comment.getUpdateDt())
+            .updateDt(comment.getUpdatedDt())
             .isDeleted(comment.getIsDeleted())
             .parentId(comment.getParent().getId())
             .childCommentList(

@@ -8,6 +8,7 @@ import com.health.api.form.PostForm;
 import com.health.api.service.ForumApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.PostDomainDto;
+import com.health.domain.response.PostResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -105,6 +106,40 @@ public class PostController {
   //  게시글 조회, 좋아요 기능
   //  redis 데이터 스케쥴러 통해 DB로 업데이트
 
+  @GetMapping("/{postId}")
+  public ResponseEntity<?> getPostInfo(
+      @CookieValue(name = "Authorization") String jwt, @PathVariable Long postId
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+    PostDomainDto postDomainDto = postApplication.getPostInfo(authId, postId);
+
+    return ResponseEntity.ok(
+        SuccessResponse.of(PostResponse.PostContentResponse.fromDomainDto(postDomainDto))
+    );
+  }
+
+  @PostMapping("/{postId}/like")
+  public ResponseEntity<?> postAddLike(
+      @CookieValue(name = "Authorization") String jwt, @PathVariable Long postId
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+    Integer likeCount = postApplication.postAddLike(authId, postId);
+
+    return ResponseEntity.ok(SuccessResponse.of(likeCount));
+  }
+
+  @PatchMapping("/{postId}/like")
+  public ResponseEntity<?> postUnLike(
+      @CookieValue(name = "Authorization") String jwt, @PathVariable Long postId
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+    Integer likeCount = postApplication.postUnLike(authId, postId);
+
+    return ResponseEntity.ok(SuccessResponse.of(likeCount));
+  }
 
 
 }

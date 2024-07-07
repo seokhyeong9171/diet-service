@@ -6,12 +6,15 @@ import static com.health.common.redis.RedisKeyComponent.*;
 import com.health.common.exception.CustomException;
 import com.health.common.redis.RedisKeyComponent;
 import com.health.domain.dto.PostDomainDto;
+import com.health.domain.entity.CommentEntity;
 import com.health.domain.entity.PostEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.form.PostDomainForm;
+import com.health.domain.repository.CommentRepository;
 import com.health.domain.repository.PostRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.forumservice.service.PostService;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,6 +32,7 @@ public class PostServiceImpl implements PostService {
 
   private final UserRepository userRepository;
   private final PostRepository postRepository;
+  private final CommentRepository commentRepository;
 
   private final RedisTemplate<String, String> redisTemplate;
 
@@ -81,6 +85,8 @@ public class PostServiceImpl implements PostService {
 
     validateCreatedUser(findUser, findPost);
 
+    findPost.getCommentList().forEach(commentRepository::deleteByParentComment);
+    commentRepository.deleteByPost(findPost);
     postRepository.delete(findPost);
 
     zSetOps.remove(postLikeCountKey(), postId.toString());

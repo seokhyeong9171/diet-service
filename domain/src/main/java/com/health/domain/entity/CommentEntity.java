@@ -72,11 +72,6 @@ public class CommentEntity extends BaseEntity{
             .build();
     }
 
-    public void updateComment(CommentDomainForm form) {
-        this.content = form.getContent();
-        this.updateDt = LocalDateTime.now();
-    }
-
     public static CommentEntity createSubComment
         (CommentEntity comment, UserEntity user, CommentDomainForm form) {
 
@@ -88,6 +83,11 @@ public class CommentEntity extends BaseEntity{
             .isDeleted(false)
             .parent(comment)
             .build();
+    }
+
+    public void updateComment(CommentDomainForm form) {
+        this.content = form.getContent();
+        this.updateDt = LocalDateTime.now();
     }
 
 

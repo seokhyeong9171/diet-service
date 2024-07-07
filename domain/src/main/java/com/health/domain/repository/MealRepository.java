@@ -17,7 +17,7 @@ public interface MealRepository extends JpaRepository<MealEntity, Long> {
   Optional<MealEntity> findById(Long id);
 
   @Modifying
-  @Query("delete from meal m where m.dailyMeal in :dailyMeal")
+  @Query("delete from meal m where m.dailyMeal = :dailyMeal")
   void deleteByDailyMeal(@Param("dailyMeal")DailyMealEntity dailyMeal);
 
 }

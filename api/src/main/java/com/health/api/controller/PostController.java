@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/forums/posts")
 @RequiredArgsConstructor
-public class ForumController {
+public class PostController {
 
   private final AuthValidatorComponent authValidatorComponent;
   private final ForumApplication forumApplication;

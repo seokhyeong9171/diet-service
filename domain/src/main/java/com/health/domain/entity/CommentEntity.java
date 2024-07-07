@@ -72,7 +72,7 @@ public class CommentEntity extends BaseEntity{
             .build();
     }
 
-    public static CommentEntity createSubComment
+    public static CommentEntity createChildComment
         (CommentEntity comment, UserEntity user, CommentDomainForm form) {
 
         return CommentEntity.builder()

@@ -108,7 +108,7 @@ public class CommentServiceImpl implements CommentService {
     validateRightPost(findPost, findParentComment);
 
     CommentEntity createdChildComment =
-        CommentEntity.createSubComment(findParentComment, findUser, domainForm);
+        CommentEntity.createChildComment(findParentComment, findUser, domainForm);
     CommentEntity savedChildComment = commentRepository.save(createdChildComment);
     findParentComment.getChildCommentList().add(savedChildComment);
 

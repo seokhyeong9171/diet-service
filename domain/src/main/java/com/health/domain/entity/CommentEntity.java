@@ -1,5 +1,6 @@
 package com.health.domain.entity;
 
+import com.health.domain.form.CommentDomainForm;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,12 +9,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity(name = "comment")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,4 +42,57 @@ public class CommentEntity extends BaseEntity{
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity createdUser;
+
+    @Column(name = "create_dt")
+    private LocalDateTime createdDt;
+
+    @Column(name = "update_dt")
+    private LocalDateTime updateDt;
+
+    @Column(name = "delete_yn")
+    private Boolean isDeleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private CommentEntity parent;
+
+    @OneToMany(mappedBy = "parent")
+    @OrderBy("createdDt ASC")
+    private List<CommentEntity> childCommentList = new ArrayList<>();
+
+    public static CommentEntity createComment
+        (PostEntity post, UserEntity user, CommentDomainForm form) {
+
+        return CommentEntity.builder()
+            .content(form.getContent())
+            .post(post)
+            .createdUser(user)
+            .createdDt(LocalDateTime.now())
+            .isDeleted(false)
+            .build();
+    }
+
+    public void updateComment(CommentDomainForm form) {
+        this.content = form.getContent();
+        this.updateDt = LocalDateTime.now();
+    }
+
+    public static CommentEntity createSubComment
+        (CommentEntity comment, UserEntity user, CommentDomainForm form) {
+
+        return CommentEntity.builder()
+            .content(form.getContent())
+            .post(comment.getPost())
+            .createdUser(user)
+            .createdDt(LocalDateTime.now())
+            .isDeleted(false)
+            .parent(comment)
+            .build();
+    }
+
+
+
+    public void markDeleteFlag() {
+        this.isDeleted = true;
+    }
 }

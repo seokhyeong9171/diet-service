@@ -101,11 +101,6 @@ public class PostController {
     );
   }
 
-
-  // TODO
-  //  게시글 조회, 좋아요 기능
-  //  redis 데이터 스케쥴러 통해 DB로 업데이트
-
   @GetMapping("/{postId}")
   public ResponseEntity<?> getPostInfo(
       @CookieValue(name = "Authorization") String jwt, @PathVariable Long postId

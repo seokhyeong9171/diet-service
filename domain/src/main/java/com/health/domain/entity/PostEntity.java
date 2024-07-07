@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +28,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-public class PostEntity extends BaseEntity{
+public class PostEntity extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
 
@@ -43,12 +45,6 @@ public class PostEntity extends BaseEntity{
     @Column(name = "content")
     private String content;
 
-    @Column(name = "likes")
-    private int like;
-
-    @Column(name = "views")
-    private int view;
-
     @Column(name = "create_dt")
     private LocalDateTime postCreateDt;
     @Column(name = "update_dt")
@@ -59,6 +55,7 @@ public class PostEntity extends BaseEntity{
     private UserEntity createUser;
 
     @OneToMany(mappedBy = "post")
+    @OrderBy("createdDt ASC")
     private List<CommentEntity> commentList = new ArrayList<>();
 
     public static PostEntity createFromForm(UserEntity user, PostDomainForm form) {
@@ -66,8 +63,6 @@ public class PostEntity extends BaseEntity{
             .postCategory(form.getPostCategory())
             .title(form.getTitle())
             .content(form.getContent())
-            .like(0)
-            .view(0)
             .postCreateDt(LocalDateTime.now())
             .createUser(user)
             .build();
@@ -77,11 +72,5 @@ public class PostEntity extends BaseEntity{
         this.title = form.getTitle();
         this.content = form.getContent();
         this.postUpdateDt = LocalDateTime.now();
-    }
-
-
-
-    public void updateLike(int like) {
-        this.like = like;
     }
 }

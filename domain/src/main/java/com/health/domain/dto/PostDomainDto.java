@@ -37,8 +37,6 @@ public class PostDomainDto {
             .postCategory(post.getPostCategory())
             .title(post.getTitle())
             .content(post.getContent())
-            .like(post.getLike())
-            .view(post.getView())
             .postCreateDt(post.getPostCreateDt())
             .postUpdateDt(post.getPostUpdateDt())
             .createdUser(CreatedUser.fromUserEntity(post.getCreateUser()))

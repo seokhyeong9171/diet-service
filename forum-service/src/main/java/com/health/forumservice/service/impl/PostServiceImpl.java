@@ -1,7 +1,11 @@
 package com.health.forumservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.*;
-import static com.health.common.redis.RedisKeyComponent.*;
+import static com.health.common.exception.ErrorCode.POST_NOT_CREATE_USER;
+import static com.health.common.exception.ErrorCode.POST_NOT_FOUND;
+import static com.health.common.exception.ErrorCode.REDIS_OBJECT_NOT_EXIST;
+import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
+import static com.health.common.redis.RedisKeyComponent.postLikeCountKey;
+import static com.health.common.redis.RedisKeyComponent.postViewCountKey;
 
 import com.health.common.exception.CustomException;
 import com.health.domain.dto.PostDomainDto;

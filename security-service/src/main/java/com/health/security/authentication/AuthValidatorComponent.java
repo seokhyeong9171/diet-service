@@ -4,7 +4,6 @@ import static com.health.common.exception.ErrorCode.USER_INVALID_ACCESS;
 
 import com.health.common.exception.CustomException;
 import com.health.security.jwt.JwtComponent;
-import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

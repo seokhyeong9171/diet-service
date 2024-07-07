@@ -23,10 +23,10 @@ spring:
         enabled: true
 
     redis:
-      host: redis-17192.c244.us-east-1-2.ec2.redns.redis-cloud.com
-      port: 17192
-      username: default
-      password: AAp61mDXJemGKf1x6YYAHhisfzVJHHpx
+      host: localhost
+      port: 6379
+      username:
+      password:
 
 
 

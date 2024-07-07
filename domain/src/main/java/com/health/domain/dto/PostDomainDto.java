@@ -4,7 +4,6 @@ import com.health.domain.entity.PostEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.type.PostCategory;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

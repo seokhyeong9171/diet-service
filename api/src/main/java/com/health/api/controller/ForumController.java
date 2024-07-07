@@ -1,7 +1,8 @@
 package com.health.api.controller;
 
-import static com.health.domain.response.PostResponse.*;
-import static org.springframework.http.HttpStatus.*;
+import static com.health.domain.response.PostResponse.PostContentResponse;
+import static com.health.domain.response.PostResponse.PostListResponse;
+import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.PostForm;
 import com.health.api.service.ForumApplication;

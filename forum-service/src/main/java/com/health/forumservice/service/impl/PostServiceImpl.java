@@ -1,15 +1,10 @@
 package com.health.forumservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.POST_NOT_CREATE_USER;
-import static com.health.common.exception.ErrorCode.POST_NOT_FOUND;
-import static com.health.common.exception.ErrorCode.REDIS_OBJECT_NOT_EXIST;
-import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
-import static com.health.common.redis.RedisKeyComponent.postLikeCountKey;
-import static com.health.common.redis.RedisKeyComponent.postViewCountKey;
-import static com.health.common.redis.RedisKeyComponent.userPostLikeKey;
-import static com.health.common.redis.RedisKeyComponent.userPostViewKey;
+import static com.health.common.exception.ErrorCode.*;
+import static com.health.common.redis.RedisKeyComponent.*;
 
 import com.health.common.exception.CustomException;
+import com.health.common.redis.RedisKeyComponent;
 import com.health.domain.dto.PostDomainDto;
 import com.health.domain.entity.PostEntity;
 import com.health.domain.entity.UserEntity;
@@ -52,9 +47,12 @@ public class PostServiceImpl implements PostService {
     PostEntity createdPost = PostEntity.createFromForm(findUser, form);
     PostEntity savedPost = postRepository.save(createdPost);
 
+    findUser.getPostList().add(savedPost);
+
     // Redis zSet에 넣어줌
     ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
     zSetOps.add(postLikeCountKey(), savedPost.getId().toString(), 0);
+    zSetOps.add(postViewCountKey(), savedPost.getId().toString(), 0);
 
     return PostDomainDto.fromEntity(savedPost);
   }
@@ -75,16 +73,21 @@ public class PostServiceImpl implements PostService {
   @Override
   public Long deletePost(String authId, Long postId) {
 
+    ZSetOperations<String, String> zSetOps = getZSetOps();
+    SetOperations<String, String> setOps = getSetOps();
+
     UserEntity findUser = findUserByAuthId(authId);
     PostEntity findPost = findPostById(postId);
 
     validateCreatedUser(findUser, findPost);
 
     postRepository.delete(findPost);
-    redisTemplate.opsForZSet().remove(postLikeCountKey(), postId.toString());
 
-    // TODO
-    //  해당 게시물에 좋아요 누른 유저 cache 제거
+    zSetOps.remove(postLikeCountKey(), postId.toString());
+    zSetOps.remove(postViewCountKey(), postId.toString());
+
+    setOps.remove(userPostLikeKey(authId), postId);
+    setOps.remove(RedisKeyComponent.userPostViewKey(authId), postId);
 
     return findPost.getId();
   }
@@ -124,8 +127,8 @@ public class PostServiceImpl implements PostService {
     SetOperations<String, String> setOps = getSetOps();
 
     // 처음 조회한 유저일 경우 유저 조회 게시글 추가 & 게시글 조회수 증가
-    if (isContainsRedisSetValue(userPostViewKey(postId), authId)) {
-      setOps.add(userPostViewKey(postId), authId);
+    if (isContainsRedisSetValue(userPostViewKey(authId), postId.toString())) {
+      setOps.add(userPostViewKey(authId), postId.toString());
       getZSetOps().incrementScore(postViewCountKey(), postId.toString(), 1);
     }
 
@@ -138,7 +141,7 @@ public class PostServiceImpl implements PostService {
     SetOperations<String, String> setOps = getSetOps();
     ZSetOperations<String, String> zSetOps = getZSetOps();
 
-    setOps.add(userPostLikeKey(postId), authId);
+    setOps.add(userPostLikeKey(authId), postId.toString());
     zSetOps.incrementScore(postLikeCountKey(), postId.toString(), 1);
 
     return Objects.requireNonNull(zSetOps.score(postLikeCountKey(), postId)).intValue();
@@ -150,7 +153,7 @@ public class PostServiceImpl implements PostService {
     SetOperations<String, String> setOps = getSetOps();
     ZSetOperations<String, String> zSetOps = getZSetOps();
 
-    setOps.remove(userPostLikeKey(postId), authId);
+    setOps.remove(userPostLikeKey(authId), postId);
     zSetOps.incrementScore(postLikeCountKey(), postId.toString(), -1);
 
     return Objects.requireNonNull(zSetOps.score(postLikeCountKey(), postId)).intValue();

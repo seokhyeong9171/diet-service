@@ -16,9 +16,10 @@ public class RedisKeyComponent {
     return "post:like";
   }
 
-  // 게시글 별 좋아요 누른 유저
-  public static String userPostLikeKey(Long postId) {
-    return "post:" + postId + ":like_user";
+
+  // 유저 별 좋아요 누른 게시글
+  public static String userPostLikeKey(String authId) {
+    return "user:" + authId + ":like_post";
   }
 
   // 게시글 조회 수
@@ -26,9 +27,9 @@ public class RedisKeyComponent {
     return "post:view";
   }
 
-  // 게시글 별 조회한 유저
-  public static String userPostViewKey(Long postId) {
-    return "post:" + postId + ":view_user";
+  // 유저 별 조회한 게시글
+  public static String userPostViewKey(String authId) {
+    return "user:" + authId + ":view_post";
   }
 
 }

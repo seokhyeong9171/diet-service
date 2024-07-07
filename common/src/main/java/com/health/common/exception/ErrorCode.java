@@ -38,9 +38,10 @@ public enum ErrorCode {
     POST_NOT_FOUND(BAD_REQUEST, "couldn't find post"),
     POST_NOT_CREATE_USER(BAD_REQUEST, "this post is not created by that user"),
 
-
     USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),
     PARAMETER_INVALID(BAD_REQUEST, "this is wrong parameter"),
+
+    REDIS_OBJECT_NOT_EXIST(BAD_REQUEST, "this redis object is not exist"),
 
     API_NOT_WORKING(INTERNAL_SERVER_ERROR, "api is not working now");
 

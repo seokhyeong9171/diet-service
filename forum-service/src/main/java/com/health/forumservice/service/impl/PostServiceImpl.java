@@ -83,35 +83,29 @@ public class PostServiceImpl implements PostService {
 
   @Override
   @Transactional(readOnly = true)
-  public Integer getPostLikeCount(Long postId) {
+  public int getPostLikeCount(Long postId) {
 
     Double likeCount = redisTemplate.opsForZSet().score(postLikeCountKey(), postId.toString());
 
-    if (likeCount != null) {
-      return likeCount.intValue();
+    if (likeCount == null) {
+      throw new CustomException(REDIS_OBJECT_NOT_EXIST);
 
     } else {
-      // Redis에 해당 값이 없을 경우 DB에서 조회해서 가져옴
-      int likeInDb = findPostById(postId).getLike();
-      redisTemplate.opsForZSet().add(postLikeCountKey(), postId.toString(), likeInDb);
-      return likeInDb;
+      return likeCount.intValue();
     }
   }
 
   @Override
   @Transactional(readOnly = true)
-  public Integer getPostViewCount(Long postId) {
+  public int getPostViewCount(Long postId) {
 
     Double viewCount = redisTemplate.opsForZSet().score(postViewCountKey(), postId.toString());
 
-    if (viewCount != null) {
-      return viewCount.intValue();
+    if (viewCount == null) {
+      throw new CustomException(REDIS_OBJECT_NOT_EXIST);
 
     } else {
-      // Redis에 해당 값이 없을 경우 DB에서 조회해서 가져옴
-      int ViewInDb = findPostById(postId).getView();
-      redisTemplate.opsForZSet().add(postViewCountKey(), postId.toString(), ViewInDb);
-      return ViewInDb;
+      return viewCount.intValue();
     }
   }
 

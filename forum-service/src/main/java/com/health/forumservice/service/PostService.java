@@ -15,7 +15,7 @@ public interface PostService {
 
   Long deletePost(String authId, Long postId);
 
-  Integer getPostLikeCount(Long postId);
+  int getPostLikeCount(Long postId);
 
-  Integer getPostViewCount(Long postId);
+  int getPostViewCount(Long postId);
 }

@@ -15,16 +15,16 @@ import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/authid{authId}/mypage")
+@RequestMapping("/mypage")
 @RequiredArgsConstructor
 public class UserInfoController {
 
@@ -35,9 +35,9 @@ public class UserInfoController {
    * user info 조회 end point
    */
   @GetMapping
-  public ResponseEntity<?> getUserInfo(@PathVariable String authId) {
+  public ResponseEntity<?> getUserInfo(@CookieValue(name = "Authorization") String jwt) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     UserDomainDto userInfoDto = userInfoApplication.getUserInfo(authId);
 
@@ -48,11 +48,11 @@ public class UserInfoController {
 
   @GetMapping("/intake")
   public ResponseEntity<?> getIntakeInfo(
-      @PathVariable String authId,
+      @CookieValue(name = "Authorization") String jwt,
       @RequestParam @DateTimeFormat(iso = DATE)LocalDate date
   ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     IntakeDomainDto possibleIntake = userInfoApplication.getIntakeInfo(authId, date);
 
@@ -66,9 +66,9 @@ public class UserInfoController {
    */
   @PatchMapping("/nickname")
   public ResponseEntity<?> updateUserNickname(
-      @PathVariable String authId, @RequestBody UserNicknameForm form) {
+      @CookieValue(name = "Authorization") String jwt, @RequestBody UserNicknameForm form) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     String updatedNickname = userInfoApplication.updateUserNickname(authId, form);
 
@@ -82,9 +82,9 @@ public class UserInfoController {
    */
   @PatchMapping("/userinfo")
   public ResponseEntity<?> updateUserDetails(
-      @PathVariable String authId, @RequestBody UserDetailsForm form) {
+      @CookieValue(name = "Authorization") String jwt, @RequestBody UserDetailsForm form) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     UserDomainDto userInfoDto = userInfoApplication.updateUserInfo(authId, form);
 

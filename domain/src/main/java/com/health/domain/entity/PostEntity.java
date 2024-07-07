@@ -1,5 +1,6 @@
 package com.health.domain.entity;
 
+import com.health.domain.form.PostDomainForm;
 import com.health.domain.type.PostCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,8 +19,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity(name = "post")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -43,6 +46,9 @@ public class PostEntity extends BaseEntity{
     @Column(name = "likes")
     private int like;
 
+    @Column(name = "views")
+    private int view;
+
     @Column(name = "create_dt")
     private LocalDateTime postCreateDt;
     @Column(name = "update_dt")
@@ -54,4 +60,28 @@ public class PostEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "post")
     private List<CommentEntity> commentList = new ArrayList<>();
+
+    public static PostEntity createFromForm(UserEntity user, PostDomainForm form) {
+        return PostEntity.builder()
+            .postCategory(form.getPostCategory())
+            .title(form.getTitle())
+            .content(form.getContent())
+            .like(0)
+            .view(0)
+            .postCreateDt(LocalDateTime.now())
+            .createUser(user)
+            .build();
+    }
+
+    public void updateFromForm(PostDomainForm form) {
+        this.title = form.getTitle();
+        this.content = form.getContent();
+        this.postUpdateDt = LocalDateTime.now();
+    }
+
+
+
+    public void updateLike(int like) {
+        this.like = like;
+    }
 }

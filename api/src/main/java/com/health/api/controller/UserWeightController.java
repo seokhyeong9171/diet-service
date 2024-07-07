@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/authid/{authId}/weights")
+@RequestMapping("/weights")
 @RequiredArgsConstructor
 public class UserWeightController {
 
@@ -31,10 +32,12 @@ public class UserWeightController {
   private final UserWeightApplication userWeightApplication;
 
   @GetMapping
-  public ResponseEntity<?> getWeightList
-      (@PathVariable String authId, @RequestParam String scope, Pageable pageable) {
+  public ResponseEntity<?> getWeightList(
+      @CookieValue(name = "Authorization") String jwt,
+      @RequestParam String scope, Pageable pageable
+  ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     Page<UserWeightResponse> weightResponseList =
         userWeightApplication.getUserWeightList(authId, scope, pageable)
@@ -45,9 +48,10 @@ public class UserWeightController {
 
   @PostMapping
   public ResponseEntity<?> createWeightRecord(
-      @PathVariable String authId, @RequestBody UserWeightForm form) {
+      @CookieValue(name = "Authorization") String jwt, @RequestBody UserWeightForm form
+  ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     UserWeightDomainDto userWeightDto = userWeightApplication.createWeightRecord(authId, form);
 
@@ -58,10 +62,11 @@ public class UserWeightController {
 
   @PatchMapping("/{recordId}")
   public ResponseEntity<?> updateWeightRecord(
-      @PathVariable String authId, @PathVariable Long recordId, @RequestBody UserWeightForm form
+      @CookieValue(name = "Authorization") String jwt,
+      @PathVariable Long recordId, @RequestBody UserWeightForm form
   ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     UserWeightDomainDto userWeightDto =
         userWeightApplication.updateWeightRecord(authId, recordId, form);
@@ -73,10 +78,10 @@ public class UserWeightController {
 
   @DeleteMapping("/{recordId}")
   public ResponseEntity<?> deleteWeightRecord(
-      @PathVariable String authId, @PathVariable Long recordId
+      @CookieValue(name = "Authorization") String jwt, @PathVariable Long recordId
   ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     Long deletedRecordId = userWeightApplication.deleteWeightRecord(authId, recordId);
 

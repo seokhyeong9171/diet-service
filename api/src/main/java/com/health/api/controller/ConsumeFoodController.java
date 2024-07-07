@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/authid/{authId}/dailymeals/{dailyMealDt}/meals/{mealId}")
+//@RequestMapping("/authid/{authId}/dailymeals/{dailyMealDt}/meals/{mealId}")
+@RequestMapping("dailymeals/{dailyMealDt}/meals/{mealId}")
 @RequiredArgsConstructor
 public class ConsumeFoodController {
 
@@ -32,13 +34,14 @@ public class ConsumeFoodController {
 
   @PostMapping
   public ResponseEntity<?> addFoodToMeal(
-      @PathVariable String authId,
+//      @PathVariable String authId,
+      @CookieValue(name = "Authorization") String jwt,
       @PathVariable @DateTimeFormat(iso = DATE) LocalDate dailyMealDt,
       @PathVariable Long mealId,
       @RequestBody @Validated FoodConsumeForm foodConsumeForm
   ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     ConsumeFoodDomainDto consumeFoodDomainDto =
         consumeFoodApplication.addFoodToMeal(authId, dailyMealDt, mealId, foodConsumeForm);
@@ -50,13 +53,13 @@ public class ConsumeFoodController {
 
   @DeleteMapping("/{consumeFoodId}")
   public ResponseEntity<?> deleteConsumeFood(
-      @PathVariable String authId,
+      @CookieValue(name = "Authorization") String jwt,
       @PathVariable @DateTimeFormat(iso = DATE) LocalDate dailyMealDt,
       @PathVariable Long mealId,
       @PathVariable Long consumeFoodId
       ) {
 
-    authValidatorComponent.validateAuthId(authId);
+    String authId = authValidatorComponent.validateAuthId(jwt);
 
     Long deletedConsumeFoodId =
         consumeFoodApplication.deleteConsumeFood(authId, dailyMealDt, mealId, consumeFoodId);

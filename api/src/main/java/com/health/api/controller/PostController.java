@@ -5,7 +5,7 @@ import static com.health.domain.response.PostResponse.PostListResponse;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.PostForm;
-import com.health.api.service.ForumApplication;
+import com.health.api.service.PostApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.PostDomainDto;
 import com.health.domain.response.PostResponse;
@@ -31,13 +31,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
   private final AuthValidatorComponent authValidatorComponent;
-  private final ForumApplication forumApplication;
+  private final PostApplication postApplication;
 
 
   @GetMapping
   public ResponseEntity<?> getPostList(Pageable pageable) {
 
-    Page<PostDomainDto> postDomainDtoList = forumApplication.getPostList(pageable);
+    Page<PostDomainDto> postDomainDtoList = postApplication.getPostList(pageable);
 
     return ResponseEntity.ok(
         SuccessResponse.of(postDomainDtoList.map(PostListResponse::fromDomainDto))
@@ -51,7 +51,7 @@ public class PostController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    PostDomainDto postDomainDto = forumApplication.createPost(authId, postForm);
+    PostDomainDto postDomainDto = postApplication.createPost(authId, postForm);
 
     return ResponseEntity.status(CREATED).body(
         SuccessResponse.of(PostContentResponse.fromDomainDto(postDomainDto))
@@ -66,7 +66,7 @@ public class PostController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    PostDomainDto postDomainDto = forumApplication.updatePost(authId, postId, postForm);
+    PostDomainDto postDomainDto = postApplication.updatePost(authId, postId, postForm);
 
     return ResponseEntity.ok(
         SuccessResponse.of(PostContentResponse.fromDomainDto(postDomainDto))
@@ -80,7 +80,7 @@ public class PostController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    Long deletedPostId = forumApplication.deletePost(authId, postId);
+    Long deletedPostId = postApplication.deletePost(authId, postId);
 
     return ResponseEntity.ok(SuccessResponse.of(deletedPostId));
   }
@@ -89,7 +89,7 @@ public class PostController {
   public ResponseEntity<?> getPostLikeCount(@PathVariable Long postId) {
 
     return ResponseEntity.ok(
-        SuccessResponse.of(forumApplication.getPostLikeCount(postId))
+        SuccessResponse.of(postApplication.getPostLikeCount(postId))
     );
   }
 
@@ -97,7 +97,7 @@ public class PostController {
   public ResponseEntity<?> getPostViewCount(@PathVariable Long postId) {
 
     return ResponseEntity.ok(
-        SuccessResponse.of(forumApplication.getPostViewCount(postId))
+        SuccessResponse.of(postApplication.getPostViewCount(postId))
     );
   }
 

@@ -44,7 +44,7 @@ public class CommentEntity extends BaseEntity{
     private UserEntity createdUser;
 
     @Column(name = "delete_yn")
-    private Boolean isDeleted;
+    private boolean deleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -61,7 +61,7 @@ public class CommentEntity extends BaseEntity{
             .content(form.getContent())
             .post(post)
             .createdUser(user)
-            .isDeleted(false)
+            .deleted(false)
             .build();
     }
 
@@ -72,7 +72,7 @@ public class CommentEntity extends BaseEntity{
             .content(form.getContent())
             .post(comment.getPost())
             .createdUser(user)
-            .isDeleted(false)
+            .deleted(false)
             .parent(comment)
             .build();
     }
@@ -84,6 +84,6 @@ public class CommentEntity extends BaseEntity{
 
 
     public void markDeleteFlag() {
-        this.isDeleted = true;
+        this.deleted = true;
     }
 }

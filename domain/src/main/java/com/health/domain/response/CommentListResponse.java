@@ -1,5 +1,7 @@
 package com.health.domain.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.health.domain.dto.CommentDomainDto;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,57 +16,52 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CommentListResponse {
 
-  private Long id;
+  private CommentInfo parentComment;
 
-  private String content;
+  @JsonInclude(Include.NON_EMPTY)
+  private List<CommentInfo> childCommentList;
 
-  private String createdUserAuthId;
-
-  private LocalDateTime createdDt;
-  private LocalDateTime updateDt;
-
-  private List<CommentResponse> childCommentList;
-
-
-  public static CommentListResponse fromDomainDto(CommentDomainDto commentDomainDto) {
-    return CommentListResponse.builder()
-        .id(commentDomainDto.getId())
-        .content(commentDomainDto.getContent())
-        .createdUserAuthId(commentDomainDto.getCreatedUserAuthId())
-        .createdDt(commentDomainDto.getCreatedDt())
-        .updateDt(commentDomainDto.getUpdateDt())
-        .childCommentList(
-            commentDomainDto.getChildCommentList().stream()
-                .map(CommentResponse::fromDomainDto).toList()
-        )
-        .build();
-  }
 
   @Getter
   @AllArgsConstructor
   @NoArgsConstructor
   @Builder
-  public static class CommentResponse {
+  public static class CommentInfo {
 
     private Long id;
 
     private String content;
 
+    @JsonInclude(Include.NON_NULL)
     private String createdUserAuthId;
+
+    @JsonInclude(Include.NON_NULL)
     private LocalDateTime createdDt;
+    @JsonInclude(Include.NON_NULL)
     private LocalDateTime updateDt;
 
-    public static CommentResponse fromDomainDto(CommentDomainDto commentDomainDto) {
-      return CommentResponse.builder()
-          .id(commentDomainDto.getId())
-          .content(commentDomainDto.getContent())
-          .createdUserAuthId(commentDomainDto.getCreatedUserAuthId())
-          .createdDt(commentDomainDto.getCreatedDt())
-          .updateDt(commentDomainDto.getUpdateDt())
-          .build();
+    public static CommentInfo fromDomainDto(CommentDomainDto commentDomainDto) {
+
+        return CommentInfo.builder()
+            .id(commentDomainDto.getId())
+            .content(commentDomainDto.getContent())
+            .createdUserAuthId(commentDomainDto.getCreatedUserAuthId())
+            .createdDt(commentDomainDto.getCreatedDt())
+            .updateDt(commentDomainDto.getUpdateDt())
+            .build();
     }
 
   }
 
+  public static CommentListResponse fromDomainDto(CommentDomainDto commentDomainDto) {
+
+    return CommentListResponse.builder()
+        .parentComment(CommentInfo.fromDomainDto(commentDomainDto))
+        .childCommentList(
+            commentDomainDto.getChildCommentList().stream()
+                .map(CommentInfo::fromDomainDto).toList()
+        )
+        .build();
+  }
 
 }

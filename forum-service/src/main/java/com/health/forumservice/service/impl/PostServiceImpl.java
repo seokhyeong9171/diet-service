@@ -6,15 +6,17 @@ import static com.health.common.redis.RedisKeyComponent.*;
 import com.health.common.exception.CustomException;
 import com.health.common.redis.RedisKeyComponent;
 import com.health.domain.dto.PostDomainDto;
-import com.health.domain.entity.CommentEntity;
 import com.health.domain.entity.PostEntity;
+import com.health.domain.entity.PostLikeEntity;
+import com.health.domain.entity.PostViewEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.form.PostDomainForm;
 import com.health.domain.repository.CommentRepository;
+import com.health.domain.repository.PostLikeRepository;
 import com.health.domain.repository.PostRepository;
+import com.health.domain.repository.PostViewRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.forumservice.service.PostService;
-import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,6 +35,8 @@ public class PostServiceImpl implements PostService {
   private final UserRepository userRepository;
   private final PostRepository postRepository;
   private final CommentRepository commentRepository;
+  private final PostViewRepository postViewRepository;
+  private final PostLikeRepository postLikeRepository;
 
   private final RedisTemplate<String, String> redisTemplate;
 
@@ -104,12 +108,10 @@ public class PostServiceImpl implements PostService {
 
     Double likeCount = redisTemplate.opsForZSet().score(postLikeCountKey(), postId.toString());
 
-    if (likeCount == null) {
-      throw new CustomException(REDIS_OBJECT_NOT_EXIST);
+    validateRedisNotNull(likeCount);
 
-    } else {
-      return likeCount.intValue();
-    }
+    return likeCount.intValue();
+
   }
 
   @Override
@@ -118,22 +120,24 @@ public class PostServiceImpl implements PostService {
 
     Double viewCount = redisTemplate.opsForZSet().score(postViewCountKey(), postId.toString());
 
-    if (viewCount == null) {
-      throw new CustomException(REDIS_OBJECT_NOT_EXIST);
+    validateRedisNotNull(viewCount);
 
-    } else {
-      return viewCount.intValue();
-    }
+    return viewCount.intValue();
+
   }
 
   @Override
   public PostDomainDto getPostInfo(String authId, Long postId) {
+    UserEntity findUser = findUserByAuthId(authId);
     PostEntity findPost = findPostById(postId);
 
     SetOperations<String, String> setOps = getSetOps();
 
     // 처음 조회한 유저일 경우 유저 조회 게시글 추가 & 게시글 조회수 증가
-    if (isContainsRedisSetValue(userPostViewKey(authId), postId.toString())) {
+    if (!isContainsRedisSetValue(userPostViewKey(authId), postId.toString())) {
+
+      postViewRepository.save(PostViewEntity.createNew(findUser, findPost));
+
       setOps.add(userPostViewKey(authId), postId.toString());
       getZSetOps().incrementScore(postViewCountKey(), postId.toString(), 1);
     }
@@ -147,6 +151,14 @@ public class PostServiceImpl implements PostService {
     SetOperations<String, String> setOps = getSetOps();
     ZSetOperations<String, String> zSetOps = getZSetOps();
 
+    // 이미 해당 유저가 해당 게시글에 좋아요를 누른 상태인지 확인
+    validateAlreadyLike(authId, postId);
+
+    UserEntity findUser = findUserByAuthId(authId);
+    PostEntity findPost = findPostById(postId);
+
+    postLikeRepository.save(PostLikeEntity.createNew(findUser, findPost));
+
     setOps.add(userPostLikeKey(authId), postId.toString());
     zSetOps.incrementScore(postLikeCountKey(), postId.toString(), 1);
 
@@ -158,6 +170,9 @@ public class PostServiceImpl implements PostService {
 
     SetOperations<String, String> setOps = getSetOps();
     ZSetOperations<String, String> zSetOps = getZSetOps();
+
+    // 해당 유저가 해당 게시글에 좋아요 한 상태인지 확인
+    validateNotLike(authId, postId);
 
     setOps.remove(userPostLikeKey(authId), postId);
     zSetOps.incrementScore(postLikeCountKey(), postId.toString(), -1);
@@ -189,8 +204,26 @@ public class PostServiceImpl implements PostService {
     return redisTemplate.opsForZSet();
   }
 
+  private void validateRedisNotNull(Double value) {
+    if (value == null) {
+      throw new CustomException(REDIS_OBJECT_NOT_EXIST);
+    }
+  }
+
   private boolean isContainsRedisSetValue(String key, String value) {
-    return Boolean.FALSE.equals(getSetOps().isMember(key, value));
+    return Boolean.TRUE.equals(getSetOps().isMember(key, value));
+  }
+
+  private void validateAlreadyLike(String authId, Long postId) {
+    if (isContainsRedisSetValue(userPostLikeKey(authId), postId.toString())) {
+      throw new CustomException(POST_LIKE_ALREADY_EXIST);
+    }
+  }
+
+  private void validateNotLike(String authId, Long postId) {
+    if (isContainsRedisSetValue(userPostLikeKey(authId), postId.toString())) {
+      throw new CustomException(POST_LIKE_NOT_EXIST);
+    }
   }
 
 }

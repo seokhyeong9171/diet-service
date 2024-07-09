@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
     // 오래된 순서대로 정렬
     return getPostByPostId(postId).getCommentList().stream()
-        .filter(c -> !c.getIsDeleted())
+        .filter(c -> !c.isDeleted())
         .sorted(Comparator.comparing(CommentEntity::getCreatedDt))
         .map(CommentDomainDto::fromEntity)
         .toList();
@@ -80,14 +80,8 @@ public class CommentServiceImpl implements CommentService {
     validateDeleted(findComment);
     validateRightPost(findPost, findComment);
 
-    // child comment 없는 경우엔 comment 삭제
-    // child comment 있는 경우엔 delete flag만 변경
-    if (findComment.getChildCommentList().isEmpty()) {
-      findPost.getCommentList().remove(findComment);
-      commentRepository.delete(findComment);
-    } else {
-      findComment.markDeleteFlag();
-    }
+    // flag 변경으로 soft delete
+    findComment.markDeleteFlag();
 
     return findComment.getId();
   }
@@ -132,7 +126,7 @@ public class CommentServiceImpl implements CommentService {
 
     findChildComment.updateComment(domainForm);
 
-    return null;
+    return CommentDomainDto.fromEntity(findChildComment);
   }
 
   @Override
@@ -148,8 +142,8 @@ public class CommentServiceImpl implements CommentService {
     validateRightPost(findPost, findParentComment);
     validateAccurateParent(findParentComment, findChildComment);
 
-    findParentComment.getChildCommentList().remove(findChildComment);
-    commentRepository.delete(findChildComment);
+    // flag 변경으로 soft delete
+    findChildComment.markDeleteFlag();
 
     return findChildComment.getId();
   }
@@ -176,7 +170,7 @@ public class CommentServiceImpl implements CommentService {
   }
 
   private void validateDeleted(CommentEntity findComment) {
-    if (findComment.getIsDeleted()) {
+    if (findComment.isDeleted()) {
       throw new CustomException(COMMENT_PARENT_DELETED);
     }
   }

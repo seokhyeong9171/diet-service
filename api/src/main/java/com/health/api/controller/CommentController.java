@@ -7,7 +7,7 @@ import com.health.api.service.CommentApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.CommentDomainDto;
 import com.health.domain.response.CommentListResponse;
-import com.health.domain.response.CommentListResponse.CommentResponse;
+import com.health.domain.response.CommentListResponse.CommentInfo;
 import com.health.security.authentication.AuthValidatorComponent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class CommentController {
     List<CommentDomainDto> commentDomainDtoList = commentApplication.getCommentList(postId);
 
     return ResponseEntity.ok(
-        SuccessResponse.of(commentDomainDtoList.stream().map(CommentResponse::fromDomainDto))
+        SuccessResponse.of(commentDomainDtoList.stream().map(CommentListResponse::fromDomainDto))
     );
   }
 
@@ -55,7 +55,7 @@ public class CommentController {
         commentApplication.createComment(authId, postId, commentForm);
 
     return ResponseEntity.status(CREATED).body(
-        SuccessResponse.of(CommentResponse.fromDomainDto(commentDomainDto))
+        SuccessResponse.of(CommentInfo.fromDomainDto(commentDomainDto))
     );
   }
 
@@ -71,7 +71,7 @@ public class CommentController {
         commentApplication.updateComment(authId, postId, commentId, commentForm);
 
     return ResponseEntity.status(CREATED).body(
-        SuccessResponse.of(CommentResponse.fromDomainDto(commentDomainDto))
+        SuccessResponse.of(CommentInfo.fromDomainDto(commentDomainDto))
     );
   }
 
@@ -118,8 +118,8 @@ public class CommentController {
     CommentDomainDto commentDomainDto =
         commentApplication.updateChildComment(authId, postId, commentId, childCommentId, commentForm);
 
-    return ResponseEntity.status(CREATED).body(
-        SuccessResponse.of(CommentResponse.fromDomainDto(commentDomainDto))
+    return ResponseEntity.ok(
+        SuccessResponse.of(CommentInfo.fromDomainDto(commentDomainDto))
     );
   }
 

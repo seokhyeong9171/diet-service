@@ -17,7 +17,7 @@ public class RedisKeyComponent {
   }
 
 
-  // 유저 별 좋아요 누른 게시글
+  // 게시글 별 좋아요 누른 유저
   public static String userPostLikeKey(String authId) {
     return "user:" + authId + ":like_post";
   }

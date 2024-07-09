@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ForumApplication {
+public class PostApplication {
 
   private final PostService postService;
 
@@ -36,5 +36,17 @@ public class ForumApplication {
 
   public Integer getPostViewCount(Long postId) {
     return postService.getPostViewCount(postId);
+  }
+
+  public PostDomainDto getPostInfo(String authId, Long postId) {
+    return postService.getPostInfo(authId, postId);
+  }
+
+  public Integer postAddLike(String authId, Long postId) {
+    return postService.postAddLike(authId, postId);
+  }
+
+  public Integer postUnLike(String authId, Long postId) {
+    return postService.postUnLike(authId, postId);
   }
 }

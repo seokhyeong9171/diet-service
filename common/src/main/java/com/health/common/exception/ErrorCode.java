@@ -37,6 +37,16 @@ public enum ErrorCode {
 
     POST_NOT_FOUND(BAD_REQUEST, "couldn't find post"),
     POST_NOT_CREATE_USER(BAD_REQUEST, "this post is not created by that user"),
+    POST_LIKE_ALREADY_EXIST(BAD_REQUEST, "this user already liked that post"),
+    POST_LIKE_NOT_EXIST(BAD_REQUEST, "this user didn't like that post yet"),
+
+    COMMENT_NOT_FOUND(BAD_REQUEST, "couldn't find comment"),
+    COMMENT_AND_USER_NOT_MATCH(BAD_REQUEST, "this comment is not owned by that user"),
+    COMMENT_AND_POST_NOT_MATCH(BAD_REQUEST, "this comment is not owned by that post"),
+    COMMENT_CHILD_AND_PARENT_NOT_MATCH(BAD_REQUEST, "this child comment is not owned by that comment"),
+    COMMENT_ALREADY_DELETED(BAD_REQUEST, "this comment is already deleted"),
+    COMMENT_PARENT_DELETED(BAD_REQUEST, "parent comment is deleted"),
+    COMMENT_IS_SUB(BAD_REQUEST, "sub comment is not created to sub comment"),
 
     USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),
     PARAMETER_INVALID(BAD_REQUEST, "this is wrong parameter"),

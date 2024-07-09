@@ -5,9 +5,10 @@ import static com.health.domain.response.PostResponse.PostListResponse;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.PostForm;
-import com.health.api.service.ForumApplication;
+import com.health.api.service.PostApplication;
 import com.health.common.model.SuccessResponse;
 import com.health.domain.dto.PostDomainDto;
+import com.health.domain.response.PostResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,16 +28,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/forums/posts")
 @RequiredArgsConstructor
-public class ForumController {
+public class PostController {
 
   private final AuthValidatorComponent authValidatorComponent;
-  private final ForumApplication forumApplication;
+  private final PostApplication postApplication;
 
 
   @GetMapping
   public ResponseEntity<?> getPostList(Pageable pageable) {
 
-    Page<PostDomainDto> postDomainDtoList = forumApplication.getPostList(pageable);
+    Page<PostDomainDto> postDomainDtoList = postApplication.getPostList(pageable);
 
     return ResponseEntity.ok(
         SuccessResponse.of(postDomainDtoList.map(PostListResponse::fromDomainDto))
@@ -50,7 +51,7 @@ public class ForumController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    PostDomainDto postDomainDto = forumApplication.createPost(authId, postForm);
+    PostDomainDto postDomainDto = postApplication.createPost(authId, postForm);
 
     return ResponseEntity.status(CREATED).body(
         SuccessResponse.of(PostContentResponse.fromDomainDto(postDomainDto))
@@ -65,7 +66,7 @@ public class ForumController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    PostDomainDto postDomainDto = forumApplication.updatePost(authId, postId, postForm);
+    PostDomainDto postDomainDto = postApplication.updatePost(authId, postId, postForm);
 
     return ResponseEntity.ok(
         SuccessResponse.of(PostContentResponse.fromDomainDto(postDomainDto))
@@ -79,7 +80,7 @@ public class ForumController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    Long deletedPostId = forumApplication.deletePost(authId, postId);
+    Long deletedPostId = postApplication.deletePost(authId, postId);
 
     return ResponseEntity.ok(SuccessResponse.of(deletedPostId));
   }
@@ -88,7 +89,7 @@ public class ForumController {
   public ResponseEntity<?> getPostLikeCount(@PathVariable Long postId) {
 
     return ResponseEntity.ok(
-        SuccessResponse.of(forumApplication.getPostLikeCount(postId))
+        SuccessResponse.of(postApplication.getPostLikeCount(postId))
     );
   }
 
@@ -96,15 +97,44 @@ public class ForumController {
   public ResponseEntity<?> getPostViewCount(@PathVariable Long postId) {
 
     return ResponseEntity.ok(
-        SuccessResponse.of(forumApplication.getPostViewCount(postId))
+        SuccessResponse.of(postApplication.getPostViewCount(postId))
     );
   }
 
+  @GetMapping("/{postId}")
+  public ResponseEntity<?> getPostInfo(
+      @CookieValue(name = "Authorization") String jwt, @PathVariable Long postId
+  ) {
 
-  // TODO
-  //  게시글 조회, 좋아요 기능
-  //  redis 데이터 스케쥴러 통해 DB로 업데이트
+    String authId = authValidatorComponent.validateAuthId(jwt);
+    PostDomainDto postDomainDto = postApplication.getPostInfo(authId, postId);
 
+    return ResponseEntity.ok(
+        SuccessResponse.of(PostResponse.PostContentResponse.fromDomainDto(postDomainDto))
+    );
+  }
+
+  @PostMapping("/{postId}/like")
+  public ResponseEntity<?> postAddLike(
+      @CookieValue(name = "Authorization") String jwt, @PathVariable Long postId
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+    Integer likeCount = postApplication.postAddLike(authId, postId);
+
+    return ResponseEntity.ok(SuccessResponse.of(likeCount));
+  }
+
+  @PatchMapping("/{postId}/like")
+  public ResponseEntity<?> postUnLike(
+      @CookieValue(name = "Authorization") String jwt, @PathVariable Long postId
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+    Integer likeCount = postApplication.postUnLike(authId, postId);
+
+    return ResponseEntity.ok(SuccessResponse.of(likeCount));
+  }
 
 
 }

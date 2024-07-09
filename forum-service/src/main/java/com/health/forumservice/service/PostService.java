@@ -18,4 +18,10 @@ public interface PostService {
   int getPostLikeCount(Long postId);
 
   int getPostViewCount(Long postId);
+
+  PostDomainDto getPostInfo(String authId, Long postId);
+
+  Integer postAddLike(String authId, Long postId);
+
+  Integer postUnLike(String authId, Long postId);
 }

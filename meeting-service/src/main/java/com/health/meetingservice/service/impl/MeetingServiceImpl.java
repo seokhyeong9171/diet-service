@@ -82,16 +82,15 @@ public class MeetingServiceImpl implements MeetingService {
 
     validateMeetingCreator(findUser, findMeeting);
 
-    // TODO
-    //  meeting participant가 있을 경우 status만 cancel로 변경
-    //  meeting participant 없을 경우 삭제
-
     meetingRepository.delete(findMeeting);
 
+    // 참가자가 없을 경우 모임 글 자체를 삭제
+    // 참가자가 있을 경우 모임 상태 cancel로 변경, 참가자 상태 cancel로 변경
     if (findMeeting.getParticipantList().isEmpty()) {
       meetingRepository.delete(findMeeting);
     } else {
       findMeeting.cancel();
+      findMeeting.getParticipantList().forEach(MeetingParticipantEntity::cancel);
     }
 
     return findMeeting.getId();

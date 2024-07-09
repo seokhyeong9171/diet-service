@@ -1,6 +1,7 @@
 package com.health.domain.entity;
 
 import static com.health.domain.type.AdmissionStatus.APPROVAL;
+import static com.health.domain.type.AdmissionStatus.CANCEL;
 import static com.health.domain.type.AdmissionStatus.DECLINE;
 import static com.health.domain.type.AdmissionStatus.PENDING;
 
@@ -57,5 +58,9 @@ public class MeetingParticipantEntity extends BaseEntity{
 
     public void decline() {
         this.admissionStatus = DECLINE;
+    }
+
+    public void cancel() {
+        this.admissionStatus = CANCEL;
     }
 }

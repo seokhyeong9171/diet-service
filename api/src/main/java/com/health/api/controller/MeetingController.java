@@ -114,4 +114,33 @@ public class MeetingController {
     );
   }
 
+  @PostMapping("/{meetingId}/participant/{participantId}/decline")
+  public ResponseEntity<?> delcineEnroll(
+      @CookieValue("Authorization") String jwt, @PathVariable Long meetingId,
+      @PathVariable Long participantId
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+
+    MeetingParticipantDomainDto meetingParticipantDomainDto =
+        meetingApplication.declineEnroll(authId, meetingId, participantId);
+
+    return ResponseEntity.ok(
+        SuccessResponse.of(MeetingParticipantResponse.fromDomainDto(meetingParticipantDomainDto))
+    );
+  }
+
+  @PostMapping("/{meetingId}/participant/{participantId}/demerit")
+  public ResponseEntity<?> setDemerit(
+      @CookieValue("Authorization") String jwt, @PathVariable Long meetingId,
+      @PathVariable Long participantId
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+
+    Long demeritedUserAuthId = meetingApplication.setDemerit(authId, meetingId, participantId);
+
+    return ResponseEntity.ok(SuccessResponse.of(demeritedUserAuthId));
+  }
+
 }

@@ -40,4 +40,14 @@ public class MeetingApplication {
       (String authId, Long meetingId, Long participantId) {
     return meetingService.permitEnroll(authId, meetingId, participantId);
   }
+
+  public MeetingParticipantDomainDto declineEnroll
+      (String authId, Long meetingId, Long participantId) {
+    return meetingService.declineEnroll
+        (authId, meetingId, participantId);
+  }
+
+  public Long setDemerit(String authId, Long meetingId, Long participantId) {
+    return meetingService.setDemerit(authId, meetingId, participantId);
+  }
 }

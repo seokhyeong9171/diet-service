@@ -111,6 +111,9 @@ public class UserEntity extends BaseEntity{
     }
 
 
+    public void increaseDemerit() {
+        this.demerit++;
+    }
 
     public void increaseExerciseDuration() {
         this.exerciseDuration++;

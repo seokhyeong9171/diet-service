@@ -20,4 +20,8 @@ public interface MeetingService {
   Long enrollMeeting(String authId, Long meetingId);
 
   MeetingParticipantDomainDto permitEnroll(String authId, Long meetingId, Long participantId);
+
+  MeetingParticipantDomainDto declineEnroll(String authId, Long meetingId, Long participantId);
+
+  Long setDemerit(String authId, Long meetingId, Long participantId);
 }

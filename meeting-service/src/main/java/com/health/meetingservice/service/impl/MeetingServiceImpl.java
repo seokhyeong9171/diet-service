@@ -102,6 +102,8 @@ public class MeetingServiceImpl implements MeetingService {
     UserEntity findUser = findUserByAuthId(authId);
     MeetingEntity findMeeting = findMeetingById(meetingId);
 
+    validateBlackList(findUser);
+
     RLock participateLock = redissonClient.getLock(meetingEnrollRock(meetingId));
     boolean isLock = false;
 
@@ -146,13 +148,47 @@ public class MeetingServiceImpl implements MeetingService {
     MeetingParticipantEntity findParticipant = findParticipantById(participantId);
 
     validateBlackList(findParticipant.getParticipant());
-    validateParticipantStatus(findParticipant);
+    validatePendingStatus(findParticipant);
     validateMeetingCreator(findUser, findMeeting);
     validateMeetingAndParticipant(findMeeting, findParticipant);
 
     findParticipant.permit();
 
     return MeetingParticipantDomainDto.fromEntity(findParticipant);
+  }
+
+  @Override
+  public MeetingParticipantDomainDto declineEnroll
+      (String authId, Long meetingId, Long participantId) {
+
+    UserEntity findUser = findUserByAuthId(authId);
+    MeetingEntity findMeeting = findMeetingById(meetingId);
+    MeetingParticipantEntity findParticipant = findParticipantById(participantId);
+
+    validatePendingStatus(findParticipant);
+    validateMeetingCreator(findUser, findMeeting);
+    validateMeetingAndParticipant(findMeeting, findParticipant);
+
+    findParticipant.decline();
+
+    hashOperations.increment(meetingParticipantCount(), meetingId.toString(), -1);
+
+    return MeetingParticipantDomainDto.fromEntity(findParticipant);
+  }
+
+  @Override
+  public Long setDemerit(String authId, Long meetingId, Long participantId) {
+
+    UserEntity findUser = findUserByAuthId(authId);
+    MeetingEntity findMeeting = findMeetingById(meetingId);
+    MeetingParticipantEntity findParticipant = findParticipantById(participantId);
+
+    validateMeetingCreator(findUser, findMeeting);
+    validateMeetingAndParticipant(findMeeting, findParticipant);
+
+    findParticipant.getParticipant().increaseDemerit();
+
+    return findParticipant.getParticipant().getId();
   }
 
   private Integer getParticipantCount(Long meetingId) {
@@ -175,41 +211,48 @@ public class MeetingServiceImpl implements MeetingService {
         .orElseThrow(() -> new CustomException(MEETING_PARTICIPANT_NOT_FOUND));
   }
 
+  // 모임 참가자 수가 다 찼는지 확인
   private void validateParticipantCount(Long meetingId, MeetingEntity findMeeting) {
     if (findMeeting.getMaxParticipant() >= getParticipantCount(meetingId)) {
       throw new CustomException(MEETING_PARTICIPANT_FULL);
     }
   }
 
+  // 참가 권한이 있는지 확인
   private void validateHaveRightToEnroll(UserEntity findUser, MeetingEntity findMeeting) {
     validateBlackList(findUser);
     validateNotMeetingCreator(findUser, findMeeting);
   }
 
+  // 해당 user가 blacklist인지 확인
   private void validateBlackList(UserEntity findUser) {
     if (findUser.getDemerit() >= 3) {
       throw new CustomException(USER_BLACKLIST);
     }
   }
 
+  // 해당 user가 모임 개설자인지 확인
   private void validateMeetingCreator(UserEntity findUser, MeetingEntity findMeeting) {
     if (findUser != findMeeting.getEstablishedUser()) {
       throw new CustomException(MEETING_CREATOR_NOT_MATCH);
     }
   }
 
+  // 해당 user가 모임 개설자가 아닌지 확인
   private void validateNotMeetingCreator(UserEntity findUser, MeetingEntity findMeeting) {
     if (findUser == findMeeting.getEstablishedUser()) {
       throw new CustomException(MEETING_CREATOR_CAN_NOT_ENROLL);
     }
   }
 
-  private void validateParticipantStatus(MeetingParticipantEntity findParticipant) {
+  // 현재 participant 상태가 pending인지 확인 (pending 상태에서만 승인, 거절 가능)
+  private void validatePendingStatus(MeetingParticipantEntity findParticipant) {
     if (findParticipant.getAdmissionStatus() != PENDING) {
       throw new CustomException(MEETING_PARTICIPANT_STATUS_INVALID);
     }
   }
 
+  // 해당 meeting과 participant 정보가 일치하는지 확인
   private void validateMeetingAndParticipant(MeetingEntity findMeeting, MeetingParticipantEntity findParticipant) {
     if (findMeeting != findParticipant.getMeeting()) {
       throw new CustomException(MEETING_PARTICIPANT_AND_MEETING_NOT_MATCH);

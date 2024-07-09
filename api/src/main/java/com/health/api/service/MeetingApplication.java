@@ -1,10 +1,10 @@
 package com.health.api.service;
 
 import com.health.api.form.MeetingForm;
-import com.health.communityservice.service.MeetingService;
 import com.health.domain.dto.MeetingDomainDto;
 import com.health.domain.dto.MeetingParticipantDomainDto;
 import com.health.domain.type.Region;
+import com.health.meetingservice.service.MeetingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

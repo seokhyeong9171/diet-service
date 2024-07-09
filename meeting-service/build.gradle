@@ -5,6 +5,8 @@ plugins {
 repositories {
 }
 
+bootJar.enabled=false
+
 dependencies {
 }
 

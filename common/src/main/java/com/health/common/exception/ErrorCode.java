@@ -56,6 +56,7 @@ public enum ErrorCode {
     MEETING_PARTICIPANT_FULL(BAD_REQUEST,"The number of participants has been exceeded"),
     MEETING_PARTICIPANT_NOT_FOUND(BAD_REQUEST,"couldn't find meeting participant"),
     MEETING_PARTICIPANT_STATUS_INVALID(BAD_REQUEST,"permission is possible only when it is pending."),
+    MEETING_PARTICIPANT_AND_USER_NOT_MATCH(BAD_REQUEST,"user and participant are not matching."),
     MEETING_PARTICIPANT_AND_MEETING_NOT_MATCH(BAD_REQUEST,"meeting and participant are not matching."),
 
     USER_INVALID_ACCESS(UNAUTHORIZED, "wrong authentication"),

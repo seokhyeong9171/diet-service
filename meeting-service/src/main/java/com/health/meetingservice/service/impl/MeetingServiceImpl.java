@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.HashOperations;
@@ -132,6 +133,22 @@ public class MeetingServiceImpl implements MeetingService {
   }
 
   @Override
+  public Long cancelEnroll(String authId, Long meetingId, Long participantId) {
+
+    UserEntity findUser = findUserByAuthId(authId);
+    MeetingEntity findMeeting = findMeetingById(meetingId);
+    MeetingParticipantEntity findParticipant = findParticipantById(participantId);
+
+    validateMeetingAndParticipant(findMeeting, findParticipant);
+    validateParticipantUser(findParticipant, findUser);
+
+    findParticipant.cancel();
+    hashOperations.increment(meetingParticipantCount(), meetingId.toString(), -1);
+
+    return findParticipant.getId();
+  }
+
+  @Override
   public MeetingParticipantDomainDto permitEnroll
       (String authId, Long meetingId, Long participantId) {
 
@@ -234,6 +251,13 @@ public class MeetingServiceImpl implements MeetingService {
   private void validateNotMeetingCreator(UserEntity findUser, MeetingEntity findMeeting) {
     if (findUser == findMeeting.getEstablishedUser()) {
       throw new CustomException(MEETING_CREATOR_CAN_NOT_ENROLL);
+    }
+  }
+
+  private void validateParticipantUser
+      (MeetingParticipantEntity findParticipant, UserEntity findUser) {
+    if (findUser != findParticipant.getParticipant()) {
+      throw new CustomException(MEETING_PARTICIPANT_AND_USER_NOT_MATCH);
     }
   }
 

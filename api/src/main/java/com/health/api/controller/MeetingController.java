@@ -98,6 +98,19 @@ public class MeetingController {
     return ResponseEntity.ok(SuccessResponse.of(enrolledMeetingId));
   }
 
+  @DeleteMapping("/{meetingId}/participant/{participantId}")
+  public ResponseEntity<?> cancelEnroll(
+      @CookieValue("Authorization") String jwt, @PathVariable Long meetingId,
+      @PathVariable Long participantId
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+
+    Long canceledMeetingId = meetingApplication.cancelEnroll(authId, meetingId, participantId);
+
+    return ResponseEntity.ok(SuccessResponse.of(canceledMeetingId));
+  }
+
   @PostMapping("/{meetingId}/participant/{participantId}/permit")
   public ResponseEntity<?> permitEnroll(
       @CookieValue("Authorization") String jwt, @PathVariable Long meetingId,

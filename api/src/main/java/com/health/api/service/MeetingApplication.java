@@ -50,4 +50,8 @@ public class MeetingApplication {
   public Long setDemerit(String authId, Long meetingId, Long participantId) {
     return meetingService.setDemerit(authId, meetingId, participantId);
   }
+
+  public Long cancelEnroll(String authId, Long meetingId, Long participantId) {
+    return meetingService.cancelEnroll(authId, meetingId, participantId);
+  }
 }

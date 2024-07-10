@@ -24,4 +24,6 @@ public interface MeetingService {
   MeetingParticipantDomainDto declineEnroll(String authId, Long meetingId, Long participantId);
 
   Long setDemerit(String authId, Long meetingId, Long participantId);
+
+  Long cancelEnroll(String authId, Long meetingId, Long participantId);
 }

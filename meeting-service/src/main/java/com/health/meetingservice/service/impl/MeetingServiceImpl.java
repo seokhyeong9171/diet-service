@@ -16,6 +16,7 @@ import com.health.domain.repository.MeetingRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.domain.type.Region;
 import com.health.meetingservice.service.MeetingService;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
@@ -191,13 +192,24 @@ public class MeetingServiceImpl implements MeetingService {
     UserEntity findUser = findUserByAuthId(authId);
     MeetingEntity findMeeting = findMeetingById(meetingId);
     MeetingParticipantEntity findParticipant = findParticipantById(participantId);
+    UserEntity participantUser = findParticipant.getParticipant();
 
     validateMeetingCreator(findUser, findMeeting);
     validateMeetingAndParticipant(findMeeting, findParticipant);
 
-    findParticipant.getParticipant().increaseDemerit();
+    participantUser.increaseDemerit();
 
-    return findParticipant.getParticipant().getId();
+    // 해당 참가자가 처음으로 블랙리스트에 올랐을 경우에 해당 참가자의 모든 참가들을 cancel로 변경
+    if (participantUser.getDemerit() == 3) {
+
+      meetingParticipantRepository.findByParticipant(participantUser)
+          .forEach(p -> {
+            p.cancel();
+            hashOperations
+                .increment(meetingParticipantCount(), p.getMeeting().getId().toString(), -1);
+          });
+    }
+    return participantUser.getId();
   }
 
   private Integer getParticipantCount(Long meetingId) {
@@ -256,7 +268,7 @@ public class MeetingServiceImpl implements MeetingService {
 
   // 해당 참가의 유저 정보 일치하는지 확인
   private void validateParticipantUser
-      (MeetingParticipantEntity findParticipant, UserEntity findUser) {
+  (MeetingParticipantEntity findParticipant, UserEntity findUser) {
     if (findUser != findParticipant.getParticipant()) {
       throw new CustomException(MEETING_PARTICIPANT_AND_USER_NOT_MATCH);
     }

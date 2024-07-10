@@ -98,7 +98,7 @@ public class MeetingController {
     return ResponseEntity.ok(SuccessResponse.of(enrolledMeetingId));
   }
 
-  @PostMapping("/{meetingId}/participant/{participantId}/enroll")
+  @PostMapping("/{meetingId}/participant/{participantId}/permit")
   public ResponseEntity<?> permitEnroll(
       @CookieValue("Authorization") String jwt, @PathVariable Long meetingId,
       @PathVariable Long participantId

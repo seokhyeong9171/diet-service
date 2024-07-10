@@ -23,7 +23,6 @@ import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +35,6 @@ public class MeetingServiceImpl implements MeetingService {
   private final MeetingRepository meetingRepository;
   private final MeetingParticipantRepository meetingParticipantRepository;
 
-  private final RedisTemplate<String, String> redisTemplate;
   private final RedissonClient redissonClient;
   private final HashOperations<String, String, Integer> hashOperations;
 
@@ -84,14 +82,9 @@ public class MeetingServiceImpl implements MeetingService {
 
     meetingRepository.delete(findMeeting);
 
-    // 참가자가 없을 경우 모임 글 자체를 삭제
-    // 참가자가 있을 경우 모임 상태 cancel로 변경, 참가자 상태 cancel로 변경
-    if (findMeeting.getParticipantList().isEmpty()) {
-      meetingRepository.delete(findMeeting);
-    } else {
-      findMeeting.cancel();
-      findMeeting.getParticipantList().forEach(MeetingParticipantEntity::cancel);
-    }
+    // 모임 상태 cancel로 변경, 참가자 상태 cancel로 변경
+    findMeeting.cancel();
+    findMeeting.getParticipantList().forEach(MeetingParticipantEntity::cancel);
 
     return findMeeting.getId();
   }
@@ -102,19 +95,19 @@ public class MeetingServiceImpl implements MeetingService {
     UserEntity findUser = findUserByAuthId(authId);
     MeetingEntity findMeeting = findMeetingById(meetingId);
 
-    validateBlackList(findUser);
+    validateBlacklist(findUser);
 
     RLock participateLock = redissonClient.getLock(meetingEnrollRock(meetingId));
-    boolean isLock = false;
-
 
     validateHaveRightToEnroll(findUser, findMeeting);
 
     try {
 
-      isLock = participateLock.tryLock(10, 10, TimeUnit.SECONDS);
+      // 선착순 참가 시 동시성 문제 해결 위해 lock 사용
+      boolean isParticipantLock =
+          participateLock.tryLock(10, 10, TimeUnit.SECONDS);
 
-      if (!isLock) {
+      if (!isParticipantLock) {
         throw new CustomException(REDIS_LOCK_TIMEOUT);
       }
       validateParticipantCount(meetingId, findMeeting);
@@ -123,7 +116,6 @@ public class MeetingServiceImpl implements MeetingService {
 
       MeetingParticipantEntity createdParticipant =
           MeetingParticipantEntity.enroll(findUser, findMeeting);
-
       MeetingParticipantEntity savedParticipant =
           meetingParticipantRepository.save(createdParticipant);
 
@@ -147,7 +139,7 @@ public class MeetingServiceImpl implements MeetingService {
     MeetingEntity findMeeting = findMeetingById(meetingId);
     MeetingParticipantEntity findParticipant = findParticipantById(participantId);
 
-    validateBlackList(findParticipant.getParticipant());
+    validateBlacklist(findParticipant.getParticipant());
     validatePendingStatus(findParticipant);
     validateMeetingCreator(findUser, findMeeting);
     validateMeetingAndParticipant(findMeeting, findParticipant);
@@ -220,13 +212,13 @@ public class MeetingServiceImpl implements MeetingService {
 
   // 참가 권한이 있는지 확인
   private void validateHaveRightToEnroll(UserEntity findUser, MeetingEntity findMeeting) {
-    validateBlackList(findUser);
+    validateBlacklist(findUser);
     validateNotMeetingCreator(findUser, findMeeting);
   }
 
   // 해당 user가 blacklist인지 확인
-  private void validateBlackList(UserEntity findUser) {
-    if (findUser.getDemerit() >= 3) {
+  private void validateBlacklist(UserEntity findUser) {
+    if (findUser.isBlacklist()) {
       throw new CustomException(USER_BLACKLIST);
     }
   }
@@ -253,7 +245,8 @@ public class MeetingServiceImpl implements MeetingService {
   }
 
   // 해당 meeting과 participant 정보가 일치하는지 확인
-  private void validateMeetingAndParticipant(MeetingEntity findMeeting, MeetingParticipantEntity findParticipant) {
+  private void validateMeetingAndParticipant(MeetingEntity findMeeting,
+      MeetingParticipantEntity findParticipant) {
     if (findMeeting != findParticipant.getMeeting()) {
       throw new CustomException(MEETING_PARTICIPANT_AND_MEETING_NOT_MATCH);
     }

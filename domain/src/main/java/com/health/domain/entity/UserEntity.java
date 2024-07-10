@@ -110,9 +110,12 @@ public class UserEntity extends BaseEntity{
         this.weight = weightEntity.getWeight();
     }
 
-
     public void increaseDemerit() {
         this.demerit++;
+    }
+
+    public boolean isBlacklist() {
+        return this.demerit >= 3;
     }
 
     public void increaseExerciseDuration() {

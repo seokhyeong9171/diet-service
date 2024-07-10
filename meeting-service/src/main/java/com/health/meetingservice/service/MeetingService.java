@@ -26,4 +26,5 @@ public interface MeetingService {
   Long setDemerit(String authId, Long meetingId, Long participantId);
 
   Long cancelEnroll(String authId, Long meetingId, Long participantId);
+
 }

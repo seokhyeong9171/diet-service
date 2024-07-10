@@ -177,7 +177,7 @@ class UserInfoServiceTest {
     // then
     assertThatThrownBy(() -> userInfoApplication.updateUserNickname(savedUser.getAuthId(), userNicknameForm))
         .isInstanceOf(CustomException.class)
-        .hasMessage(ErrorCode.NICKNAME_DUPLICATED.getMessage());
+        .hasMessage(ErrorCode.USER_NICKNAME_DUPLICATED.getMessage());
   }
 
 

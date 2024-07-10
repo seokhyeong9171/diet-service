@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.HashOperations;
@@ -148,6 +147,7 @@ public class MeetingServiceImpl implements MeetingService {
     return findParticipant.getId();
   }
 
+
   @Override
   public MeetingParticipantDomainDto permitEnroll
       (String authId, Long meetingId, Long participantId) {
@@ -157,7 +157,7 @@ public class MeetingServiceImpl implements MeetingService {
     MeetingParticipantEntity findParticipant = findParticipantById(participantId);
 
     validateBlacklist(findParticipant.getParticipant());
-    validatePendingStatus(findParticipant);
+    validateParticipantStatus(findParticipant);
     validateMeetingCreator(findUser, findMeeting);
     validateMeetingAndParticipant(findMeeting, findParticipant);
 
@@ -174,7 +174,7 @@ public class MeetingServiceImpl implements MeetingService {
     MeetingEntity findMeeting = findMeetingById(meetingId);
     MeetingParticipantEntity findParticipant = findParticipantById(participantId);
 
-    validatePendingStatus(findParticipant);
+    validateParticipantStatus(findParticipant);
     validateMeetingCreator(findUser, findMeeting);
     validateMeetingAndParticipant(findMeeting, findParticipant);
 
@@ -254,6 +254,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
   }
 
+  // 해당 참가의 유저 정보 일치하는지 확인
   private void validateParticipantUser
       (MeetingParticipantEntity findParticipant, UserEntity findUser) {
     if (findUser != findParticipant.getParticipant()) {
@@ -262,9 +263,9 @@ public class MeetingServiceImpl implements MeetingService {
   }
 
   // 현재 participant 상태가 pending인지 확인 (pending 상태에서만 승인, 거절 가능)
-  private void validatePendingStatus(MeetingParticipantEntity findParticipant) {
+  private void validateParticipantStatus(MeetingParticipantEntity findParticipant) {
     if (findParticipant.getAdmissionStatus() != PENDING) {
-      throw new CustomException(MEETING_PARTICIPANT_STATUS_INVALID);
+      throw new CustomException(MEETING_PARTICIPANT_STATUS_NOT_PENDING);
     }
   }
 

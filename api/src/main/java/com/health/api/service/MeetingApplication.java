@@ -54,4 +54,5 @@ public class MeetingApplication {
   public Long cancelEnroll(String authId, Long meetingId, Long participantId) {
     return meetingService.cancelEnroll(authId, meetingId, participantId);
   }
+
 }

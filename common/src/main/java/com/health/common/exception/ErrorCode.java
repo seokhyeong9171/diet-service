@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     USER_NOT_FOUND(BAD_REQUEST, "couldn't find user"),
-    NICKNAME_DUPLICATED(BAD_REQUEST, "this nickname is duplicated"),
+    USER_NICKNAME_DUPLICATED(BAD_REQUEST, "this nickname is duplicated"),
     USER_BLACKLIST(BAD_REQUEST, "this user was put on a blacklist"),
 
     EXERCISE_RECORD_NOT_FOUND(BAD_REQUEST, "couldn't find exercise record"),
@@ -47,7 +47,7 @@ public enum ErrorCode {
     COMMENT_CHILD_AND_PARENT_NOT_MATCH(BAD_REQUEST, "this child comment is not owned by that comment"),
     COMMENT_ALREADY_DELETED(BAD_REQUEST, "this comment is already deleted"),
     COMMENT_PARENT_DELETED(BAD_REQUEST, "parent comment is deleted"),
-    COMMENT_IS_SUB(BAD_REQUEST, "sub comment is not created to sub comment"),
+    COMMENT_IS_CHILD(BAD_REQUEST, "child comment can not created to other child comment"),
 
     MEETING_NOT_FOUND(BAD_REQUEST, "couldn't find meeting"),
     MEETING_CREATOR_NOT_MATCH(BAD_REQUEST, "this meeting is not created by that user"),
@@ -55,7 +55,8 @@ public enum ErrorCode {
 
     MEETING_PARTICIPANT_FULL(BAD_REQUEST,"The number of participants has been exceeded"),
     MEETING_PARTICIPANT_NOT_FOUND(BAD_REQUEST,"couldn't find meeting participant"),
-    MEETING_PARTICIPANT_STATUS_INVALID(BAD_REQUEST,"permission is possible only when it is pending."),
+    MEETING_PARTICIPANT_STATUS_NOT_PENDING(BAD_REQUEST,"this meeting participant's status is not pending."),
+    MEETING_PARTICIPANT_STATUS_NOT_APPROVAL(BAD_REQUEST,"this meeting participant is not approved."),
     MEETING_PARTICIPANT_AND_USER_NOT_MATCH(BAD_REQUEST,"user and participant are not matching."),
     MEETING_PARTICIPANT_AND_MEETING_NOT_MATCH(BAD_REQUEST,"meeting and participant are not matching."),
 

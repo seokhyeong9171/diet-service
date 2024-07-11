@@ -1,7 +1,7 @@
 package com.health.api.application;
 
 import com.health.api.form.PostForm;
-import com.health.domain.dto.PostDomainDto;
+import com.health.forumservice.dto.PostDomainDto;
 import com.health.forumservice.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

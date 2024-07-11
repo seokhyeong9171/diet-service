@@ -1,4 +1,4 @@
-package com.health.domain.dto;
+package com.health.forumservice.dto;
 
 import com.health.domain.entity.PostEntity;
 import com.health.domain.entity.UserEntity;

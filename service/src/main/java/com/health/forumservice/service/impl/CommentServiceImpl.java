@@ -3,7 +3,7 @@ package com.health.forumservice.service.impl;
 import static com.health.domain.exception.ErrorCode.*;
 
 import com.health.domain.exception.CustomException;
-import com.health.domain.dto.CommentDomainDto;
+import com.health.forumservice.dto.CommentServiceDto;
 import com.health.domain.entity.CommentEntity;
 import com.health.domain.entity.PostEntity;
 import com.health.domain.entity.UserEntity;
@@ -29,32 +29,32 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<CommentDomainDto> getCommentList(Long postId) {
+  public List<CommentServiceDto> getCommentList(Long postId) {
 
     // 오래된 순서대로 정렬
     return getPostByPostId(postId).getCommentList().stream()
         .filter(c -> !c.isDeleted())
         .sorted(Comparator.comparing(CommentEntity::getCreatedDt))
-        .map(CommentDomainDto::fromEntity)
+        .map(CommentServiceDto::fromEntity)
         .toList();
   }
 
   @Override
-  public CommentDomainDto createComment(String authId, Long postId, CommentServiceForm domainForm) {
+  public CommentServiceDto createComment(String authId, Long postId, CommentServiceForm serviceForm) {
 
     UserEntity findUser = getUserByAuthId(authId);
     PostEntity findPost = getPostByPostId(postId);
 
-    CommentEntity createdComment = CommentEntity.createComment(findPost, findUser, domainForm);
+    CommentEntity createdComment = CommentEntity.createComment(findPost, findUser, serviceForm.toDomainForm());
     CommentEntity savedComment = commentRepository.save(createdComment);
     findPost.getCommentList().add(savedComment);
 
-    return CommentDomainDto.fromEntity(savedComment);
+    return CommentServiceDto.fromEntity(savedComment);
   }
 
   @Override
-  public CommentDomainDto updateComment
-      (String authId, Long postId, Long commentId, CommentServiceForm domainForm) {
+  public CommentServiceDto updateComment
+      (String authId, Long postId, Long commentId, CommentServiceForm serviceForm) {
 
     UserEntity findUser = getUserByAuthId(authId);
     PostEntity findPost = getPostByPostId(postId);
@@ -65,9 +65,9 @@ public class CommentServiceImpl implements CommentService {
     validateDeleted(findComment);
     validateRightPost(findPost, findComment);
 
-    findComment.updateComment(domainForm);
+    findComment.updateComment(serviceForm.toDomainForm());
 
-    return CommentDomainDto.fromEntity(findComment);
+    return CommentServiceDto.fromEntity(findComment);
   }
 
   @Override
@@ -87,8 +87,8 @@ public class CommentServiceImpl implements CommentService {
   }
 
   @Override
-  public CommentDomainDto createChildComment
-      (String authId, Long postId, Long parentCommentId, CommentServiceForm domainForm) {
+  public CommentServiceDto createChildComment
+      (String authId, Long postId, Long parentCommentId, CommentServiceForm serviceForm) {
 
     UserEntity findUser = getUserByAuthId(authId);
     PostEntity findPost = getPostByPostId(postId);
@@ -102,17 +102,17 @@ public class CommentServiceImpl implements CommentService {
     validateRightPost(findPost, findParentComment);
 
     CommentEntity createdChildComment =
-        CommentEntity.createChildComment(findParentComment, findUser, domainForm);
+        CommentEntity.createChildComment(findParentComment, findUser, serviceForm.toDomainForm());
     CommentEntity savedChildComment = commentRepository.save(createdChildComment);
     findParentComment.getChildCommentList().add(savedChildComment);
 
-    return CommentDomainDto.fromEntity(savedChildComment);
+    return CommentServiceDto.fromEntity(savedChildComment);
   }
 
   @Override
-  public CommentDomainDto updateChildComment(
+  public CommentServiceDto updateChildComment(
       String authId, Long postId,
-      Long parentCommentId, Long childCommentId, CommentServiceForm domainForm
+      Long parentCommentId, Long childCommentId, CommentServiceForm serviceForm
   ) {
 
     UserEntity findUser = getUserByAuthId(authId);
@@ -124,9 +124,9 @@ public class CommentServiceImpl implements CommentService {
     validateRightPost(findPost, findParentComment);
     validateAccurateParent(findParentComment, findChildComment);
 
-    findChildComment.updateComment(domainForm);
+    findChildComment.updateComment(serviceForm.toDomainForm());
 
-    return CommentDomainDto.fromEntity(findChildComment);
+    return CommentServiceDto.fromEntity(findChildComment);
   }
 
   @Override

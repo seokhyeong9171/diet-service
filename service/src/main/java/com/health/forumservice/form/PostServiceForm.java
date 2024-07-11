@@ -1,5 +1,6 @@
 package com.health.forumservice.form;
 
+import com.health.domain.form.PostDomainForm;
 import com.health.domain.type.PostCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,5 +18,13 @@ public class PostServiceForm {
     private String title;
 
     private String content;
+
+    public PostDomainForm toDomainForm() {
+        return PostDomainForm.builder()
+            .postCategory(postCategory)
+            .title(title)
+            .content(content)
+            .build();
+    }
 
 }

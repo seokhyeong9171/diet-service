@@ -1,6 +1,6 @@
 package com.health.forumservice.service;
 
-import com.health.domain.dto.PostDomainDto;
+import com.health.forumservice.dto.PostDomainDto;
 import com.health.forumservice.form.PostServiceForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,9 +9,9 @@ public interface PostService {
 
   Page<PostDomainDto> getPostList(Pageable pageable);
 
-  PostDomainDto createPost(String authId, PostServiceForm form);
+  PostDomainDto createPost(String authId, PostServiceForm serviceForm);
 
-  PostDomainDto updatePost(String authId, Long postId, PostServiceForm domainForm);
+  PostDomainDto updatePost(String authId, Long postId, PostServiceForm serviceForm);
 
   Long deletePost(String authId, Long postId);
 

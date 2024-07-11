@@ -1,4 +1,4 @@
-package com.health.common.config;
+package com.health.domain.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

@@ -7,7 +7,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import com.health.api.form.PostForm;
 import com.health.api.application.PostApplication;
 import com.health.api.model.SuccessResponse;
-import com.health.domain.dto.PostDomainDto;
+import com.health.forumservice.dto.PostDomainDto;
 import com.health.domain.response.PostResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;

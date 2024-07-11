@@ -1,4 +1,4 @@
-package com.health.common.config;
+package com.health.redisservice.config;
 
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +32,16 @@ public class RedisConfig {
     redisConfig.setUsername(getRedisUsername());
     redisConfig.setPassword(getRedisPassword());
     return new LettuceConnectionFactory(redisConfig);
+  }
+
+  @Bean
+  public RedisTemplate<String, String> StringRedisTemplate() {
+    RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setKeySerializer(new StringRedisSerializer());
+    redisTemplate.setValueSerializer(new StringRedisSerializer());
+    redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+    redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+    return redisTemplate;
   }
 
   @Bean

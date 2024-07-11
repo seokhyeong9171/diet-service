@@ -1,4 +1,4 @@
-package com.health.domain.dto;
+package com.health.forumservice.dto;
 
 import com.health.domain.entity.CommentEntity;
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommentDomainDto {
+public class CommentServiceDto {
 
     private Long id;
 
@@ -29,13 +29,13 @@ public class CommentDomainDto {
 
     private Long parentId;
 
-    private List<CommentDomainDto> childCommentList;
+    private List<CommentServiceDto> childCommentList;
 
-    public static CommentDomainDto fromEntity(CommentEntity comment) {
+    public static CommentServiceDto fromEntity(CommentEntity comment) {
 
         // 삭제된 comment의 경우 comment 내용 가져오지 않음
         if (comment.isDeleted()) {
-            return CommentDomainDto.builder()
+            return CommentServiceDto.builder()
                 .id(comment.getId())
                 .isDeleted(comment.isDeleted())
                 .postId(comment.getPost().getId())
@@ -43,7 +43,7 @@ public class CommentDomainDto {
                 .build();
 
         } else {
-            return CommentDomainDto.builder()
+            return CommentServiceDto.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
                 .createdUserAuthId(comment.getCreatedUser().getAuthId())
@@ -53,7 +53,7 @@ public class CommentDomainDto {
                 .parentId(comment.getParent().getId())
                 .childCommentList(
                     comment.getChildCommentList().stream()
-                        .map(CommentDomainDto::fromEntity)
+                        .map(CommentServiceDto::fromEntity)
                         .toList()
                 )
                 .build();

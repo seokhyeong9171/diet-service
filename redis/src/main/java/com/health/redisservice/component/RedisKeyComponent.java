@@ -1,4 +1,4 @@
-package com.health.common.redis;
+package com.health.redisservice.component;
 
 import java.time.LocalDate;
 import org.springframework.stereotype.Component;

@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import com.health.api.form.CommentForm;
 import com.health.api.application.CommentApplication;
 import com.health.api.model.SuccessResponse;
-import com.health.domain.dto.CommentDomainDto;
+import com.health.forumservice.dto.CommentServiceDto;
 import com.health.domain.response.CommentListResponse;
 import com.health.domain.response.CommentListResponse.CommentInfo;
 import com.health.security.authentication.AuthValidatorComponent;
@@ -37,7 +37,7 @@ public class CommentController {
   ) {
     authValidatorComponent.validateAuthId(jwt);
 
-    List<CommentDomainDto> commentDomainDtoList = commentApplication.getCommentList(postId);
+    List<CommentServiceDto> commentDomainDtoList = commentApplication.getCommentList(postId);
 
     return ResponseEntity.ok(
         SuccessResponse.of(commentDomainDtoList.stream().map(CommentListResponse::fromDomainDto))
@@ -51,7 +51,7 @@ public class CommentController {
   ) {
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    CommentDomainDto commentDomainDto =
+    CommentServiceDto commentDomainDto =
         commentApplication.createComment(authId, postId, commentForm);
 
     return ResponseEntity.status(CREATED).body(
@@ -67,7 +67,7 @@ public class CommentController {
   ) {
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    CommentDomainDto commentDomainDto =
+    CommentServiceDto commentDomainDto =
         commentApplication.updateComment(authId, postId, commentId, commentForm);
 
     return ResponseEntity.status(CREATED).body(
@@ -98,7 +98,7 @@ public class CommentController {
   ) {
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    CommentDomainDto commentDomainDto =
+    CommentServiceDto commentDomainDto =
         commentApplication.createSubComment(authId, postId, commentId, commentForm);
 
     return ResponseEntity.status(CREATED).body(
@@ -115,7 +115,7 @@ public class CommentController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    CommentDomainDto commentDomainDto =
+    CommentServiceDto commentDomainDto =
         commentApplication.updateChildComment(authId, postId, commentId, childCommentId, commentForm);
 
     return ResponseEntity.ok(

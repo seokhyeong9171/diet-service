@@ -1,7 +1,7 @@
 package com.health.api.application;
 
 import com.health.api.form.CommentForm;
-import com.health.domain.dto.CommentDomainDto;
+import com.health.forumservice.dto.CommentServiceDto;
 import com.health.forumservice.service.CommentService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,20 +13,20 @@ public class CommentApplication {
 
   private final CommentService commentService;
 
-  public List<CommentDomainDto> getCommentList(Long postId) {
+  public List<CommentServiceDto> getCommentList(Long postId) {
     return commentService.getCommentList(postId);
   }
 
-  public CommentDomainDto createComment(String authId, Long postId, CommentForm commentForm) {
+  public CommentServiceDto createComment(String authId, Long postId, CommentForm commentForm) {
     return commentService.createComment(authId, postId, commentForm.toDomainForm());
   }
 
-  public CommentDomainDto updateComment
+  public CommentServiceDto updateComment
       (String authId, Long postId, Long commentId, CommentForm commentForm) {
     return commentService.updateComment(authId, postId, commentId, commentForm.toDomainForm());
   }
 
-  public CommentDomainDto createSubComment
+  public CommentServiceDto createSubComment
       (String authId, Long postId, Long parentCommentId, CommentForm commentForm) {
     return commentService.createChildComment
         (authId, postId, parentCommentId, commentForm.toDomainForm());
@@ -36,7 +36,7 @@ public class CommentApplication {
     return commentService.deleteComment(authId, postId, commentId);
   }
 
-  public CommentDomainDto updateChildComment
+  public CommentServiceDto updateChildComment
       (String authId, Long postId, Long commentId, Long childCommentId, CommentForm commentForm) {
     return commentService.updateChildComment
         (authId, postId, commentId, childCommentId, commentForm.toDomainForm());

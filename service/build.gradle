@@ -9,10 +9,11 @@ bootJar.enabled=false
 
 dependencies {
 
-    implementation project(":domain")
+    api project(":domain")
 
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation project(":redis")
+    implementation project(":elastic")
+
 }
 
 test {

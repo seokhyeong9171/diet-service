@@ -1,0 +1,32 @@
+plugins {
+}
+
+
+repositories {
+}
+
+ext {
+    springCloudVersion = "2023.0.2"
+}
+
+bootJar.enabled=false
+
+dependencies {
+
+    api project(":domain")
+
+    implementation project(":redis")
+    api project(":elastic")
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
+}
+
+test {
+}

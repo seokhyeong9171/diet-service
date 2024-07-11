@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.domain.form.MeetingDomainForm;
+import com.health.service.meetingservice.form.MeetingServiceForm;
 import com.health.domain.type.Region;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -49,25 +49,22 @@ public class MeetingForm {
     public static class MeetingArea {
         @NotNull
         private Region region;
-        @NotNull
-        private Double latitude;
-        @NotNull
-        private Double longitude;
+        @NotBlank
+        private String address;
     }
 
 
-    public MeetingDomainForm toDomainForm() {
-        return MeetingDomainForm.builder()
+    public MeetingServiceForm toServiceForm() {
+        return MeetingServiceForm.builder()
             .meetingName(meetingName)
             .meetingDescription(meetingDescription)
             .minParticipant(minParticipant)
             .maxParticipant(maxParticipant)
             .meetingDeadLine(meetingDeadLine)
             .meetingArea(
-                MeetingDomainForm.MeetingArea.builder()
+                MeetingServiceForm.MeetingArea.builder()
                     .region(meetingArea.getRegion())
-                    .latitude(meetingArea.getLatitude())
-                    .longitude(meetingArea.getLongitude())
+                    .address(meetingArea.getAddress())
                     .build()
             )
             .meetingDt(meetingDt)

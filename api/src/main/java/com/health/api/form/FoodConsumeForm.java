@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.domain.form.FoodDomainForm;
+import com.health.service.mealservice.form.FoodServiceForm;
 import com.health.domain.type.ConsumeAmount;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class FoodConsumeForm {
   private ConsumeAmount consumeAmount;
 
 
-  public FoodDomainForm toDomainForm() {
-    return FoodDomainForm.builder().foodCode(foodCode).consumeAmount(consumeAmount).build();
+  public FoodServiceForm toDomainForm() {
+    return FoodServiceForm.builder().foodCode(foodCode).consumeAmount(consumeAmount).build();
   }
 }

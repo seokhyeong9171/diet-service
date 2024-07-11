@@ -4,12 +4,12 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 
 import com.health.api.form.UserDetailsForm;
 import com.health.api.form.UserNicknameForm;
-import com.health.api.service.UserInfoApplication;
-import com.health.common.model.SuccessResponse;
-import com.health.domain.dto.IntakeDomainDto;
-import com.health.domain.dto.UserDomainDto;
-import com.health.domain.response.IntakeResponse;
-import com.health.domain.response.UserInfoResponse;
+import com.health.api.application.UserInfoApplication;
+import com.health.api.model.SuccessResponse;
+import com.health.service.userservice.dto.UserServiceDto;
+import com.health.service.mealservice.response.IntakeResponse;
+import com.health.service.userservice.dto.IntakeServiceDto;
+import com.health.service.userservice.response.UserInfoResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class UserInfoController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    UserDomainDto userInfoDto = userInfoApplication.getUserInfo(authId);
+    UserServiceDto userInfoDto = userInfoApplication.getUserInfo(authId);
 
     return ResponseEntity.ok(
         SuccessResponse.of(UserInfoResponse.fromDomainDto(userInfoDto))
@@ -54,7 +54,7 @@ public class UserInfoController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    IntakeDomainDto possibleIntake = userInfoApplication.getIntakeInfo(authId, date);
+    IntakeServiceDto possibleIntake = userInfoApplication.getIntakeInfo(authId, date);
 
     return ResponseEntity.ok(
         SuccessResponse.of(IntakeResponse.fromDomainDto(possibleIntake))
@@ -86,7 +86,7 @@ public class UserInfoController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    UserDomainDto userInfoDto = userInfoApplication.updateUserInfo(authId, form);
+    UserServiceDto userInfoDto = userInfoApplication.updateUserInfo(authId, form);
 
     return ResponseEntity.ok(
         SuccessResponse.of(UserInfoResponse.fromDomainDto(userInfoDto))

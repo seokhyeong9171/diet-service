@@ -35,8 +35,7 @@ public class MeetingDomainForm {
     @Builder
     public static class MeetingArea {
         private Region region;
-        private Double latitude;
-        private Double longitude;
+        private String address;
     }
 
 }

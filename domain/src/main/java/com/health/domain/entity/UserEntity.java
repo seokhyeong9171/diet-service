@@ -1,6 +1,5 @@
 package com.health.domain.entity;
 
-import com.health.domain.dto.UserDomainDto;
 import com.health.domain.form.UserDetailsDomainForm;
 import com.health.domain.form.UserNicknameDomainForm;
 import com.health.domain.type.Gender;
@@ -80,20 +79,6 @@ public class UserEntity extends BaseEntity{
     @OneToMany(mappedBy = "createUser")
     private List<PostEntity> postList = new ArrayList<>();
 
-
-    public static UserEntity register(UserDomainDto userDomainDto) {
-        return UserEntity.builder()
-            .authId(userDomainDto.getAuthId())
-            .username(userDomainDto.getUsername())
-            .nickname(NicknameUtil.createRandomNickname())
-            .role(userDomainDto.getRole())
-            .birth(userDomainDto.getBirth())
-            .gender(userDomainDto.getGender())
-            .exerciseDuration(0)
-            .demerit(0)
-            .build();
-
-    }
 
     public void updateDetails(UserDetailsDomainForm form) {
         this.height = form.getHeight();

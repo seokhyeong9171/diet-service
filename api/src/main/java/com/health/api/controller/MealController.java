@@ -4,10 +4,10 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.MealForm;
-import com.health.api.service.MealApplication;
-import com.health.common.model.SuccessResponse;
-import com.health.domain.dto.MealDomainDto;
-import com.health.domain.response.MealInfoResponse;
+import com.health.api.application.MealApplication;
+import com.health.api.model.SuccessResponse;
+import com.health.service.mealservice.dto.MealServiceDto;
+import com.health.service.mealservice.response.MealInfoResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import java.time.LocalDate;
 import java.util.List;
@@ -40,7 +40,7 @@ public class MealController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    List<MealDomainDto> mealList = mealApplication.getMealList(authId, dailyMealDt);
+    List<MealServiceDto> mealList = mealApplication.getMealList(authId, dailyMealDt);
 
     return ResponseEntity.ok(
         SuccessResponse.of(mealList.stream().map(MealInfoResponse::fromDto))
@@ -56,7 +56,7 @@ public class MealController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    MealDomainDto meal = mealApplication.getMealInfo(authId, dailyMealDt, mealId);
+    MealServiceDto meal = mealApplication.getMealInfo(authId, dailyMealDt, mealId);
 
     return ResponseEntity.ok(SuccessResponse.of(MealInfoResponse.fromDto(meal)));
   }
@@ -70,10 +70,10 @@ public class MealController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    MealDomainDto mealDomainDto =  mealApplication.createMeal(authId, dailyMealDt, mealForm);
+    MealServiceDto mealServiceDto =  mealApplication.createMeal(authId, dailyMealDt, mealForm);
 
     return ResponseEntity.status(CREATED).body(
-        SuccessResponse.of(MealInfoResponse.fromDto(mealDomainDto))
+        SuccessResponse.of(MealInfoResponse.fromDto(mealServiceDto))
     );
   }
 

@@ -4,10 +4,10 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.FoodConsumeForm;
-import com.health.api.service.ConsumeFoodApplication;
-import com.health.common.model.SuccessResponse;
-import com.health.domain.dto.ConsumeFoodDomainDto;
-import com.health.domain.response.ConsumeFoodResponse;
+import com.health.api.application.ConsumeFoodApplication;
+import com.health.api.model.SuccessResponse;
+import com.health.service.mealservice.dto.ConsumeFoodServiceDto;
+import com.health.service.mealservice.response.ConsumeFoodResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -43,11 +43,11 @@ public class ConsumeFoodController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    ConsumeFoodDomainDto consumeFoodDomainDto =
+    ConsumeFoodServiceDto consumeFoodServiceDto =
         consumeFoodApplication.addFoodToMeal(authId, dailyMealDt, mealId, foodConsumeForm);
 
     return ResponseEntity.status(CREATED).body(
-        SuccessResponse.of(ConsumeFoodResponse.fromDomainDto(consumeFoodDomainDto))
+        SuccessResponse.of(ConsumeFoodResponse.fromDomainDto(consumeFoodServiceDto))
     );
   }
 

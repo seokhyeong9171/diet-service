@@ -3,10 +3,10 @@ package com.health.api.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.UserWeightForm;
-import com.health.api.service.UserWeightApplication;
-import com.health.common.model.SuccessResponse;
-import com.health.domain.dto.UserWeightDomainDto;
-import com.health.domain.response.UserWeightResponse;
+import com.health.api.application.UserWeightApplication;
+import com.health.api.model.SuccessResponse;
+import com.health.service.userservice.dto.UserWeightServiceDto;
+import com.health.service.userservice.response.UserWeightResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -53,7 +53,7 @@ public class UserWeightController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    UserWeightDomainDto userWeightDto = userWeightApplication.createWeightRecord(authId, form);
+    UserWeightServiceDto userWeightDto = userWeightApplication.createWeightRecord(authId, form);
 
     return ResponseEntity.status(CREATED).body(
         SuccessResponse.of(UserWeightResponse.fromDomainDto(userWeightDto))
@@ -68,7 +68,7 @@ public class UserWeightController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    UserWeightDomainDto userWeightDto =
+    UserWeightServiceDto userWeightDto =
         userWeightApplication.updateWeightRecord(authId, recordId, form);
 
     return ResponseEntity.ok(

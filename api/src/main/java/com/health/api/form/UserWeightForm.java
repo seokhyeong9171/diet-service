@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.domain.form.UserWeightDomainForm;
+import com.health.service.userservice.form.UserWeightServiceForm;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ public class UserWeightForm {
   @NotNull
   private Double weight;
 
-  public UserWeightDomainForm toDomainForm() {
-    return UserWeightDomainForm.builder().weight(weight).build();
+  public UserWeightServiceForm toDomainForm() {
+    return UserWeightServiceForm.builder().weight(weight).build();
   }
 }

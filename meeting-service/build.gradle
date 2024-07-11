@@ -1,0 +1,18 @@
+plugins {
+}
+
+
+repositories {
+}
+
+bootJar.enabled=false
+
+dependencies {
+
+    implementation project(":common")
+    implementation project(":domain")
+
+}
+
+test {
+}

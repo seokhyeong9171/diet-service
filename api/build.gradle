@@ -13,6 +13,7 @@ dependencies {
     implementation project(":user-service")
     implementation project(":meal-service")
     implementation project(":forum-service")
+    implementation project(":meeting-service")
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation platform('org.junit:junit-bom:5.10.0')

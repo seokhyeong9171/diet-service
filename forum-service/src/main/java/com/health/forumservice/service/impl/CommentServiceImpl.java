@@ -177,7 +177,7 @@ public class CommentServiceImpl implements CommentService {
 
   private void validateThisIsParent(CommentEntity findComment) {
     if (findComment.getParent() != null) {
-      throw new CustomException(COMMENT_IS_SUB);
+      throw new CustomException(COMMENT_IS_CHILD);
     }
   }
 

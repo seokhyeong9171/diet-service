@@ -4,5 +4,6 @@ public enum AdmissionStatus {
 
     PENDING,
     APPROVAL,
-    DECLINE
+    DECLINE,
+    CANCEL
 }

@@ -7,4 +7,5 @@ include 'user-service'
 include 'food-service'
 include 'meal-service'
 include 'forum-service'
+include 'meeting-service'
 

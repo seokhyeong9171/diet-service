@@ -1,6 +1,6 @@
 package com.health.userservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.NICKNAME_DUPLICATED;
+import static com.health.common.exception.ErrorCode.USER_NICKNAME_DUPLICATED;
 import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
 import static com.health.userservice.util.UserCalorieUtil.calculateAbleCalorie;
 
@@ -84,7 +84,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
   private void validUniqueNickname(UserNicknameDomainForm form) {
     if (userRepository.existsByNickname(form.getNickname())) {
-      throw new CustomException(NICKNAME_DUPLICATED);
+      throw new CustomException(USER_NICKNAME_DUPLICATED);
     }
   }
 

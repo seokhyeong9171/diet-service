@@ -1,5 +1,6 @@
 package com.health.domain.entity;
 
+import com.health.domain.form.MeetingDomainForm;
 import com.health.domain.type.MeetingStatus;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -22,8 +23,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity(name = "meeting")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -51,6 +54,7 @@ public class MeetingEntity extends BaseEntity{
 
     @Embedded
     @AttributeOverrides({
+            @AttributeOverride(name = "region", column = @Column(name = "area_region")),
             @AttributeOverride(name = "latitude", column = @Column(name = "area_latitude")),
             @AttributeOverride(name = "longitude", column = @Column(name = "area_longitude"))
     })
@@ -69,4 +73,40 @@ public class MeetingEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "meeting")
     private List<MeetingParticipantEntity> participantList = new ArrayList<>();
+
+    public static MeetingEntity createFromForm(UserEntity user, MeetingDomainForm form) {
+        return MeetingEntity.builder()
+            .meetingName(form.getMeetingName())
+            .meetingDescription(form.getMeetingDescription())
+            .minParticipant(form.getMinParticipant())
+            .maxParticipant(form.getMaxParticipant())
+            .meetingDeadLine(form.getMeetingDeadLine())
+            .meetingArea(geoFromForm(form.getMeetingArea()))
+            .meetingDt(form.getMeetingDt())
+            .meetingStatus(MeetingStatus.RECRUITING)
+            .establishedUser(user)
+            .build();
+    }
+
+    public void updateMeeting(MeetingDomainForm form) {
+        this.meetingName = form.getMeetingName();
+        this.meetingDescription = form.getMeetingDescription();
+        this.minParticipant = form.getMinParticipant();
+        this.maxParticipant = form.getMaxParticipant();
+        this.meetingDeadLine = form.getMeetingDeadLine();
+        this.meetingDt = form.getMeetingDt();
+        this.meetingArea.updateFromForm(form.getMeetingArea());
+    }
+
+    public void cancel() {
+        this.meetingStatus = MeetingStatus.CANCELED;
+    }
+
+    private static GeoInformation geoFromForm(MeetingDomainForm.MeetingArea meetingArea) {
+        return GeoInformation.builder()
+            .region(meetingArea.getRegion())
+            .latitude(meetingArea.getLatitude())
+            .longitude(meetingArea.getLongitude())
+            .build();
+    }
 }

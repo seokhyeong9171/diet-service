@@ -1,8 +1,8 @@
 package com.health.api.controller;
 
 import com.health.api.form.MeetingForm;
-import com.health.api.service.MeetingApplication;
-import com.health.common.model.SuccessResponse;
+import com.health.api.application.MeetingApplication;
+import com.health.api.model.SuccessResponse;
 import com.health.domain.dto.MeetingDomainDto;
 import com.health.domain.dto.MeetingParticipantDomainDto;
 import com.health.domain.response.MeetingParticipantResponse;

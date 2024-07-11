@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.domain.form.UserNicknameDomainForm;
+import com.health.userservice.form.UserNicknameServiceForm;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -18,8 +18,8 @@ public class UserNicknameForm {
   @NotBlank
   private String nickname;
 
-  public UserNicknameDomainForm toDomainForm() {
-    return UserNicknameDomainForm.builder().nickname(nickname).build();
+  public UserNicknameServiceForm toDomainForm() {
+    return UserNicknameServiceForm.builder().nickname(nickname).build();
   }
 
 }

@@ -3,8 +3,8 @@ package com.health.api.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.CommentForm;
-import com.health.api.service.CommentApplication;
-import com.health.common.model.SuccessResponse;
+import com.health.api.application.CommentApplication;
+import com.health.api.model.SuccessResponse;
 import com.health.domain.dto.CommentDomainDto;
 import com.health.domain.response.CommentListResponse;
 import com.health.domain.response.CommentListResponse.CommentInfo;

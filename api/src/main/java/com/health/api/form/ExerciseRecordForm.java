@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.domain.form.ExerciseRecordDomainForm;
+import com.health.userservice.form.ExerciseRecordServiceForm;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class ExerciseRecordForm {
   private String description;
 
 
-  public ExerciseRecordDomainForm toDomainForm() {
-    return ExerciseRecordDomainForm.builder().description(description).build();
+  public ExerciseRecordServiceForm toDomainForm() {
+    return ExerciseRecordServiceForm.builder().description(description).build();
   }
 }

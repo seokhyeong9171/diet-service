@@ -3,8 +3,8 @@ package com.health.api.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.ExerciseRecordForm;
-import com.health.api.service.UserExerciseApplication;
-import com.health.common.model.SuccessResponse;
+import com.health.api.application.UserExerciseApplication;
+import com.health.api.model.SuccessResponse;
 import com.health.domain.dto.ExerciseRecordDomainDto;
 import com.health.domain.response.ExerciseRecordResponse;
 import com.health.security.authentication.AuthValidatorComponent;

@@ -5,8 +5,8 @@ import static com.health.domain.response.PostResponse.PostListResponse;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.PostForm;
-import com.health.api.service.PostApplication;
-import com.health.common.model.SuccessResponse;
+import com.health.api.application.PostApplication;
+import com.health.api.model.SuccessResponse;
 import com.health.domain.dto.PostDomainDto;
 import com.health.domain.response.PostResponse;
 import com.health.security.authentication.AuthValidatorComponent;

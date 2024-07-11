@@ -1,7 +1,7 @@
 package com.health.api.controller;
 
-import com.health.api.service.FoodApplication;
-import com.health.common.model.SuccessResponse;
+import com.health.api.application.FoodApplication;
+import com.health.api.model.SuccessResponse;
 import com.health.domain.dto.FoodDomainDto;
 import com.health.domain.response.FoodResponse;
 import lombok.RequiredArgsConstructor;

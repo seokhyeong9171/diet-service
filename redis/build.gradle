@@ -1,0 +1,17 @@
+plugins {
+}
+
+
+repositories {
+}
+
+bootJar.enabled=false
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.redisson:redisson-spring-data-21:3.32.0'
+}
+
+test {
+}

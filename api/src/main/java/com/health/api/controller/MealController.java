@@ -4,8 +4,8 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.MealForm;
-import com.health.api.service.MealApplication;
-import com.health.common.model.SuccessResponse;
+import com.health.api.application.MealApplication;
+import com.health.api.model.SuccessResponse;
 import com.health.domain.dto.MealDomainDto;
 import com.health.domain.response.MealInfoResponse;
 import com.health.security.authentication.AuthValidatorComponent;

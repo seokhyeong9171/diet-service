@@ -3,8 +3,8 @@ package com.health.api.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.UserWeightForm;
-import com.health.api.service.UserWeightApplication;
-import com.health.common.model.SuccessResponse;
+import com.health.api.application.UserWeightApplication;
+import com.health.api.model.SuccessResponse;
 import com.health.domain.dto.UserWeightDomainDto;
 import com.health.domain.response.UserWeightResponse;
 import com.health.security.authentication.AuthValidatorComponent;

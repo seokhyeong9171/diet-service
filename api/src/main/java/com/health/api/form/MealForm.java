@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.domain.form.MealDomainForm;
+import com.health.mealservice.form.MealServiceForm;
 import com.health.domain.type.MealType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,8 +17,8 @@ public class MealForm {
   @NotNull
   private MealType mealType;
 
-  public MealDomainForm toDomainForm() {
-    return MealDomainForm.builder().mealType(mealType).build();
+  public MealServiceForm toDomainForm() {
+    return MealServiceForm.builder().mealType(mealType).build();
   }
 
 }

@@ -21,12 +21,10 @@ public class GeoInformation {
     @Enumerated(value = EnumType.STRING)
     private Region region;
 
-    private Double latitude;
-    private Double longitude;
+    private String address;
 
     public void updateFromForm(MeetingDomainForm.MeetingArea form) {
         this.region = form.getRegion();
-        this.latitude = form.getLatitude();
-        this.longitude = form.getLongitude();
+        this.address = form.getAddress();
     }
 }

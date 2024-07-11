@@ -1,17 +1,17 @@
 package com.health.forumservice.service;
 
-import com.health.forumservice.dto.PostDomainDto;
+import com.health.forumservice.dto.PostServiceDto;
 import com.health.forumservice.form.PostServiceForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PostService {
 
-  Page<PostDomainDto> getPostList(Pageable pageable);
+  Page<PostServiceDto> getPostList(Pageable pageable);
 
-  PostDomainDto createPost(String authId, PostServiceForm serviceForm);
+  PostServiceDto createPost(String authId, PostServiceForm serviceForm);
 
-  PostDomainDto updatePost(String authId, Long postId, PostServiceForm serviceForm);
+  PostServiceDto updatePost(String authId, Long postId, PostServiceForm serviceForm);
 
   Long deletePost(String authId, Long postId);
 
@@ -19,7 +19,7 @@ public interface PostService {
 
   int getPostViewCount(Long postId);
 
-  PostDomainDto getPostInfo(String authId, Long postId);
+  PostServiceDto getPostInfo(String authId, Long postId);
 
   Integer postAddLike(String authId, Long postId);
 

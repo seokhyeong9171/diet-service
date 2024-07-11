@@ -1,7 +1,7 @@
 package com.health.userservice.type;
 
-import com.health.common.exception.CustomException;
-import com.health.common.exception.ErrorCode;
+import com.health.domain.exception.CustomException;
+import com.health.domain.exception.ErrorCode;
 import java.util.Arrays;
 import lombok.Getter;
 

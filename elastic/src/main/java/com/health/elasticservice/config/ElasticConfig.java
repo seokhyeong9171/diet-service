@@ -1,5 +1,6 @@
 package com.health.elasticservice.config;
 
+import com.health.elasticservice.repository.FoodElasticRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -9,7 +10,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 @Configuration
 @RequiredArgsConstructor
-@EnableElasticsearchRepositories(basePackages = "com.health.elasticservice")
+@EnableElasticsearchRepositories(basePackageClasses = FoodElasticRepository.class)
 public class ElasticConfig extends ElasticsearchConfiguration {
 //
   private final Environment env;

@@ -105,8 +105,7 @@ public class MeetingEntity extends BaseEntity{
     private static GeoInformation geoFromForm(MeetingDomainForm.MeetingArea meetingArea) {
         return GeoInformation.builder()
             .region(meetingArea.getRegion())
-            .latitude(meetingArea.getLatitude())
-            .longitude(meetingArea.getLongitude())
+            .address(meetingArea.getAddress())
             .build();
     }
 }

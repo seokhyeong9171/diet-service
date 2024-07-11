@@ -1,19 +1,19 @@
 package com.health.userservice.service;
 
 
-import com.health.domain.dto.IntakeDomainDto;
-import com.health.domain.dto.UserDomainDto;
+import com.health.userservice.dto.UserServiceDto;
+import com.health.userservice.dto.IntakeServiceDto;
 import com.health.userservice.form.UserDetailsServiceForm;
 import com.health.userservice.form.UserNicknameServiceForm;
 import java.time.LocalDate;
 
 public interface UserInfoService {
 
-  UserDomainDto getUserInfo(String authId);
+  UserServiceDto getUserInfo(String authId);
 
-  UserDomainDto updateUserDetails(String authId, UserDetailsServiceForm form);
+  UserServiceDto updateUserDetails(String authId, UserDetailsServiceForm serviceForm);
 
-  String updateUserNickname(String authId, UserNicknameServiceForm form);
+  String updateUserNickname(String authId, UserNicknameServiceForm serviceForm);
 
-  IntakeDomainDto getIntakeInfo(String authId, LocalDate date);
+  IntakeServiceDto getIntakeInfo(String authId, LocalDate date);
 }

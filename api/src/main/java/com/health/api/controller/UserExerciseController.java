@@ -5,8 +5,8 @@ import static org.springframework.http.HttpStatus.CREATED;
 import com.health.api.form.ExerciseRecordForm;
 import com.health.api.application.UserExerciseApplication;
 import com.health.api.model.SuccessResponse;
-import com.health.domain.dto.ExerciseRecordDomainDto;
-import com.health.domain.response.ExerciseRecordResponse;
+import com.health.userservice.dto.ExerciseRecordServiceDto;
+import com.health.userservice.response.ExerciseRecordResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -43,7 +43,7 @@ public class UserExerciseController {
     // 올바른 user의 접근인지 확인
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    Page<ExerciseRecordDomainDto> exerciseList =
+    Page<ExerciseRecordServiceDto> exerciseList =
         userExerciseApplication.getExerciseList(authId, pageable);
 
     return ResponseEntity.ok(
@@ -63,7 +63,7 @@ public class UserExerciseController {
     // 올바른 user의 접근인지 확인
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    ExerciseRecordDomainDto exerciseRecordDto =
+    ExerciseRecordServiceDto exerciseRecordDto =
         userExerciseApplication.createExerciseRecord(authId, form);
 
     return ResponseEntity.status(CREATED).body(
@@ -82,7 +82,7 @@ public class UserExerciseController {
     // 올바른 user의 접근인지 확인
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    ExerciseRecordDomainDto updatedExerciseRecordDto =
+    ExerciseRecordServiceDto updatedExerciseRecordDto =
         userExerciseApplication.updateExerciseRecord(authId, recordId, form);
 
     return ResponseEntity.status(CREATED).body(

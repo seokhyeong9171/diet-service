@@ -2,9 +2,9 @@ package com.health.security.service;
 
 import static com.health.domain.type.RoleType.ROLE_USER;
 
-import com.health.domain.dto.UserDomainDto;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.repository.UserRepository;
+import com.health.domain.util.NicknameUtil;
 import com.health.security.dto.CustomOAuth2User;
 import com.health.security.dto.UserSecurityDto;
 import com.health.security.response.OAuth2Response;
@@ -45,11 +45,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     String authId = oAuth2Response.getAuthId();
     boolean existsByAuthId = userRepository.existsByAuthId(authId);
     if (!existsByAuthId) {
-      UserDomainDto userDomainDto = userSecurityDto.toDomainDto();
-      UserEntity registeredUser = UserEntity.register(userDomainDto);
+      UserEntity registeredUser = register(userSecurityDto);
       userRepository.save(registeredUser);
     }
 
     return new CustomOAuth2User(userSecurityDto);
+  }
+
+  private UserEntity register(UserSecurityDto userDomainDto) {
+    return UserEntity.builder()
+        .authId(userDomainDto.getAuthId())
+        .username(userDomainDto.getUsername())
+        .nickname(NicknameUtil.createRandomNickname())
+        .role(userDomainDto.getRole())
+        .birth(userDomainDto.getBirth())
+        .gender(userDomainDto.getGender())
+        .exerciseDuration(0)
+        .demerit(0)
+        .build();
+
   }
 }

@@ -49,14 +49,12 @@ public class MeetingForm {
     public static class MeetingArea {
         @NotNull
         private Region region;
-        @NotNull
-        private Double latitude;
-        @NotNull
-        private Double longitude;
+        @NotBlank
+        private String address;
     }
 
 
-    public MeetingServiceForm toDomainForm() {
+    public MeetingServiceForm toServiceForm() {
         return MeetingServiceForm.builder()
             .meetingName(meetingName)
             .meetingDescription(meetingDescription)
@@ -66,8 +64,7 @@ public class MeetingForm {
             .meetingArea(
                 MeetingServiceForm.MeetingArea.builder()
                     .region(meetingArea.getRegion())
-                    .latitude(meetingArea.getLatitude())
-                    .longitude(meetingArea.getLongitude())
+                    .address(meetingArea.getAddress())
                     .build()
             )
             .meetingDt(meetingDt)

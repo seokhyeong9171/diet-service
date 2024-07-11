@@ -1,16 +1,18 @@
 package com.health.elasticservice.repository;
 
-import com.health.domain.entity.FoodElasticEntity;
+import com.health.elasticservice.dto.FoodElasticDto;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FoodElasticRepository extends ElasticsearchRepository<FoodElasticEntity, String> {
+public interface FoodElasticRepository extends ElasticsearchRepository<FoodElasticDto, String>{
 
-  Page<FoodElasticEntity> findByFoodName(String foodName, Pageable pageable);
+  Page<FoodElasticDto> findByFoodName(String foodName, Pageable pageable);
 
-  Page<FoodElasticEntity> findByFoodNameContaining(String foodName, Pageable pageable);
+  Page<FoodElasticDto> findByFoodNameContaining(String foodName, Pageable pageable);
 
 }

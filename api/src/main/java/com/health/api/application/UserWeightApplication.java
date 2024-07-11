@@ -1,7 +1,7 @@
 package com.health.api.application;
 
 import com.health.api.form.UserWeightForm;
-import com.health.domain.dto.UserWeightDomainDto;
+import com.health.userservice.dto.UserWeightServiceDto;
 import com.health.userservice.service.UserWeightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,15 +14,15 @@ public class UserWeightApplication {
 
   private final UserWeightService userWeightService;
 
-  public Page<UserWeightDomainDto> getUserWeightList(String authId, String scope, Pageable pageable) {
+  public Page<UserWeightServiceDto> getUserWeightList(String authId, String scope, Pageable pageable) {
     return userWeightService.getUserWeightList(authId, scope, pageable);
   }
 
-  public UserWeightDomainDto createWeightRecord(String authId, UserWeightForm form) {
+  public UserWeightServiceDto createWeightRecord(String authId, UserWeightForm form) {
     return userWeightService.createWeightRecord(authId, form.toDomainForm());
   }
 
-  public UserWeightDomainDto updateWeightRecord(String authId, Long recordId, UserWeightForm form) {
+  public UserWeightServiceDto updateWeightRecord(String authId, Long recordId, UserWeightForm form) {
     return userWeightService.updateWeightRecord(authId, recordId, form.toDomainForm());
   }
 

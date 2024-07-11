@@ -1,6 +1,6 @@
 package com.health.api.application;
 
-import com.health.domain.dto.DailyMealDomainDto;
+import com.health.mealservice.dto.DailyMealServiceDto;
 import com.health.mealservice.service.DailyMealService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +14,11 @@ public class DailyMealApplication {
 
   private final DailyMealService dailyMealService;
 
-  public Page<DailyMealDomainDto> getDailyMealList(String authId, Pageable pageable) {
+  public Page<DailyMealServiceDto> getDailyMealList(String authId, Pageable pageable) {
     return dailyMealService.getDailyMealList(authId, pageable);
   }
 
-  public DailyMealDomainDto createDailyMeal(String authId, LocalDate dailyMealDt) {
+  public DailyMealServiceDto createDailyMeal(String authId, LocalDate dailyMealDt) {
     return dailyMealService.createDailyMeal(authId, dailyMealDt);
   }
 

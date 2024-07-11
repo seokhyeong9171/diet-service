@@ -1,5 +1,6 @@
 package com.health.userservice.form;
 
+import com.health.domain.form.UserDetailsDomainForm;
 import com.health.domain.type.Region;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +20,11 @@ public class UserDetailsServiceForm {
   private Double goalWeight;
 
   private Region region;
+
+  public UserDetailsDomainForm toDomainForm() {
+    return UserDetailsDomainForm.builder()
+        .height(height).weight(weight).goalWeight(goalWeight).region(region)
+        .build();
+  }
 
 }

@@ -1,14 +1,14 @@
 package com.health.api.controller;
 
-import static com.health.domain.response.PostResponse.PostContentResponse;
-import static com.health.domain.response.PostResponse.PostListResponse;
+import static com.health.forumservice.response.PostResponse.PostContentResponse;
+import static com.health.forumservice.response.PostResponse.PostListResponse;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.PostForm;
 import com.health.api.application.PostApplication;
 import com.health.api.model.SuccessResponse;
-import com.health.forumservice.dto.PostDomainDto;
-import com.health.domain.response.PostResponse;
+import com.health.forumservice.dto.PostServiceDto;
+import com.health.forumservice.response.PostResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -37,7 +37,7 @@ public class PostController {
   @GetMapping
   public ResponseEntity<?> getPostList(Pageable pageable) {
 
-    Page<PostDomainDto> postDomainDtoList = postApplication.getPostList(pageable);
+    Page<PostServiceDto> postDomainDtoList = postApplication.getPostList(pageable);
 
     return ResponseEntity.ok(
         SuccessResponse.of(postDomainDtoList.map(PostListResponse::fromDomainDto))
@@ -51,10 +51,10 @@ public class PostController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    PostDomainDto postDomainDto = postApplication.createPost(authId, postForm);
+    PostServiceDto postServiceDto = postApplication.createPost(authId, postForm);
 
     return ResponseEntity.status(CREATED).body(
-        SuccessResponse.of(PostContentResponse.fromDomainDto(postDomainDto))
+        SuccessResponse.of(PostContentResponse.fromDomainDto(postServiceDto))
     );
   }
 
@@ -66,10 +66,10 @@ public class PostController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    PostDomainDto postDomainDto = postApplication.updatePost(authId, postId, postForm);
+    PostServiceDto postServiceDto = postApplication.updatePost(authId, postId, postForm);
 
     return ResponseEntity.ok(
-        SuccessResponse.of(PostContentResponse.fromDomainDto(postDomainDto))
+        SuccessResponse.of(PostContentResponse.fromDomainDto(postServiceDto))
     );
   }
 
@@ -107,10 +107,10 @@ public class PostController {
   ) {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
-    PostDomainDto postDomainDto = postApplication.getPostInfo(authId, postId);
+    PostServiceDto postServiceDto = postApplication.getPostInfo(authId, postId);
 
     return ResponseEntity.ok(
-        SuccessResponse.of(PostResponse.PostContentResponse.fromDomainDto(postDomainDto))
+        SuccessResponse.of(PostResponse.PostContentResponse.fromDomainDto(postServiceDto))
     );
   }
 

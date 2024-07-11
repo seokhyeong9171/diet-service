@@ -1,7 +1,7 @@
 package com.health.api.application;
 
 import com.health.api.form.PostForm;
-import com.health.forumservice.dto.PostDomainDto;
+import com.health.forumservice.dto.PostServiceDto;
 import com.health.forumservice.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,15 +14,15 @@ public class PostApplication {
 
   private final PostService postService;
 
-  public Page<PostDomainDto> getPostList(Pageable pageable) {
+  public Page<PostServiceDto> getPostList(Pageable pageable) {
     return postService.getPostList(pageable);
   }
 
-  public PostDomainDto createPost(String authId, PostForm postForm) {
+  public PostServiceDto createPost(String authId, PostForm postForm) {
     return postService.createPost(authId, postForm.toDomainForm());
   }
 
-  public PostDomainDto updatePost(String authId, Long postId, PostForm postForm) {
+  public PostServiceDto updatePost(String authId, Long postId, PostForm postForm) {
     return postService.updatePost(authId, postId, postForm.toDomainForm());
   }
 
@@ -38,7 +38,7 @@ public class PostApplication {
     return postService.getPostViewCount(postId);
   }
 
-  public PostDomainDto getPostInfo(String authId, Long postId) {
+  public PostServiceDto getPostInfo(String authId, Long postId) {
     return postService.getPostInfo(authId, postId);
   }
 

@@ -3,10 +3,10 @@ package com.health.api.controller;
 import com.health.api.form.MeetingForm;
 import com.health.api.application.MeetingApplication;
 import com.health.api.model.SuccessResponse;
-import com.health.domain.dto.MeetingDomainDto;
-import com.health.domain.dto.MeetingParticipantDomainDto;
-import com.health.domain.response.MeetingParticipantResponse;
-import com.health.domain.response.MeetingResponse;
+import com.health.meetingservice.dto.MeetingServiceDto;
+import com.health.meetingservice.dto.MeetingParticipantServiceDto;
+import com.health.meetingservice.response.MeetingParticipantResponse;
+import com.health.meetingservice.response.MeetingResponse;
 import com.health.domain.type.Region;
 import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class MeetingController {
   @GetMapping
   public ResponseEntity<?> getMeetingList(@RequestParam Region region, Pageable pageable) {
 
-    Page<MeetingDomainDto> meetingDomainDtoList =
+    Page<MeetingServiceDto> meetingDomainDtoList =
         meetingApplication.getMeetingList(region, pageable);
 
     return ResponseEntity.ok(
@@ -54,10 +54,10 @@ public class MeetingController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    MeetingDomainDto meetingDomainDto = meetingApplication.createMeeting(authId, meetingForm);
+    MeetingServiceDto meetingServiceDto = meetingApplication.createMeeting(authId, meetingForm);
 
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(SuccessResponse.of(MeetingResponse.fromDomainDto(meetingDomainDto)));
+        .body(SuccessResponse.of(MeetingResponse.fromDomainDto(meetingServiceDto)));
   }
 
   @PatchMapping("/{meetingId}")
@@ -68,10 +68,10 @@ public class MeetingController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    MeetingDomainDto meetingDomainDto =
+    MeetingServiceDto meetingServiceDto =
         meetingApplication.updateMeeting(authId, meetingId, meetingForm);
 
-    return ResponseEntity.ok(SuccessResponse.of(MeetingResponse.fromDomainDto(meetingDomainDto)));
+    return ResponseEntity.ok(SuccessResponse.of(MeetingResponse.fromDomainDto(meetingServiceDto)));
   }
 
   @DeleteMapping("/{meetingId}")
@@ -119,11 +119,11 @@ public class MeetingController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    MeetingParticipantDomainDto meetingParticipantDomainDto =
+    MeetingParticipantServiceDto meetingParticipantServiceDto =
         meetingApplication.permitEnroll(authId, meetingId, participantId);
 
     return ResponseEntity.ok(
-        SuccessResponse.of(MeetingParticipantResponse.fromDomainDto(meetingParticipantDomainDto))
+        SuccessResponse.of(MeetingParticipantResponse.fromDomainDto(meetingParticipantServiceDto))
     );
   }
 
@@ -135,11 +135,11 @@ public class MeetingController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    MeetingParticipantDomainDto meetingParticipantDomainDto =
+    MeetingParticipantServiceDto meetingParticipantServiceDto =
         meetingApplication.declineEnroll(authId, meetingId, participantId);
 
     return ResponseEntity.ok(
-        SuccessResponse.of(MeetingParticipantResponse.fromDomainDto(meetingParticipantDomainDto))
+        SuccessResponse.of(MeetingParticipantResponse.fromDomainDto(meetingParticipantServiceDto))
     );
   }
 

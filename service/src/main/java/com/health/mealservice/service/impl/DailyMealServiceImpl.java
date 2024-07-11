@@ -1,14 +1,13 @@
 package com.health.mealservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.DAILY_MEAL_ALREADY_EXIST;
-import static com.health.common.exception.ErrorCode.DAILY_MEAL_NOT_FOUND;
-import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
 
-import com.health.common.exception.CustomException;
-import com.health.domain.dto.DailyMealDomainDto;
+import static com.health.domain.exception.ErrorCode.*;
+
+import com.health.mealservice.dto.DailyMealServiceDto;
 import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.MealEntity;
 import com.health.domain.entity.UserEntity;
+import com.health.domain.exception.CustomException;
 import com.health.domain.repository.ConsumeFoodRepository;
 import com.health.domain.repository.DailyMealRepository;
 import com.health.domain.repository.MealRepository;
@@ -35,18 +34,18 @@ public class DailyMealServiceImpl implements DailyMealService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<DailyMealDomainDto> getDailyMealList(String authId, Pageable pageable) {
+  public Page<DailyMealServiceDto> getDailyMealList(String authId, Pageable pageable) {
 
     UserEntity findUser = findUserByAuthId(authId);
 
     Page<DailyMealEntity> mealList =
         dailyMealRepository.findByUserOrderByDailyMealDtDesc(findUser, pageable);
 
-    return mealList.map(DailyMealDomainDto::fromEntity);
+    return mealList.map(DailyMealServiceDto::fromEntity);
   }
 
   @Override
-  public DailyMealDomainDto createDailyMeal(String authId, LocalDate dailyMealDt) {
+  public DailyMealServiceDto createDailyMeal(String authId, LocalDate dailyMealDt) {
 
     UserEntity findUser = findUserByAuthId(authId);
 
@@ -55,7 +54,7 @@ public class DailyMealServiceImpl implements DailyMealService {
     DailyMealEntity dailyMealEntity = DailyMealEntity.createNew(findUser, dailyMealDt);
     DailyMealEntity savedDailyMeal = dailyMealRepository.save(dailyMealEntity);
 
-    return DailyMealDomainDto.fromEntity(savedDailyMeal);
+    return DailyMealServiceDto.fromEntity(savedDailyMeal);
   }
 
   @Override

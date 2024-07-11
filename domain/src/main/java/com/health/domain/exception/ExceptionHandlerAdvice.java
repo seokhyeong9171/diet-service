@@ -1,6 +1,5 @@
 package com.health.domain.exception;
 
-import com.health.common.model.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

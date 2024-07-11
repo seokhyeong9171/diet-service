@@ -1,5 +1,6 @@
 package com.health.meetingservice.form;
 
+import com.health.domain.form.MeetingDomainForm;
 import com.health.domain.type.Region;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,8 +36,24 @@ public class MeetingServiceForm {
     @Builder
     public static class MeetingArea {
         private Region region;
-        private Double latitude;
-        private Double longitude;
+        private String address;
+    }
+
+    public MeetingDomainForm toDomainForm() {
+        return MeetingDomainForm.builder()
+            .meetingName(meetingName)
+            .meetingDescription(meetingDescription)
+            .minParticipant(minParticipant)
+            .maxParticipant(maxParticipant)
+            .meetingDeadLine(meetingDeadLine)
+            .meetingArea(
+                MeetingDomainForm.MeetingArea.builder()
+                    .region(meetingArea.getRegion())
+                    .address(meetingArea.getAddress())
+                    .build()
+            )
+            .meetingDt(meetingDt)
+            .build();
     }
 
 }

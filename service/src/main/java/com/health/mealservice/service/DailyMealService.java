@@ -1,15 +1,15 @@
 package com.health.mealservice.service;
 
-import com.health.domain.dto.DailyMealDomainDto;
+import com.health.mealservice.dto.DailyMealServiceDto;
 import java.time.LocalDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface DailyMealService {
 
-  Page<DailyMealDomainDto> getDailyMealList(String authId, Pageable pageable);
+  Page<DailyMealServiceDto> getDailyMealList(String authId, Pageable pageable);
 
-  DailyMealDomainDto createDailyMeal(String authId, LocalDate dailyMealDt);
+  DailyMealServiceDto createDailyMeal(String authId, LocalDate dailyMealDt);
 
   LocalDate deleteDailyMeal(String authId, LocalDate dailyMealDt);
 }

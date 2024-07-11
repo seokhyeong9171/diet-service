@@ -13,4 +13,5 @@ public class UserNicknameDomainForm {
 
   private String nickname;
 
+
 }

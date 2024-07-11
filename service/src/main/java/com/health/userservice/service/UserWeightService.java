@@ -1,17 +1,17 @@
 package com.health.userservice.service;
 
-import com.health.domain.dto.UserWeightDomainDto;
+import com.health.userservice.dto.UserWeightServiceDto;
 import com.health.userservice.form.UserWeightServiceForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserWeightService {
 
-  Page<UserWeightDomainDto> getUserWeightList(String authId, String scope, Pageable pageable);
+  Page<UserWeightServiceDto> getUserWeightList(String authId, String scope, Pageable pageable);
 
-  UserWeightDomainDto createWeightRecord(String authId, UserWeightServiceForm form);
+  UserWeightServiceDto createWeightRecord(String authId, UserWeightServiceForm serviceForm);
 
-  UserWeightDomainDto updateWeightRecord(String authId, Long recordId, UserWeightServiceForm form);
+  UserWeightServiceDto updateWeightRecord(String authId, Long recordId, UserWeightServiceForm serviceForm);
 
   Long deleteWeightRecord(String authId, Long recordId);
 

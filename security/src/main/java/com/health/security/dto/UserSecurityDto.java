@@ -1,6 +1,5 @@
 package com.health.security.dto;
 
-import com.health.domain.dto.UserDomainDto;
 import com.health.domain.type.Gender;
 import com.health.domain.type.RoleType;
 import com.health.security.response.OAuth2Response;
@@ -37,14 +36,14 @@ public class UserSecurityDto {
         .build();
   }
 
-  public UserDomainDto toDomainDto() {
-    return UserDomainDto.builder()
-        .username(this.username)
-        .authId(this.authId)
-        .birth(this.birth)
-        .gender(this.gender)
-        .role(this.role)
-        .build();
-  }
+//  public UserDomainDto toDomainDto() {
+//    return UserDomainDto.builder()
+//        .username(this.username)
+//        .authId(this.authId)
+//        .birth(this.birth)
+//        .gender(this.gender)
+//        .role(this.role)
+//        .build();
+//  }
 
 }

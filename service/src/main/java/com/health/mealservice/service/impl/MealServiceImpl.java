@@ -1,16 +1,12 @@
 package com.health.mealservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.DAILY_MEAL_NOT_FOUND;
-import static com.health.common.exception.ErrorCode.MEAL_AND_DAILY_MEAL_NOT_MATCH;
-import static com.health.common.exception.ErrorCode.MEAL_NOT_FOUND;
-import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.*;
 
-import com.health.common.exception.CustomException;
-import com.health.common.redis.RedisComponent;
-import com.health.domain.dto.MealDomainDto;
+import com.health.mealservice.dto.MealServiceDto;
 import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.MealEntity;
 import com.health.domain.entity.UserEntity;
+import com.health.domain.exception.CustomException;
 import com.health.mealservice.form.MealServiceForm;
 import com.health.domain.repository.ConsumeFoodRepository;
 import com.health.domain.repository.DailyMealRepository;
@@ -34,21 +30,20 @@ public class MealServiceImpl implements MealService {
   private final ConsumeFoodRepository consumeFoodRepository;
   private final DailyMealRepository dailyMealRepository;
 
-  private final RedisComponent redisComponent;
 
   @Override
   @Transactional(readOnly = true)
-  public List<MealDomainDto> getMealList(String authId, LocalDate dailyMealDt) {
+  public List<MealServiceDto> getMealList(String authId, LocalDate dailyMealDt) {
     UserEntity findUser = findUserByAuthId(authId);
     DailyMealEntity findDailyMeal = findDailyMealByUserAndDt(findUser, dailyMealDt);
 
     return findDailyMeal.getMeals().stream()
-        .map(MealDomainDto::fromEntity).toList();
+        .map(MealServiceDto::fromEntity).toList();
   }
 
   @Override
   @Transactional(readOnly = true)
-  public MealDomainDto getMealInfo(String authId, LocalDate dailyMealDt, Long mealId) {
+  public MealServiceDto getMealInfo(String authId, LocalDate dailyMealDt, Long mealId) {
 
     UserEntity findUser = findUserByAuthId(authId);
     DailyMealEntity findDailyMeal = findDailyMealByUserAndDt(findUser, dailyMealDt);
@@ -57,22 +52,23 @@ public class MealServiceImpl implements MealService {
 
     validateProperMeal(findMeal, findDailyMeal);
 
-    return MealDomainDto.fromEntity(findMeal);
+    return MealServiceDto.fromEntity(findMeal);
   }
 
   @Override
-  public MealDomainDto createMeal(String authId, LocalDate dailyMealDt, MealServiceForm domainForm) {
+  public MealServiceDto createMeal(String authId, LocalDate dailyMealDt, MealServiceForm serviceForm) {
 
     UserEntity findUser = findUserByAuthId(authId);
 
     DailyMealEntity dailyMealEntity = findDailyMealByUserAndDt(findUser, dailyMealDt);
 
-    MealEntity mealEntity = MealEntity.createNew(dailyMealEntity, dailyMealDt, domainForm);
+    MealEntity mealEntity =
+        MealEntity.createNew(dailyMealEntity, dailyMealDt, serviceForm.toDomainForm());
     MealEntity savedMealEntity = mealRepository.save(mealEntity);
 
     dailyMealEntity.getMeals().add(savedMealEntity);
 
-    return MealDomainDto.fromEntity(mealEntity);
+    return MealServiceDto.fromEntity(mealEntity);
   }
 
 

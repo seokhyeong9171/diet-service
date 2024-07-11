@@ -1,8 +1,8 @@
 package com.health.api.application;
 
 import com.health.api.form.MeetingForm;
-import com.health.domain.dto.MeetingDomainDto;
-import com.health.domain.dto.MeetingParticipantDomainDto;
+import com.health.meetingservice.dto.MeetingServiceDto;
+import com.health.meetingservice.dto.MeetingParticipantServiceDto;
 import com.health.domain.type.Region;
 import com.health.meetingservice.service.MeetingService;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +16,16 @@ public class MeetingApplication {
 
   private final MeetingService meetingService;
 
-  public Page<MeetingDomainDto> getMeetingList(Region region, Pageable pageable) {
+  public Page<MeetingServiceDto> getMeetingList(Region region, Pageable pageable) {
     return meetingService.getMeetingList(region, pageable);
   }
 
-  public MeetingDomainDto createMeeting(String authId, MeetingForm meetingForm) {
-    return meetingService.createMeeting(authId, meetingForm.toDomainForm());
+  public MeetingServiceDto createMeeting(String authId, MeetingForm meetingForm) {
+    return meetingService.createMeeting(authId, meetingForm.toServiceForm());
   }
 
-  public MeetingDomainDto updateMeeting(String authId, Long meetingId, MeetingForm meetingForm) {
-    return meetingService.updateMeeting(authId, meetingId, meetingForm.toDomainForm());
+  public MeetingServiceDto updateMeeting(String authId, Long meetingId, MeetingForm meetingForm) {
+    return meetingService.updateMeeting(authId, meetingId, meetingForm.toServiceForm());
   }
 
   public Long deleteMeeting(String authId, Long meetingId) {
@@ -36,12 +36,12 @@ public class MeetingApplication {
     return meetingService.enrollMeeting(authId, meetingId);
   }
 
-  public MeetingParticipantDomainDto permitEnroll
+  public MeetingParticipantServiceDto permitEnroll
       (String authId, Long meetingId, Long participantId) {
     return meetingService.permitEnroll(authId, meetingId, participantId);
   }
 
-  public MeetingParticipantDomainDto declineEnroll
+  public MeetingParticipantServiceDto declineEnroll
       (String authId, Long meetingId, Long participantId) {
     return meetingService.declineEnroll
         (authId, meetingId, participantId);

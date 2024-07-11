@@ -1,9 +1,9 @@
 package com.health.mealservice.service.impl;
 
-import com.health.domain.entity.FoodElasticEntity;
+import com.health.elasticservice.dto.FoodElasticDto;
 import com.health.domain.entity.FoodEntity;
 import com.health.domain.repository.FoodRepository;
-import com.health.domain.repository.elastic.FoodElasticRepository;
+import com.health.elasticservice.repository.FoodElasticRepository;
 import com.health.mealservice.component.FoodPublicDataComponent;
 import com.health.mealservice.dto.FoodPublicDataDto;
 import com.health.mealservice.service.FoodDataService;
@@ -37,7 +37,7 @@ public class FoodPublicDataServiceImpl implements FoodDataService {
           foodInfoList.stream().map(FoodPublicDataDto::toEntity).toList();
 
       foodElasticRepository.saveAll(
-          FoodEntityList.stream().map(FoodElasticEntity::fromEntity).toList()
+          FoodEntityList.stream().map(FoodElasticDto::fromEntity).toList()
       );
 
       foodRepository.saveAll(FoodEntityList);

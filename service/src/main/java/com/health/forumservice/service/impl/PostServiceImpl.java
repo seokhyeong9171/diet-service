@@ -4,7 +4,7 @@ import static com.health.domain.exception.ErrorCode.*;
 import static com.health.redisservice.component.RedisKeyComponent.*;
 
 import com.health.domain.exception.CustomException;
-import com.health.forumservice.dto.PostDomainDto;
+import com.health.forumservice.dto.PostServiceDto;
 import com.health.domain.entity.PostEntity;
 import com.health.domain.entity.PostLikeEntity;
 import com.health.domain.entity.PostViewEntity;
@@ -16,7 +16,6 @@ import com.health.domain.repository.PostRepository;
 import com.health.domain.repository.PostViewRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.forumservice.service.PostService;
-import com.health.redisservice.component.RedisKeyComponent;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,13 +41,13 @@ public class PostServiceImpl implements PostService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<PostDomainDto> getPostList(Pageable pageable) {
+  public Page<PostServiceDto> getPostList(Pageable pageable) {
 
-    return postRepository.findAll(pageable).map(PostDomainDto::fromEntity);
+    return postRepository.findAll(pageable).map(PostServiceDto::fromEntity);
   }
 
   @Override
-  public PostDomainDto createPost(String authId, PostServiceForm serviceForm) {
+  public PostServiceDto createPost(String authId, PostServiceForm serviceForm) {
 
     UserEntity findUser = findUserByAuthId(authId);
 
@@ -62,11 +61,11 @@ public class PostServiceImpl implements PostService {
     zSetOps.add(postLikeCountKey(), savedPost.getId().toString(), 0);
     zSetOps.add(postViewCountKey(), savedPost.getId().toString(), 0);
 
-    return PostDomainDto.fromEntity(savedPost);
+    return PostServiceDto.fromEntity(savedPost);
   }
 
   @Override
-  public PostDomainDto updatePost(String authId, Long postId, PostServiceForm serviceForm) {
+  public PostServiceDto updatePost(String authId, Long postId, PostServiceForm serviceForm) {
 
     UserEntity findUser = findUserByAuthId(authId);
     PostEntity findPost = findPostById(postId);
@@ -75,7 +74,7 @@ public class PostServiceImpl implements PostService {
 
     findPost.updateFromForm(serviceForm.toDomainForm());
 
-    return PostDomainDto.fromEntity(findPost);
+    return PostServiceDto.fromEntity(findPost);
   }
 
   @Override
@@ -127,7 +126,7 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public PostDomainDto getPostInfo(String authId, Long postId) {
+  public PostServiceDto getPostInfo(String authId, Long postId) {
     UserEntity findUser = findUserByAuthId(authId);
     PostEntity findPost = findPostById(postId);
 
@@ -142,7 +141,7 @@ public class PostServiceImpl implements PostService {
       getZSetOps().incrementScore(postViewCountKey(), postId.toString(), 1);
     }
 
-    return PostDomainDto.fromEntity(findPost);
+    return PostServiceDto.fromEntity(findPost);
   }
 
   @Override

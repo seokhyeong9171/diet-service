@@ -1,19 +1,14 @@
 package com.health.mealservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.CONSUME_FOOD_AND_MEAL_UN_MATCH;
-import static com.health.common.exception.ErrorCode.CONSUME_FOOD_NOT_FOUND;
-import static com.health.common.exception.ErrorCode.DAILY_MEAL_AND_DT_UN_MATCH;
-import static com.health.common.exception.ErrorCode.FOOD_NOT_FOUND;
-import static com.health.common.exception.ErrorCode.MEAL_NOT_FOUND;
-import static com.health.common.exception.ErrorCode.MEAL_USER_INVALID;
+import static com.health.domain.exception.ErrorCode.*;
 
-import com.health.common.exception.CustomException;
-import com.health.domain.dto.ConsumeFoodDomainDto;
+import com.health.mealservice.dto.ConsumeFoodServiceDto;
 import com.health.domain.entity.ConsumeFoodEntity;
 import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.FoodEntity;
 import com.health.domain.entity.MealEntity;
 import com.health.domain.entity.UserEntity;
+import com.health.domain.exception.CustomException;
 import com.health.mealservice.form.FoodServiceForm;
 import com.health.domain.repository.ConsumeFoodRepository;
 import com.health.domain.repository.FoodRepository;
@@ -37,7 +32,7 @@ public class ConsumeFoodServiceImpl implements ConsumeFoodService {
   @Override
   // nutrient 정보 업데이트 위해 기존 캐시 삭제
   @CacheEvict(cacheNames = "user", key = "@redisKeyComponent.intakeKey(#authId, #dailyMealDt)")
-  public ConsumeFoodDomainDto addFoodToMeal
+  public ConsumeFoodServiceDto addFoodToMeal
       (String authId, LocalDate dailyMealDt, Long mealId, FoodServiceForm foodServiceForm) {
 
     MealEntity findMeal = findMealById(mealId);
@@ -59,7 +54,7 @@ public class ConsumeFoodServiceImpl implements ConsumeFoodService {
     findDailyMeal.addNutrient(createdConsumeFood);
 
 
-    return ConsumeFoodDomainDto.fromEntity(createdConsumeFood);
+    return ConsumeFoodServiceDto.fromEntity(createdConsumeFood);
   }
 
   @Override

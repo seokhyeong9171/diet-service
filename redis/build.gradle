@@ -9,6 +9,8 @@ bootJar.enabled=false
 
 dependencies {
 
+    api project(":domain")
+
     api 'org.springframework.boot:spring-boot-starter-data-redis'
     api 'org.redisson:redisson-spring-data-21:3.32.0'
 }

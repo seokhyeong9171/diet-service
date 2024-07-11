@@ -5,8 +5,8 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.application.DailyMealApplication;
 import com.health.api.model.SuccessResponse;
-import com.health.domain.dto.DailyMealDomainDto;
-import com.health.domain.response.DailyMealResponse;
+import com.health.mealservice.dto.DailyMealServiceDto;
+import com.health.mealservice.response.DailyMealResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class DailyMealController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    Page<DailyMealDomainDto> domainDtoList =
+    Page<DailyMealServiceDto> domainDtoList =
         dailyMealApplication.getDailyMealList(authId, pageable);
 
     return ResponseEntity.ok(
@@ -53,7 +53,7 @@ public class DailyMealController {
 
     String authId = authValidatorComponent.validateAuthId(jwt);
 
-    DailyMealDomainDto dailyMeal = dailyMealApplication.createDailyMeal(authId, dailyMealDt);
+    DailyMealServiceDto dailyMeal = dailyMealApplication.createDailyMeal(authId, dailyMealDt);
 
     return ResponseEntity.status(CREATED)
         .body(SuccessResponse.of(DailyMealResponse.fromDomainDto(dailyMeal)));

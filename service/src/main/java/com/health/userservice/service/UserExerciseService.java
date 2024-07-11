@@ -1,18 +1,18 @@
 package com.health.userservice.service;
 
-import com.health.domain.dto.ExerciseRecordDomainDto;
+import com.health.userservice.dto.ExerciseRecordServiceDto;
 import com.health.userservice.form.ExerciseRecordServiceForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserExerciseService {
 
-  Page<ExerciseRecordDomainDto> getExerciseList(String authId, Pageable pageable);
+  Page<ExerciseRecordServiceDto> getExerciseList(String authId, Pageable pageable);
 
-  ExerciseRecordDomainDto createExerciseRecord(String authId, ExerciseRecordServiceForm form);
+  ExerciseRecordServiceDto createExerciseRecord(String authId, ExerciseRecordServiceForm serviceForm);
 
-  ExerciseRecordDomainDto updateExerciseRecord
-      (String authId, Long recordId, ExerciseRecordServiceForm form);
+  ExerciseRecordServiceDto updateExerciseRecord
+      (String authId, Long recordId, ExerciseRecordServiceForm serviceForm);
 
   void deleteExerciseRecord(String authId, Long recordId);
 

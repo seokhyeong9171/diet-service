@@ -1,15 +1,15 @@
 package com.health.meetingservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.*;
-import static com.health.common.redis.RedisKeyComponent.*;
-import static com.health.domain.type.AdmissionStatus.PENDING;
+import static com.health.domain.exception.ErrorCode.*;
+import static com.health.domain.type.AdmissionStatus.*;
+import static com.health.redisservice.component.RedisKeyComponent.*;
 
-import com.health.common.exception.CustomException;
-import com.health.domain.dto.MeetingDomainDto;
-import com.health.domain.dto.MeetingParticipantDomainDto;
+import com.health.meetingservice.dto.MeetingServiceDto;
+import com.health.meetingservice.dto.MeetingParticipantServiceDto;
 import com.health.domain.entity.MeetingEntity;
 import com.health.domain.entity.MeetingParticipantEntity;
 import com.health.domain.entity.UserEntity;
+import com.health.domain.exception.CustomException;
 import com.health.meetingservice.form.MeetingServiceForm;
 import com.health.domain.repository.MeetingParticipantRepository;
 import com.health.domain.repository.MeetingRepository;
@@ -40,36 +40,36 @@ public class MeetingServiceImpl implements MeetingService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<MeetingDomainDto> getMeetingList(Region region, Pageable pageable) {
+  public Page<MeetingServiceDto> getMeetingList(Region region, Pageable pageable) {
 
     Page<MeetingEntity> meetingEntityList = meetingRepository.findAllByRegion(region, pageable);
 
-    return meetingEntityList.map(MeetingDomainDto::fromEntity);
+    return meetingEntityList.map(MeetingServiceDto::fromEntity);
   }
 
   @Override
-  public MeetingDomainDto createMeeting(String authId, MeetingServiceForm domainForm) {
+  public MeetingServiceDto createMeeting(String authId, MeetingServiceForm serviceForm) {
 
     UserEntity findUser = findUserByAuthId(authId);
 
-    MeetingEntity createdMeeting = MeetingEntity.createFromForm(findUser, domainForm);
+    MeetingEntity createdMeeting = MeetingEntity.createFromForm(findUser, serviceForm.toDomainForm());
     MeetingEntity savedMeeting = meetingRepository.save(createdMeeting);
 
-    return MeetingDomainDto.fromEntity(savedMeeting);
+    return MeetingServiceDto.fromEntity(savedMeeting);
   }
 
   @Override
-  public MeetingDomainDto updateMeeting
-      (String authId, Long meetingId, MeetingServiceForm domainForm) {
+  public MeetingServiceDto updateMeeting
+      (String authId, Long meetingId, MeetingServiceForm serviceForm) {
 
     UserEntity findUser = findUserByAuthId(authId);
     MeetingEntity findMeeting = findMeetingById(meetingId);
 
     validateMeetingCreator(findUser, findMeeting);
 
-    findMeeting.updateMeeting(domainForm);
+    findMeeting.updateMeeting(serviceForm.toDomainForm());
 
-    return MeetingDomainDto.fromEntity(findMeeting);
+    return MeetingServiceDto.fromEntity(findMeeting);
   }
 
   @Override
@@ -149,7 +149,7 @@ public class MeetingServiceImpl implements MeetingService {
 
 
   @Override
-  public MeetingParticipantDomainDto permitEnroll
+  public MeetingParticipantServiceDto permitEnroll
       (String authId, Long meetingId, Long participantId) {
 
     UserEntity findUser = findUserByAuthId(authId);
@@ -163,11 +163,11 @@ public class MeetingServiceImpl implements MeetingService {
 
     findParticipant.permit();
 
-    return MeetingParticipantDomainDto.fromEntity(findParticipant);
+    return MeetingParticipantServiceDto.fromEntity(findParticipant);
   }
 
   @Override
-  public MeetingParticipantDomainDto declineEnroll
+  public MeetingParticipantServiceDto declineEnroll
       (String authId, Long meetingId, Long participantId) {
 
     UserEntity findUser = findUserByAuthId(authId);
@@ -182,7 +182,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     hashOperations.increment(meetingParticipantCount(), meetingId.toString(), -1);
 
-    return MeetingParticipantDomainDto.fromEntity(findParticipant);
+    return MeetingParticipantServiceDto.fromEntity(findParticipant);
   }
 
   @Override

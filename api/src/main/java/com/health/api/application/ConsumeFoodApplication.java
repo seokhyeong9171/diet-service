@@ -1,7 +1,7 @@
 package com.health.api.application;
 
 import com.health.api.form.FoodConsumeForm;
-import com.health.domain.dto.ConsumeFoodDomainDto;
+import com.health.mealservice.dto.ConsumeFoodServiceDto;
 import com.health.mealservice.service.ConsumeFoodService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ public class ConsumeFoodApplication {
 
   private final ConsumeFoodService consumeFoodService;
 
-  public ConsumeFoodDomainDto addFoodToMeal
+  public ConsumeFoodServiceDto addFoodToMeal
       (String authId, LocalDate dailyMealDt, Long mealId, FoodConsumeForm foodConsumeForm) {
 
     return consumeFoodService.addFoodToMeal(authId, dailyMealDt, mealId, foodConsumeForm.toDomainForm());

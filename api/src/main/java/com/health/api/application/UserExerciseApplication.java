@@ -1,7 +1,7 @@
 package com.health.api.application;
 
 import com.health.api.form.ExerciseRecordForm;
-import com.health.domain.dto.ExerciseRecordDomainDto;
+import com.health.userservice.dto.ExerciseRecordServiceDto;
 import com.health.userservice.service.UserExerciseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,19 +14,19 @@ public class UserExerciseApplication {
 
   private final UserExerciseService userExerciseService;
 
-  public Page<ExerciseRecordDomainDto> getExerciseList(String authId, Pageable pageable) {
+  public Page<ExerciseRecordServiceDto> getExerciseList(String authId, Pageable pageable) {
 
     // user-service module로 넘김
     return userExerciseService.getExerciseList(authId, pageable);
   }
 
-  public ExerciseRecordDomainDto createExerciseRecord(String authId, ExerciseRecordForm form) {
+  public ExerciseRecordServiceDto createExerciseRecord(String authId, ExerciseRecordForm form) {
 
     // domain form으로 변환해서 user-service module로 넘김
     return userExerciseService.createExerciseRecord(authId, form.toDomainForm());
   }
 
-  public ExerciseRecordDomainDto updateExerciseRecord
+  public ExerciseRecordServiceDto updateExerciseRecord
       (String authId, Long recordId, ExerciseRecordForm form) {
 
     // domain form으로 변환해서 user-service module로 넘김

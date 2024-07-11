@@ -1,15 +1,11 @@
 package com.health.userservice.service.impl;
 
-import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_ALREADY_POSTED;
-import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_EXCEED_DELETE_DATE;
-import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_NOT_FOUND;
-import static com.health.common.exception.ErrorCode.EXERCISE_RECORD_NOT_OWNED_USER;
-import static com.health.common.exception.ErrorCode.USER_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.*;
 
-import com.health.common.exception.CustomException;
-import com.health.domain.dto.ExerciseRecordDomainDto;
+import com.health.userservice.dto.ExerciseRecordServiceDto;
 import com.health.domain.entity.ExerciseRecordEntity;
 import com.health.domain.entity.UserEntity;
+import com.health.domain.exception.CustomException;
 import com.health.userservice.form.ExerciseRecordServiceForm;
 import com.health.domain.repository.ExerciseRecordRepository;
 import com.health.domain.repository.UserRepository;
@@ -33,7 +29,7 @@ public class UserExerciseServiceImpl implements UserExerciseService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<ExerciseRecordDomainDto> getExerciseList(String authId, Pageable pageable) {
+  public Page<ExerciseRecordServiceDto> getExerciseList(String authId, Pageable pageable) {
 
     // user 정보 존재하는지 확인
     validateExistUser(authId);
@@ -43,7 +39,7 @@ public class UserExerciseServiceImpl implements UserExerciseService {
   }
 
   @Override
-  public ExerciseRecordDomainDto createExerciseRecord(String authId, ExerciseRecordServiceForm form) {
+  public ExerciseRecordServiceDto createExerciseRecord(String authId, ExerciseRecordServiceForm serviceForm) {
 
     UserEntity findUser = findUserById(authId);
 
@@ -51,7 +47,8 @@ public class UserExerciseServiceImpl implements UserExerciseService {
     validatePostRecordToday(findUser);
 
     // form으로 부터 record 생성
-    ExerciseRecordEntity createdRecord = ExerciseRecordEntity.createRecord(findUser, form);
+    ExerciseRecordEntity createdRecord =
+        ExerciseRecordEntity.createRecord(findUser, serviceForm.toDomainForm());
     // record 저장
     ExerciseRecordEntity savedRecord = exerciseRecordRepository.save(createdRecord);
     // user 엔티티의 record list에 저장
@@ -60,12 +57,12 @@ public class UserExerciseServiceImpl implements UserExerciseService {
     findUser.increaseExerciseDuration();
 
     // dto로 반환
-    return ExerciseRecordDomainDto.fromEntity(savedRecord);
+    return ExerciseRecordServiceDto.fromEntity(savedRecord);
   }
 
   @Override
-  public ExerciseRecordDomainDto updateExerciseRecord(String authId, Long recordId,
-      ExerciseRecordServiceForm form) {
+  public ExerciseRecordServiceDto updateExerciseRecord(String authId, Long recordId,
+      ExerciseRecordServiceForm serviceForm) {
 
     // user 정보 존재하는지 확인
     validateExistUser(authId);
@@ -76,10 +73,10 @@ public class UserExerciseServiceImpl implements UserExerciseService {
     validateAccurateUser(authId, findRecord);
 
     // record 업데이트
-    findRecord.updateRecord(form);
+    findRecord.updateRecord(serviceForm.toDomainForm());
 
     // dto로 반환
-    return ExerciseRecordDomainDto.fromEntity(findRecord);
+    return ExerciseRecordServiceDto.fromEntity(findRecord);
   }
 
   @Override
@@ -106,41 +103,41 @@ public class UserExerciseServiceImpl implements UserExerciseService {
 
   private void validateExistUser(String authId) {
     if (!userRepository.existsByAuthId(authId)) {
-      throw new CustomException(ErrorCode.USER_NOT_FOUND);
+      throw new CustomException(USER_NOT_FOUND);
     }
   }
 
   private void validateAccurateUser(String authId, ExerciseRecordEntity findRecord) {
     if (!findRecord.getUser().getAuthId().equals(authId)) {
-      throw new CustomException(ErrorCode.EXERCISE_RECORD_NOT_OWNED_USER);
+      throw new CustomException(EXERCISE_RECORD_NOT_OWNED_USER);
     }
   }
 
   private void validatePostRecordToday(UserEntity findUser) {
 
     if (exerciseRecordRepository.existsByUserAndExerciseRecDt(findUser, LocalDate.now())) {
-      throw new CustomException(ErrorCode.EXERCISE_RECORD_ALREADY_POSTED);
+      throw new CustomException(EXERCISE_RECORD_ALREADY_POSTED);
     }
   }
 
   private void validateIsToday(ExerciseRecordEntity findRecord) {
     if (!Objects.equals(findRecord.getExerciseRecDt(), LocalDate.now())) {
-      throw new CustomException(ErrorCode.EXERCISE_RECORD_EXCEED_DELETE_DATE);
+      throw new CustomException(EXERCISE_RECORD_EXCEED_DELETE_DATE);
     }
   }
 
   private UserEntity findUserById(String authId) {
     return userRepository.findByAuthId(authId)
-        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
   }
 
-  private Page<ExerciseRecordDomainDto> getUserExerciseRecordList(String authId, Pageable pageable) {
+  private Page<ExerciseRecordServiceDto> getUserExerciseRecordList(String authId, Pageable pageable) {
     return exerciseRecordRepository.findAllByUserAuthIdOrderById(authId, pageable)
-        .map(ExerciseRecordDomainDto::fromEntity);
+        .map(ExerciseRecordServiceDto::fromEntity);
   }
 
   private ExerciseRecordEntity findExerciseRecordById(Long recordId) {
     return exerciseRecordRepository.findById(recordId)
-        .orElseThrow(() -> new CustomException(ErrorCode.EXERCISE_RECORD_NOT_FOUND));
+        .orElseThrow(() -> new CustomException(EXERCISE_RECORD_NOT_FOUND));
   }
 }

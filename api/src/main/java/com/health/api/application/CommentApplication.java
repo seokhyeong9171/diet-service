@@ -1,8 +1,8 @@
 package com.health.api.application;
 
 import com.health.api.form.CommentForm;
-import com.health.forumservice.dto.CommentServiceDto;
-import com.health.forumservice.service.CommentService;
+import com.health.service.forumservice.dto.CommentServiceDto;
+import com.health.service.forumservice.service.CommentService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

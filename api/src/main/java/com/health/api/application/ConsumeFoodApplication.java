@@ -1,8 +1,8 @@
 package com.health.api.application;
 
 import com.health.api.form.FoodConsumeForm;
-import com.health.mealservice.dto.ConsumeFoodServiceDto;
-import com.health.mealservice.service.ConsumeFoodService;
+import com.health.service.mealservice.dto.ConsumeFoodServiceDto;
+import com.health.service.mealservice.service.ConsumeFoodService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

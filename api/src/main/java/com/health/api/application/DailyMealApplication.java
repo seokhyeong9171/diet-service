@@ -1,7 +1,7 @@
 package com.health.api.application;
 
-import com.health.mealservice.dto.DailyMealServiceDto;
-import com.health.mealservice.service.DailyMealService;
+import com.health.service.mealservice.dto.DailyMealServiceDto;
+import com.health.service.mealservice.service.DailyMealService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

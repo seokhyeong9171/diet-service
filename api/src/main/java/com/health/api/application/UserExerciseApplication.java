@@ -1,8 +1,8 @@
 package com.health.api.application;
 
 import com.health.api.form.ExerciseRecordForm;
-import com.health.userservice.dto.ExerciseRecordServiceDto;
-import com.health.userservice.service.UserExerciseService;
+import com.health.service.userservice.dto.ExerciseRecordServiceDto;
+import com.health.service.userservice.service.UserExerciseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

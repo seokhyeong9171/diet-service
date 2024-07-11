@@ -39,7 +39,7 @@ public class RedisConfig {
     return new LettuceConnectionFactory(redisConfig);
   }
 
-  @Bean
+//  @Bean
   public RedisTemplate<String, String> StringRedisTemplate() {
     RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
     redisTemplate.setKeySerializer(new StringRedisSerializer());

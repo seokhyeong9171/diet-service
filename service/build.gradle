@@ -16,7 +16,8 @@ dependencies {
     api project(":domain")
 
     implementation project(":redis")
-    implementation project(":elastic")
+    api project(":elastic")
+
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 }

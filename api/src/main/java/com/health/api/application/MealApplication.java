@@ -1,8 +1,8 @@
 package com.health.api.application;
 
 import com.health.api.form.MealForm;
-import com.health.mealservice.dto.MealServiceDto;
-import com.health.mealservice.service.MealService;
+import com.health.service.mealservice.dto.MealServiceDto;
+import com.health.service.mealservice.service.MealService;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

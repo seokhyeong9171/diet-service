@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.userservice.form.UserWeightServiceForm;
+import com.health.service.userservice.form.UserWeightServiceForm;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

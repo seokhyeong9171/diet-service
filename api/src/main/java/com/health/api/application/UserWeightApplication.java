@@ -1,8 +1,8 @@
 package com.health.api.application;
 
 import com.health.api.form.UserWeightForm;
-import com.health.userservice.dto.UserWeightServiceDto;
-import com.health.userservice.service.UserWeightService;
+import com.health.service.userservice.dto.UserWeightServiceDto;
+import com.health.service.userservice.service.UserWeightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

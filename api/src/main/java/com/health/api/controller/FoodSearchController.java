@@ -2,8 +2,8 @@ package com.health.api.controller;
 
 import com.health.api.application.FoodApplication;
 import com.health.api.model.SuccessResponse;
-import com.health.mealservice.dto.FoodServiceDto;
-import com.health.mealservice.response.FoodResponse;
+import com.health.service.mealservice.dto.FoodServiceDto;
+import com.health.service.mealservice.response.FoodResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

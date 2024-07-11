@@ -1,9 +1,9 @@
 package com.health.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.health.mealservice.service.FoodDataService;
-import com.health.userservice.dto.IntakeServiceDto;
-import com.health.userservice.service.UserInfoService;
+import com.health.service.mealservice.service.FoodDataService;
+import com.health.service.userservice.dto.IntakeServiceDto;
+import com.health.service.userservice.service.UserInfoService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

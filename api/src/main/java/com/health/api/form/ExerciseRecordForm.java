@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.userservice.form.ExerciseRecordServiceForm;
+import com.health.service.userservice.form.ExerciseRecordServiceForm;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

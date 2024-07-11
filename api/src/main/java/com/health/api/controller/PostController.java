@@ -1,14 +1,14 @@
 package com.health.api.controller;
 
-import static com.health.forumservice.response.PostResponse.PostContentResponse;
-import static com.health.forumservice.response.PostResponse.PostListResponse;
+import static com.health.service.forumservice.response.PostResponse.PostContentResponse;
+import static com.health.service.forumservice.response.PostResponse.PostListResponse;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.form.PostForm;
 import com.health.api.application.PostApplication;
 import com.health.api.model.SuccessResponse;
-import com.health.forumservice.dto.PostServiceDto;
-import com.health.forumservice.response.PostResponse;
+import com.health.service.forumservice.dto.PostServiceDto;
+import com.health.service.forumservice.response.PostResponse;
 import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

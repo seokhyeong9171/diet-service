@@ -1,7 +1,7 @@
 package com.health.api.application;
 
-import com.health.mealservice.dto.FoodServiceDto;
-import com.health.mealservice.service.FoodService;
+import com.health.service.mealservice.dto.FoodServiceDto;
+import com.health.service.mealservice.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

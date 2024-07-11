@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.forumservice.form.PostServiceForm;
+import com.health.service.forumservice.form.PostServiceForm;
 import com.health.domain.type.PostCategory;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

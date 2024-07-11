@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.userservice.form.UserDetailsServiceForm;
+import com.health.service.userservice.form.UserDetailsServiceForm;
 import com.health.domain.type.Region;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

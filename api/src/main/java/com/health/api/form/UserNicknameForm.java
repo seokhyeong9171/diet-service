@@ -1,6 +1,6 @@
 package com.health.api.form;
 
-import com.health.userservice.form.UserNicknameServiceForm;
+import com.health.service.userservice.form.UserNicknameServiceForm;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

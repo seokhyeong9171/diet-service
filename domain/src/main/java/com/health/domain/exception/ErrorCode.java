@@ -14,6 +14,9 @@ public enum ErrorCode {
     USER_NICKNAME_DUPLICATED(HttpStatus.BAD_REQUEST, "this nickname is duplicated"),
     USER_BLACKLIST(HttpStatus.BAD_REQUEST, "this user was put on a blacklist"),
 
+    OAUTH2_CLIENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "couldn't find oauth2 client"),
+
+
     EXERCISE_RECORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "couldn't find exercise record"),
     EXERCISE_RECORD_NOT_OWNED_USER(HttpStatus.BAD_REQUEST, "this user couldn't access this record"),
     EXERCISE_RECORD_ALREADY_POSTED(HttpStatus.BAD_REQUEST, "exercise record already posted today"),

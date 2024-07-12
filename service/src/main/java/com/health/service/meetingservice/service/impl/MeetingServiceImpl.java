@@ -4,8 +4,12 @@ import static com.health.domain.exception.ErrorCode.*;
 import static com.health.domain.type.AdmissionStatus.*;
 import static com.health.redisservice.component.RedisKeyComponent.*;
 
+import com.health.domain.entity.Oauth2AuthorizedClient;
+import com.health.domain.entity.Oauth2AuthorizedClientId;
+import com.health.domain.repository.Oauth2AuthorizedClientRepository;
 import com.health.domain.type.AdmissionStatus;
 import com.health.service.meetingservice.component.CalenderComponent;
+import com.health.service.meetingservice.dto.CalenderDto;
 import com.health.service.meetingservice.dto.MeetingServiceDto;
 import com.health.service.meetingservice.dto.MeetingParticipantServiceDto;
 import com.health.domain.entity.MeetingEntity;
@@ -18,6 +22,7 @@ import com.health.domain.repository.MeetingRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.domain.type.Region;
 import com.health.service.meetingservice.service.MeetingService;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
@@ -36,6 +41,7 @@ public class MeetingServiceImpl implements MeetingService {
   private final UserRepository userRepository;
   private final MeetingRepository meetingRepository;
   private final MeetingParticipantRepository meetingParticipantRepository;
+  private final Oauth2AuthorizedClientRepository oauth2AuthorizedClientRepository;
 
   private final CalenderComponent calenderComponent;
 
@@ -137,6 +143,22 @@ public class MeetingServiceImpl implements MeetingService {
   }
 
   @Override
+  public void addCalender(String authId, Long meetingId, Long participantId) {
+    UserEntity findUser = findUserByAuthId(authId);
+    MeetingEntity findMeeting = findMeetingById(meetingId);
+    MeetingParticipantEntity findParticipant = findParticipantById(participantId);
+
+    validateMeetingAndParticipant(findMeeting, findParticipant);
+    validateParticipantUser(findParticipant, findUser);
+
+    validateParticipantStatus(findParticipant, APPROVAL);
+
+    String accessTokenValue = getAccessTokenValue(authId);
+    calenderComponent.addCalender
+        (accessTokenValue, CalenderDto.Request.fromMeetingEntity(findMeeting));
+  }
+
+  @Override
   public Long cancelEnroll(String authId, Long meetingId, Long participantId) {
 
     UserEntity findUser = findUserByAuthId(authId);
@@ -151,20 +173,6 @@ public class MeetingServiceImpl implements MeetingService {
 
     return findParticipant.getId();
   }
-
-  @Override
-  public void addCalender(String authId, Long meetingId, Long participantId) {
-    UserEntity findUser = findUserByAuthId(authId);
-    MeetingEntity findMeeting = findMeetingById(meetingId);
-    MeetingParticipantEntity findParticipant = findParticipantById(participantId);
-
-    validateMeetingAndParticipant(findMeeting, findParticipant);
-    validateParticipantUser(findParticipant, findUser);
-
-    validateParticipantStatus(findParticipant, APPROVAL);
-
-  }
-
 
   @Override
   public MeetingParticipantServiceDto permitEnroll
@@ -317,5 +325,17 @@ public class MeetingServiceImpl implements MeetingService {
     if (findMeeting != findParticipant.getMeeting()) {
       throw new CustomException(MEETING_PARTICIPANT_AND_MEETING_NOT_MATCH);
     }
+  }
+
+
+  private String getAccessTokenValue(String authId) {
+    Oauth2AuthorizedClient oauth2AuthorizedClient = findOAuth2ClientById(authId);
+    byte[] accessTokenByte = oauth2AuthorizedClient.getAccessTokenValue();
+    return new String(accessTokenByte, StandardCharsets.UTF_8);
+  }
+
+  private Oauth2AuthorizedClient findOAuth2ClientById(String authId) {
+    return oauth2AuthorizedClientRepository.findById(Oauth2AuthorizedClientId.fromAuthId(authId))
+        .orElseThrow(() -> new CustomException(OAUTH2_CLIENT_NOT_FOUND));
   }
 }

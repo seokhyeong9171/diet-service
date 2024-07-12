@@ -2,12 +2,15 @@ package com.health.service.meetingservice.service.impl;
 
 import static com.health.domain.exception.ErrorCode.*;
 import static com.health.domain.type.AdmissionStatus.*;
+import static com.health.redisservice.annotation.KeyType.*;
 import static com.health.redisservice.component.RedisKeyComponent.*;
 
 import com.health.domain.entity.Oauth2AuthorizedClient;
 import com.health.domain.entity.Oauth2AuthorizedClientId;
 import com.health.domain.repository.Oauth2AuthorizedClientRepository;
 import com.health.domain.type.AdmissionStatus;
+import com.health.redisservice.annotation.KeyType;
+import com.health.redisservice.annotation.RedissonLock;
 import com.health.service.meetingservice.component.CalenderComponent;
 import com.health.service.meetingservice.dto.CalenderDto;
 import com.health.service.meetingservice.dto.MeetingServiceDto;
@@ -101,6 +104,8 @@ public class MeetingServiceImpl implements MeetingService {
   }
 
   @Override
+  // custom annotation을 이용한 lock 기능
+  @RedissonLock(key = MEETING_ENROLL, value = "meetingId")
   public Long enrollMeeting(String authId, Long meetingId) {
 
     UserEntity findUser = findUserByAuthId(authId);
@@ -108,37 +113,19 @@ public class MeetingServiceImpl implements MeetingService {
 
     validateBlacklist(findUser);
 
-    RLock participateLock = redissonClient.getLock(meetingEnrollRock(meetingId));
-
     validateHaveRightToEnroll(findUser, findMeeting);
 
-    try {
+    validateParticipantCount(meetingId, findMeeting);
 
-      // 선착순 참가 시 동시성 문제 해결 위해 lock 사용
-      boolean isParticipantLock =
-          participateLock.tryLock(10, 10, TimeUnit.SECONDS);
+    hashOperations.increment(meetingParticipantCount(), meetingId.toString(), 1);
 
-      if (!isParticipantLock) {
-        throw new CustomException(REDIS_LOCK_TIMEOUT);
-      }
-      validateParticipantCount(meetingId, findMeeting);
+    MeetingParticipantEntity createdParticipant =
+        MeetingParticipantEntity.enroll(findUser, findMeeting);
+    MeetingParticipantEntity savedParticipant =
+        meetingParticipantRepository.save(createdParticipant);
 
-      hashOperations.increment(meetingParticipantCount(), meetingId.toString(), 1);
-
-      MeetingParticipantEntity createdParticipant =
-          MeetingParticipantEntity.enroll(findUser, findMeeting);
-      MeetingParticipantEntity savedParticipant =
-          meetingParticipantRepository.save(createdParticipant);
-
-      findMeeting.getParticipantList().add(savedParticipant);
-      return findMeeting.getId();
-
-    } catch (RuntimeException | InterruptedException e) {
-      throw new RuntimeException(e);
-
-    } finally {
-      participateLock.unlock();
-    }
+    findMeeting.getParticipantList().add(savedParticipant);
+    return findMeeting.getId();
 
   }
 

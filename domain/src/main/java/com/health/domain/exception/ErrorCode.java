@@ -68,6 +68,7 @@ public enum ErrorCode {
     PARAMETER_INVALID(HttpStatus.BAD_REQUEST, "this is wrong parameter"),
 
     REDIS_OBJECT_NOT_EXIST(HttpStatus.BAD_REQUEST, "this redis object is not exist"),
+    REDIS_LOCK_KEY_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "redis lock key is invalid"),
     REDIS_LOCK_UNAVAILABLE(HttpStatus.INTERNAL_SERVER_ERROR, "redis lock is unavailable now"),
     REDIS_LOCK_TIMEOUT(HttpStatus.INTERNAL_SERVER_ERROR, "redis lock is timeout"),
 

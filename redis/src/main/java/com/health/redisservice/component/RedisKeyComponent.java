@@ -38,7 +38,7 @@ public class RedisKeyComponent {
   }
 
   // 모임 참여 신청 시 모임 별 참가자 수 확인 위한 락 키
-  public static String meetingEnrollRock(Long meetingId) {
+  public static String meetingEnrollRock(String meetingId) {
     return meetingParticipantCount() + meetingId;
   }
 

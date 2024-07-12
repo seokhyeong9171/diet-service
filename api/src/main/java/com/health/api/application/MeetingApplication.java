@@ -55,4 +55,7 @@ public class MeetingApplication {
     return meetingService.cancelEnroll(authId, meetingId, participantId);
   }
 
+  public void addCalender(String authId, Long meetingId, Long participantId) {
+    meetingService.addCalender(authId, meetingId, participantId);
+  }
 }

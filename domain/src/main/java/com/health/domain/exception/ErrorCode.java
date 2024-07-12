@@ -57,6 +57,7 @@ public enum ErrorCode {
     MEETING_PARTICIPANT_NOT_FOUND(HttpStatus.BAD_REQUEST,"couldn't find meeting participant"),
     MEETING_PARTICIPANT_STATUS_NOT_PENDING(HttpStatus.BAD_REQUEST,"this meeting participant's status is not pending."),
     MEETING_PARTICIPANT_STATUS_NOT_APPROVAL(HttpStatus.BAD_REQUEST,"this meeting participant is not approved."),
+    MEETING_PARTICIPANT_STATUS_NOT_VALID(HttpStatus.BAD_REQUEST,"this meeting participant status is not valid."),
     MEETING_PARTICIPANT_AND_USER_NOT_MATCH(HttpStatus.BAD_REQUEST,"user and participant are not matching."),
     MEETING_PARTICIPANT_AND_MEETING_NOT_MATCH(HttpStatus.BAD_REQUEST,"meeting and participant are not matching."),
 

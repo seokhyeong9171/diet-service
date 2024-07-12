@@ -4,6 +4,8 @@ import static com.health.domain.exception.ErrorCode.*;
 import static com.health.domain.type.AdmissionStatus.*;
 import static com.health.redisservice.component.RedisKeyComponent.*;
 
+import com.health.domain.type.AdmissionStatus;
+import com.health.service.meetingservice.component.CalenderComponent;
 import com.health.service.meetingservice.dto.MeetingServiceDto;
 import com.health.service.meetingservice.dto.MeetingParticipantServiceDto;
 import com.health.domain.entity.MeetingEntity;
@@ -35,6 +37,8 @@ public class MeetingServiceImpl implements MeetingService {
   private final MeetingRepository meetingRepository;
   private final MeetingParticipantRepository meetingParticipantRepository;
 
+  private final CalenderComponent calenderComponent;
+
   private final RedissonClient redissonClient;
   private final HashOperations<String, String, Integer> hashOperations;
 
@@ -52,7 +56,8 @@ public class MeetingServiceImpl implements MeetingService {
 
     UserEntity findUser = findUserByAuthId(authId);
 
-    MeetingEntity createdMeeting = MeetingEntity.createFromForm(findUser, serviceForm.toDomainForm());
+    MeetingEntity createdMeeting = MeetingEntity.createFromForm(findUser,
+        serviceForm.toDomainForm());
     MeetingEntity savedMeeting = meetingRepository.save(createdMeeting);
 
     return MeetingServiceDto.fromEntity(savedMeeting);
@@ -147,6 +152,19 @@ public class MeetingServiceImpl implements MeetingService {
     return findParticipant.getId();
   }
 
+  @Override
+  public void addCalender(String authId, Long meetingId, Long participantId) {
+    UserEntity findUser = findUserByAuthId(authId);
+    MeetingEntity findMeeting = findMeetingById(meetingId);
+    MeetingParticipantEntity findParticipant = findParticipantById(participantId);
+
+    validateMeetingAndParticipant(findMeeting, findParticipant);
+    validateParticipantUser(findParticipant, findUser);
+
+    validateParticipantStatus(findParticipant, APPROVAL);
+
+  }
+
 
   @Override
   public MeetingParticipantServiceDto permitEnroll
@@ -157,7 +175,7 @@ public class MeetingServiceImpl implements MeetingService {
     MeetingParticipantEntity findParticipant = findParticipantById(participantId);
 
     validateBlacklist(findParticipant.getParticipant());
-    validateParticipantStatus(findParticipant);
+    validateParticipantStatus(findParticipant, PENDING);
     validateMeetingCreator(findUser, findMeeting);
     validateMeetingAndParticipant(findMeeting, findParticipant);
 
@@ -174,7 +192,7 @@ public class MeetingServiceImpl implements MeetingService {
     MeetingEntity findMeeting = findMeetingById(meetingId);
     MeetingParticipantEntity findParticipant = findParticipantById(participantId);
 
-    validateParticipantStatus(findParticipant);
+    validateParticipantStatus(findParticipant, PENDING);
     validateMeetingCreator(findUser, findMeeting);
     validateMeetingAndParticipant(findMeeting, findParticipant);
 
@@ -273,11 +291,24 @@ public class MeetingServiceImpl implements MeetingService {
     }
   }
 
-  // 현재 participant 상태가 pending인지 확인 (pending 상태에서만 승인, 거절 가능)
-  private void validateParticipantStatus(MeetingParticipantEntity findParticipant) {
-    if (findParticipant.getAdmissionStatus() != PENDING) {
-      throw new CustomException(MEETING_PARTICIPANT_STATUS_NOT_PENDING);
+  // 현재 participant 상태 확인
+  // (pending 상태에서만 승인, 거절 가능)
+  // (approval 상태에서만 캘린더 등록 가능
+  private void validateParticipantStatus(
+      MeetingParticipantEntity findParticipant, AdmissionStatus status
+  ) {
+    if (findParticipant.getAdmissionStatus() == status) {
+      return;
     }
+
+    if (status == PENDING) {
+      throw new CustomException(MEETING_PARTICIPANT_STATUS_NOT_PENDING);
+    } else if (status == APPROVAL) {
+      throw new CustomException(MEETING_PARTICIPANT_STATUS_NOT_APPROVAL);
+    } else {
+      throw new CustomException(MEETING_PARTICIPANT_STATUS_NOT_VALID);
+    }
+
   }
 
   // 해당 meeting과 participant 정보가 일치하는지 확인

@@ -45,7 +45,7 @@ public class Oauth2AuthorizedClientId implements java.io.Serializable {
 
   public static Oauth2AuthorizedClientId fromAuthId(String authId) {
     String clientRegistrationId =
-        authId.substring(authId.indexOf(0, '_') + 1);
+        authId.substring(0, authId.indexOf(0, '_'));
 
     return new Oauth2AuthorizedClientId(clientRegistrationId, authId);
   }

@@ -2,8 +2,16 @@ package com.health.service.meetingservice.service.impl;
 
 import static com.health.domain.exception.ErrorCode.*;
 import static com.health.domain.type.AdmissionStatus.*;
+import static com.health.redisservice.annotation.KeyType.*;
 import static com.health.redisservice.component.RedisKeyComponent.*;
 
+import com.health.domain.entity.Oauth2AuthorizedClient;
+import com.health.domain.entity.Oauth2AuthorizedClientId;
+import com.health.domain.repository.Oauth2AuthorizedClientRepository;
+import com.health.domain.type.AdmissionStatus;
+import com.health.redisservice.annotation.RedissonLock;
+import com.health.service.meetingservice.component.CalendarComponent;
+import com.health.service.meetingservice.dto.CalendarDto;
 import com.health.service.meetingservice.dto.MeetingServiceDto;
 import com.health.service.meetingservice.dto.MeetingParticipantServiceDto;
 import com.health.domain.entity.MeetingEntity;
@@ -16,9 +24,8 @@ import com.health.domain.repository.MeetingRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.domain.type.Region;
 import com.health.service.meetingservice.service.MeetingService;
-import java.util.concurrent.TimeUnit;
+import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +41,9 @@ public class MeetingServiceImpl implements MeetingService {
   private final UserRepository userRepository;
   private final MeetingRepository meetingRepository;
   private final MeetingParticipantRepository meetingParticipantRepository;
+  private final Oauth2AuthorizedClientRepository oauth2AuthorizedClientRepository;
+
+  private final CalendarComponent calendarComponent;
 
   private final RedissonClient redissonClient;
   private final HashOperations<String, String, Integer> hashOperations;
@@ -52,7 +62,8 @@ public class MeetingServiceImpl implements MeetingService {
 
     UserEntity findUser = findUserByAuthId(authId);
 
-    MeetingEntity createdMeeting = MeetingEntity.createFromForm(findUser, serviceForm.toDomainForm());
+    MeetingEntity createdMeeting = MeetingEntity.createFromForm(findUser,
+        serviceForm.toDomainForm());
     MeetingEntity savedMeeting = meetingRepository.save(createdMeeting);
 
     return MeetingServiceDto.fromEntity(savedMeeting);
@@ -90,6 +101,8 @@ public class MeetingServiceImpl implements MeetingService {
   }
 
   @Override
+  // custom annotation을 이용한 lock 기능
+  @RedissonLock(key = MEETING_ENROLL, value = "meetingId")
   public Long enrollMeeting(String authId, Long meetingId) {
 
     UserEntity findUser = findUserByAuthId(authId);
@@ -97,38 +110,36 @@ public class MeetingServiceImpl implements MeetingService {
 
     validateBlacklist(findUser);
 
-    RLock participateLock = redissonClient.getLock(meetingEnrollRock(meetingId));
-
     validateHaveRightToEnroll(findUser, findMeeting);
 
-    try {
+    validateParticipantCount(meetingId, findMeeting);
 
-      // 선착순 참가 시 동시성 문제 해결 위해 lock 사용
-      boolean isParticipantLock =
-          participateLock.tryLock(10, 10, TimeUnit.SECONDS);
+    hashOperations.increment(meetingParticipantCount(), meetingId.toString(), 1);
 
-      if (!isParticipantLock) {
-        throw new CustomException(REDIS_LOCK_TIMEOUT);
-      }
-      validateParticipantCount(meetingId, findMeeting);
+    MeetingParticipantEntity createdParticipant =
+        MeetingParticipantEntity.enroll(findUser, findMeeting);
+    MeetingParticipantEntity savedParticipant =
+        meetingParticipantRepository.save(createdParticipant);
 
-      hashOperations.increment(meetingParticipantCount(), meetingId.toString(), 1);
+    findMeeting.getParticipantList().add(savedParticipant);
+    return findMeeting.getId();
 
-      MeetingParticipantEntity createdParticipant =
-          MeetingParticipantEntity.enroll(findUser, findMeeting);
-      MeetingParticipantEntity savedParticipant =
-          meetingParticipantRepository.save(createdParticipant);
+  }
 
-      findMeeting.getParticipantList().add(savedParticipant);
-      return findMeeting.getId();
+  @Override
+  public void addCalender(String authId, Long meetingId, Long participantId) {
+    UserEntity findUser = findUserByAuthId(authId);
+    MeetingEntity findMeeting = findMeetingById(meetingId);
+    MeetingParticipantEntity findParticipant = findParticipantById(participantId);
 
-    } catch (RuntimeException | InterruptedException e) {
-      throw new RuntimeException(e);
+    validateMeetingAndParticipant(findMeeting, findParticipant);
+    validateParticipantUser(findParticipant, findUser);
 
-    } finally {
-      participateLock.unlock();
-    }
+    validateParticipantStatus(findParticipant, APPROVAL);
 
+    String accessTokenValue = getAccessTokenValue(authId);
+    calendarComponent.addCalendar
+        (accessTokenValue, CalendarDto.Request.fromMeetingEntity(findMeeting));
   }
 
   @Override
@@ -147,7 +158,6 @@ public class MeetingServiceImpl implements MeetingService {
     return findParticipant.getId();
   }
 
-
   @Override
   public MeetingParticipantServiceDto permitEnroll
       (String authId, Long meetingId, Long participantId) {
@@ -157,7 +167,7 @@ public class MeetingServiceImpl implements MeetingService {
     MeetingParticipantEntity findParticipant = findParticipantById(participantId);
 
     validateBlacklist(findParticipant.getParticipant());
-    validateParticipantStatus(findParticipant);
+    validateParticipantStatus(findParticipant, PENDING);
     validateMeetingCreator(findUser, findMeeting);
     validateMeetingAndParticipant(findMeeting, findParticipant);
 
@@ -174,7 +184,7 @@ public class MeetingServiceImpl implements MeetingService {
     MeetingEntity findMeeting = findMeetingById(meetingId);
     MeetingParticipantEntity findParticipant = findParticipantById(participantId);
 
-    validateParticipantStatus(findParticipant);
+    validateParticipantStatus(findParticipant, PENDING);
     validateMeetingCreator(findUser, findMeeting);
     validateMeetingAndParticipant(findMeeting, findParticipant);
 
@@ -273,11 +283,24 @@ public class MeetingServiceImpl implements MeetingService {
     }
   }
 
-  // 현재 participant 상태가 pending인지 확인 (pending 상태에서만 승인, 거절 가능)
-  private void validateParticipantStatus(MeetingParticipantEntity findParticipant) {
-    if (findParticipant.getAdmissionStatus() != PENDING) {
-      throw new CustomException(MEETING_PARTICIPANT_STATUS_NOT_PENDING);
+  // 현재 participant 상태 확인
+  // (pending 상태에서만 승인, 거절 가능)
+  // (approval 상태에서만 캘린더 등록 가능
+  private void validateParticipantStatus(
+      MeetingParticipantEntity findParticipant, AdmissionStatus status
+  ) {
+    if (findParticipant.getAdmissionStatus() == status) {
+      return;
     }
+
+    if (status == PENDING) {
+      throw new CustomException(MEETING_PARTICIPANT_STATUS_NOT_PENDING);
+    } else if (status == APPROVAL) {
+      throw new CustomException(MEETING_PARTICIPANT_STATUS_NOT_APPROVAL);
+    } else {
+      throw new CustomException(MEETING_PARTICIPANT_STATUS_NOT_VALID);
+    }
+
   }
 
   // 해당 meeting과 participant 정보가 일치하는지 확인
@@ -286,5 +309,17 @@ public class MeetingServiceImpl implements MeetingService {
     if (findMeeting != findParticipant.getMeeting()) {
       throw new CustomException(MEETING_PARTICIPANT_AND_MEETING_NOT_MATCH);
     }
+  }
+
+
+  private String getAccessTokenValue(String authId) {
+    Oauth2AuthorizedClient oauth2AuthorizedClient = findOAuth2ClientById(authId);
+    byte[] accessTokenByte = oauth2AuthorizedClient.getAccessTokenValue();
+    return new String(accessTokenByte, StandardCharsets.UTF_8);
+  }
+
+  private Oauth2AuthorizedClient findOAuth2ClientById(String authId) {
+    return oauth2AuthorizedClientRepository.findById(Oauth2AuthorizedClientId.fromAuthId(authId))
+        .orElseThrow(() -> new CustomException(OAUTH2_CLIENT_NOT_FOUND));
   }
 }

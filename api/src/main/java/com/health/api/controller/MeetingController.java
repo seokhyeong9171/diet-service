@@ -156,4 +156,17 @@ public class MeetingController {
     return ResponseEntity.ok(SuccessResponse.of(demeritedUserAuthId));
   }
 
+  @PostMapping("/{meetingId}/participant/{participantId}/calender")
+  public ResponseEntity<?> addCalender(
+      @CookieValue("Authorization") String jwt, @PathVariable Long meetingId,
+      @PathVariable Long participantId
+  ) {
+
+    String authId = authValidatorComponent.validateAuthId(jwt);
+
+    meetingApplication.addCalender(authId, meetingId, participantId);
+
+    return ResponseEntity.ok(SuccessResponse.of("successfully added the event to calendar"));
+  }
+
 }

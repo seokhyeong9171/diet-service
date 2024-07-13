@@ -27,4 +27,6 @@ public interface MeetingService {
 
   Long cancelEnroll(String authId, Long meetingId, Long participantId);
 
+  void addCalender(String authId, Long meetingId, Long participantId);
+
 }

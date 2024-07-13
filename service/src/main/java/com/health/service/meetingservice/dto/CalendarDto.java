@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
-public class CalenderDto {
+public class CalendarDto {
 
   @Getter
   @AllArgsConstructor

@@ -9,10 +9,9 @@ import com.health.domain.entity.Oauth2AuthorizedClient;
 import com.health.domain.entity.Oauth2AuthorizedClientId;
 import com.health.domain.repository.Oauth2AuthorizedClientRepository;
 import com.health.domain.type.AdmissionStatus;
-import com.health.redisservice.annotation.KeyType;
 import com.health.redisservice.annotation.RedissonLock;
-import com.health.service.meetingservice.component.CalenderComponent;
-import com.health.service.meetingservice.dto.CalenderDto;
+import com.health.service.meetingservice.component.CalendarComponent;
+import com.health.service.meetingservice.dto.CalendarDto;
 import com.health.service.meetingservice.dto.MeetingServiceDto;
 import com.health.service.meetingservice.dto.MeetingParticipantServiceDto;
 import com.health.domain.entity.MeetingEntity;
@@ -26,9 +25,7 @@ import com.health.domain.repository.UserRepository;
 import com.health.domain.type.Region;
 import com.health.service.meetingservice.service.MeetingService;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +43,7 @@ public class MeetingServiceImpl implements MeetingService {
   private final MeetingParticipantRepository meetingParticipantRepository;
   private final Oauth2AuthorizedClientRepository oauth2AuthorizedClientRepository;
 
-  private final CalenderComponent calenderComponent;
+  private final CalendarComponent calendarComponent;
 
   private final RedissonClient redissonClient;
   private final HashOperations<String, String, Integer> hashOperations;
@@ -141,8 +138,8 @@ public class MeetingServiceImpl implements MeetingService {
     validateParticipantStatus(findParticipant, APPROVAL);
 
     String accessTokenValue = getAccessTokenValue(authId);
-    calenderComponent.addCalender
-        (accessTokenValue, CalenderDto.Request.fromMeetingEntity(findMeeting));
+    calendarComponent.addCalendar
+        (accessTokenValue, CalendarDto.Request.fromMeetingEntity(findMeeting));
   }
 
   @Override

@@ -16,10 +16,13 @@ import com.health.domain.repository.PostRepository;
 import com.health.domain.repository.PostViewRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.service.forumservice.service.PostService;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.connection.StringRedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -57,9 +60,13 @@ public class PostServiceImpl implements PostService {
     findUser.getPostList().add(savedPost);
 
     // Redis zSet에 넣어줌
-    ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
-    zSetOps.add(postLikeCountKey(), savedPost.getId().toString(), 0);
-    zSetOps.add(postViewCountKey(), savedPost.getId().toString(), 0);
+    redisTemplate.executePipelined((RedisCallback<?>) connection -> {
+
+      StringRedisConnection redisConnection = (StringRedisConnection) connection;
+      redisConnection.zAdd(postLikeCountKey(), 0, savedPost.getId().toString());
+      redisConnection.zAdd(postViewCountKey(), 0, savedPost.getId().toString());
+      return null;
+    });
 
     return PostServiceDto.fromEntity(savedPost);
   }
@@ -80,9 +87,6 @@ public class PostServiceImpl implements PostService {
   @Override
   public Long deletePost(String authId, Long postId) {
 
-    ZSetOperations<String, String> zSetOps = getZSetOps();
-    SetOperations<String, String> setOps = getSetOps();
-
     UserEntity findUser = findUserByAuthId(authId);
     PostEntity findPost = findPostById(postId);
 
@@ -92,11 +96,19 @@ public class PostServiceImpl implements PostService {
     commentRepository.deleteByPost(findPost);
     postRepository.delete(findPost);
 
-    zSetOps.remove(postLikeCountKey(), postId.toString());
-    zSetOps.remove(postViewCountKey(), postId.toString());
+    // Redis에서 해당 값 제거
+    redisTemplate.executePipelined((RedisCallback<?>) connection -> {
 
-    setOps.remove(userPostLikeKey(authId), postId);
-    setOps.remove(userPostViewKey(authId), postId);
+      StringRedisConnection redisConnection = (StringRedisConnection) connection;
+
+      redisConnection.zRem(postLikeCountKey(), postId.toString());
+      redisConnection.zRem(postViewCountKey(), postId.toString());
+
+      redisConnection.sRem(userPostLikeKey(authId), postId.toString());
+      redisConnection.sRem(userPostViewKey(authId), postId.toString());
+
+      return null;
+    });
 
     return findPost.getId();
   }
@@ -130,15 +142,20 @@ public class PostServiceImpl implements PostService {
     UserEntity findUser = findUserByAuthId(authId);
     PostEntity findPost = findPostById(postId);
 
-    SetOperations<String, String> setOps = getSetOps();
-
     // 처음 조회한 유저일 경우 유저 조회 게시글 추가 & 게시글 조회수 증가
     if (!isContainsRedisSetValue(userPostViewKey(authId), postId.toString())) {
 
       postViewRepository.save(PostViewEntity.createNew(findUser, findPost));
 
-      setOps.add(userPostViewKey(authId), postId.toString());
-      getZSetOps().incrementScore(postViewCountKey(), postId.toString(), 1);
+      redisTemplate.executePipelined((RedisCallback<?>) connection -> {
+
+        StringRedisConnection redisConnection = (StringRedisConnection) connection;
+
+        redisConnection.sAdd(userPostViewKey(authId), postId.toString());
+        redisConnection.zIncrBy(postViewCountKey(), 1, postId.toString());
+
+        return null;
+      });
     }
 
     return PostServiceDto.fromEntity(findPost);
@@ -146,9 +163,6 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public Integer postAddLike(String authId, Long postId) {
-
-    SetOperations<String, String> setOps = getSetOps();
-    ZSetOperations<String, String> zSetOps = getZSetOps();
 
     // 이미 해당 유저가 해당 게시글에 좋아요를 누른 상태인지 확인
     validateAlreadyLike(authId, postId);
@@ -158,25 +172,38 @@ public class PostServiceImpl implements PostService {
 
     postLikeRepository.save(PostLikeEntity.createNew(findUser, findPost));
 
-    setOps.add(userPostLikeKey(authId), postId.toString());
-    zSetOps.incrementScore(postLikeCountKey(), postId.toString(), 1);
+    List<Object> result = redisTemplate.executePipelined((RedisCallback<?>) connection -> {
 
-    return Objects.requireNonNull(zSetOps.score(postLikeCountKey(), postId)).intValue();
+      StringRedisConnection redisConnection = (StringRedisConnection) connection;
+      redisConnection.sAdd(userPostLikeKey(authId), postId.toString());
+      redisConnection.zIncrBy(postLikeCountKey(), 1, postId.toString());
+      // 반환할 좋아요 갯수 조회
+      redisConnection.zScore(postLikeCountKey(), postId.toString());
+
+      return null;
+    });
+
+    return Integer.valueOf((String) result.getLast());
   }
 
   @Override
   public Integer postUnLike(String authId, Long postId) {
 
-    SetOperations<String, String> setOps = getSetOps();
-    ZSetOperations<String, String> zSetOps = getZSetOps();
-
     // 해당 유저가 해당 게시글에 좋아요 한 상태인지 확인
     validateNotLike(authId, postId);
 
-    setOps.remove(userPostLikeKey(authId), postId);
-    zSetOps.incrementScore(postLikeCountKey(), postId.toString(), -1);
+    List<Object> result = redisTemplate.executePipelined((RedisCallback<?>) connection -> {
 
-    return Objects.requireNonNull(zSetOps.score(postLikeCountKey(), postId)).intValue();
+      StringRedisConnection redisConnection = (StringRedisConnection) connection;
+      redisConnection.sRem(userPostLikeKey(authId), postId.toString());
+      redisConnection.zIncrBy(postLikeCountKey(), -1, postId.toString());
+      // 반환할 좋아요 갯수 조회
+      redisConnection.zScore(postLikeCountKey(), postId.toString());
+
+      return null;
+    });
+
+    return Integer.valueOf((String) result.getLast());
   }
 
   private UserEntity findUserByAuthId(String authId) {

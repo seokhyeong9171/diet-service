@@ -226,10 +226,6 @@ public class PostServiceImpl implements PostService {
     return redisTemplate.opsForSet();
   }
 
-  private ZSetOperations<String, String> getZSetOps() {
-    return redisTemplate.opsForZSet();
-  }
-
   private void validateRedisNotNull(Double value) {
     if (value == null) {
       throw new CustomException(REDIS_OBJECT_NOT_EXIST);

@@ -17,7 +17,6 @@ import com.health.domain.repository.PostViewRepository;
 import com.health.domain.repository.UserRepository;
 import com.health.service.forumservice.service.PostService;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +24,6 @@ import org.springframework.data.redis.connection.StringRedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +61,8 @@ public class PostServiceImpl implements PostService {
     redisTemplate.executePipelined((RedisCallback<?>) connection -> {
 
       StringRedisConnection redisConnection = (StringRedisConnection) connection;
-      redisConnection.zAdd(postLikeCountKey(), 0, savedPost.getId().toString());
-      redisConnection.zAdd(postViewCountKey(), 0, savedPost.getId().toString());
+      addPostInitialVal(redisConnection, postLikeCountKey(), savedPost);
+      addPostInitialVal(redisConnection, postViewCountKey(), savedPost);
       return null;
     });
 
@@ -152,7 +150,7 @@ public class PostServiceImpl implements PostService {
         StringRedisConnection redisConnection = (StringRedisConnection) connection;
 
         redisConnection.sAdd(userPostViewKey(authId), postId.toString());
-        redisConnection.zIncrBy(postViewCountKey(), 1, postId.toString());
+        plusPostZSetVal(redisConnection, postId);
 
         return null;
       });
@@ -176,7 +174,7 @@ public class PostServiceImpl implements PostService {
 
       StringRedisConnection redisConnection = (StringRedisConnection) connection;
       redisConnection.sAdd(userPostLikeKey(authId), postId.toString());
-      redisConnection.zIncrBy(postLikeCountKey(), 1, postId.toString());
+      plusPostZSetVal(redisConnection, postId);
       // 반환할 좋아요 갯수 조회
       redisConnection.zScore(postLikeCountKey(), postId.toString());
 
@@ -196,7 +194,7 @@ public class PostServiceImpl implements PostService {
 
       StringRedisConnection redisConnection = (StringRedisConnection) connection;
       redisConnection.sRem(userPostLikeKey(authId), postId.toString());
-      redisConnection.zIncrBy(postLikeCountKey(), -1, postId.toString());
+      minusPostZSetVal(redisConnection, postId);
       // 반환할 좋아요 갯수 조회
       redisConnection.zScore(postLikeCountKey(), postId.toString());
 
@@ -216,14 +214,27 @@ public class PostServiceImpl implements PostService {
         .orElseThrow(() -> new CustomException(POST_NOT_FOUND));
   }
 
+  private SetOperations<String, String> getSetOps() {
+    return redisTemplate.opsForSet();
+  }
+
+  private void addPostInitialVal
+      (StringRedisConnection redisConnection, String key, PostEntity savedPost) {
+    redisConnection.zAdd(key, 0, savedPost.getId().toString());
+  }
+
+  private void plusPostZSetVal(StringRedisConnection redisConnection, Long postId) {
+    redisConnection.zIncrBy(postViewCountKey(), 1, postId.toString());
+  }
+
+  private void minusPostZSetVal(StringRedisConnection redisConnection, Long postId) {
+    redisConnection.zIncrBy(postLikeCountKey(), -1, postId.toString());
+  }
+
   private void validateCreatedUser(UserEntity findUser, PostEntity findPost) {
     if (findUser != findPost.getCreateUser()) {
       throw new CustomException(POST_NOT_CREATE_USER);
     }
-  }
-
-  private SetOperations<String, String> getSetOps() {
-    return redisTemplate.opsForSet();
   }
 
   private void validateRedisNotNull(Double value) {

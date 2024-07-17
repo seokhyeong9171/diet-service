@@ -3,12 +3,12 @@ package com.health.api.controller;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 import static org.springframework.http.HttpStatus.CREATED;
 
-import com.health.api.form.MealForm;
 import com.health.api.application.MealApplication;
+import com.health.api.form.MealForm;
 import com.health.api.model.SuccessResponse;
+import com.health.security.authentication.AuthValidatorComponent;
 import com.health.service.mealservice.dto.MealServiceDto;
 import com.health.service.mealservice.response.MealInfoResponse;
-import com.health.security.authentication.AuthValidatorComponent;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

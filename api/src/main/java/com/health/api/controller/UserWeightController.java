@@ -2,12 +2,12 @@ package com.health.api.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
-import com.health.api.form.UserWeightForm;
 import com.health.api.application.UserWeightApplication;
+import com.health.api.form.UserWeightForm;
 import com.health.api.model.SuccessResponse;
+import com.health.security.authentication.AuthValidatorComponent;
 import com.health.service.userservice.dto.UserWeightServiceDto;
 import com.health.service.userservice.response.UserWeightResponse;
-import com.health.security.authentication.AuthValidatorComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

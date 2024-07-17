@@ -2,7 +2,6 @@ package com.health.elasticservice.service;
 
 import com.health.elasticservice.dto.FoodElasticDto;
 import com.health.elasticservice.repository.FoodElasticRepository;
-import java.util.Iterator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

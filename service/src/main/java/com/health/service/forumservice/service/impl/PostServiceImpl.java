@@ -1,20 +1,28 @@
 package com.health.service.forumservice.service.impl;
 
-import static com.health.domain.exception.ErrorCode.*;
-import static com.health.redisservice.component.RedisKeyComponent.*;
+import static com.health.domain.exception.ErrorCode.POST_LIKE_ALREADY_EXIST;
+import static com.health.domain.exception.ErrorCode.POST_LIKE_NOT_EXIST;
+import static com.health.domain.exception.ErrorCode.POST_NOT_CREATE_USER;
+import static com.health.domain.exception.ErrorCode.POST_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.REDIS_OBJECT_NOT_EXIST;
+import static com.health.domain.exception.ErrorCode.USER_NOT_FOUND;
+import static com.health.redisservice.component.RedisKeyComponent.postLikeCountKey;
+import static com.health.redisservice.component.RedisKeyComponent.postViewCountKey;
+import static com.health.redisservice.component.RedisKeyComponent.userPostLikeKey;
+import static com.health.redisservice.component.RedisKeyComponent.userPostViewKey;
 
-import com.health.domain.exception.CustomException;
-import com.health.service.forumservice.dto.PostServiceDto;
 import com.health.domain.entity.PostEntity;
 import com.health.domain.entity.PostLikeEntity;
 import com.health.domain.entity.PostViewEntity;
 import com.health.domain.entity.UserEntity;
-import com.health.service.forumservice.form.PostServiceForm;
+import com.health.domain.exception.CustomException;
 import com.health.domain.repository.CommentRepository;
 import com.health.domain.repository.PostLikeRepository;
 import com.health.domain.repository.PostRepository;
 import com.health.domain.repository.PostViewRepository;
 import com.health.domain.repository.UserRepository;
+import com.health.service.forumservice.dto.PostServiceDto;
+import com.health.service.forumservice.form.PostServiceForm;
 import com.health.service.forumservice.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.health.service.meetingservice.response;
 
-import com.health.service.meetingservice.dto.MeetingParticipantServiceDto;
 import com.health.domain.type.AdmissionStatus;
+import com.health.service.meetingservice.dto.MeetingParticipantServiceDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

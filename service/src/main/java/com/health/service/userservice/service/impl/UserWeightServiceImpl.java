@@ -1,17 +1,20 @@
 package com.health.service.userservice.service.impl;
 
-import static com.health.domain.exception.ErrorCode.*;
+import static com.health.domain.exception.ErrorCode.USER_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.WEIGHT_RECORD_ALREADY_POSTED;
+import static com.health.domain.exception.ErrorCode.WEIGHT_RECORD_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.WEIGHT_RECORD_NOT_OWNED_USER;
 
-import com.health.service.userservice.dto.UserWeightServiceDto;
-import com.health.service.userservice.form.UserWeightServiceForm;
-import com.health.service.userservice.service.UserWeightService;
-import com.health.service.userservice.type.Scope;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.entity.UserWeightEntity;
 import com.health.domain.exception.CustomException;
 import com.health.domain.repository.UserRepository;
 import com.health.domain.repository.UserWeightRepository;
 import com.health.domain.repository.query.UserWeightQueryRepository;
+import com.health.service.userservice.dto.UserWeightServiceDto;
+import com.health.service.userservice.form.UserWeightServiceForm;
+import com.health.service.userservice.service.UserWeightService;
+import com.health.service.userservice.type.Scope;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

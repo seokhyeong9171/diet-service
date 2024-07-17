@@ -1,9 +1,9 @@
 package com.health.api.application;
 
 import com.health.api.form.MeetingForm;
-import com.health.service.meetingservice.dto.MeetingServiceDto;
-import com.health.service.meetingservice.dto.MeetingParticipantServiceDto;
 import com.health.domain.type.Region;
+import com.health.service.meetingservice.dto.MeetingParticipantServiceDto;
+import com.health.service.meetingservice.dto.MeetingServiceDto;
 import com.health.service.meetingservice.service.MeetingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

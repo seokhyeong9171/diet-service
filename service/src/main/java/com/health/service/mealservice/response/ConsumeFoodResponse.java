@@ -1,8 +1,8 @@
 package com.health.service.mealservice.response;
 
+import com.health.domain.type.ConsumeAmount;
 import com.health.service.mealservice.dto.ConsumeFoodServiceDto;
 import com.health.service.mealservice.dto.NutrientServiceDto;
-import com.health.domain.type.ConsumeAmount;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package com.health.service.mealservice.service.impl;
 
-import com.health.elasticservice.dto.FoodElasticDto;
 import com.health.domain.entity.FoodEntity;
 import com.health.domain.repository.FoodRepository;
+import com.health.elasticservice.dto.FoodElasticDto;
 import com.health.elasticservice.service.FoodElasticService;
 import com.health.service.mealservice.component.FoodPublicDataComponent;
 import com.health.service.mealservice.dto.FoodPublicDataDto;

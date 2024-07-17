@@ -1,18 +1,23 @@
 package com.health.service.mealservice.service.impl;
 
-import static com.health.domain.exception.ErrorCode.*;
+import static com.health.domain.exception.ErrorCode.CONSUME_FOOD_AND_MEAL_UN_MATCH;
+import static com.health.domain.exception.ErrorCode.CONSUME_FOOD_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.DAILY_MEAL_AND_DT_UN_MATCH;
+import static com.health.domain.exception.ErrorCode.FOOD_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.MEAL_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.MEAL_USER_INVALID;
 
-import com.health.service.mealservice.dto.ConsumeFoodServiceDto;
 import com.health.domain.entity.ConsumeFoodEntity;
 import com.health.domain.entity.DailyMealEntity;
 import com.health.domain.entity.FoodEntity;
 import com.health.domain.entity.MealEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.exception.CustomException;
-import com.health.service.mealservice.form.FoodServiceForm;
 import com.health.domain.repository.ConsumeFoodRepository;
 import com.health.domain.repository.FoodRepository;
 import com.health.domain.repository.MealRepository;
+import com.health.service.mealservice.dto.ConsumeFoodServiceDto;
+import com.health.service.mealservice.form.FoodServiceForm;
 import com.health.service.mealservice.service.ConsumeFoodService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;

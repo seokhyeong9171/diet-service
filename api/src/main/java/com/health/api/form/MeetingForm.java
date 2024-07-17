@@ -1,7 +1,7 @@
 package com.health.api.form;
 
-import com.health.service.meetingservice.form.MeetingServiceForm;
 import com.health.domain.type.Region;
+import com.health.service.meetingservice.form.MeetingServiceForm;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

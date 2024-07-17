@@ -2,13 +2,13 @@ package com.health.api.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
-import com.health.api.form.CommentForm;
 import com.health.api.application.CommentApplication;
+import com.health.api.form.CommentForm;
 import com.health.api.model.SuccessResponse;
+import com.health.security.authentication.AuthValidatorComponent;
 import com.health.service.forumservice.dto.CommentServiceDto;
 import com.health.service.forumservice.response.CommentListResponse;
 import com.health.service.forumservice.response.CommentListResponse.CommentInfo;
-import com.health.security.authentication.AuthValidatorComponent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

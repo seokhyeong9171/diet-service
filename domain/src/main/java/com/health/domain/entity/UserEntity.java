@@ -5,7 +5,6 @@ import com.health.domain.form.UserNicknameDomainForm;
 import com.health.domain.type.Gender;
 import com.health.domain.type.Region;
 import com.health.domain.type.RoleType;
-import com.health.domain.util.NicknameUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

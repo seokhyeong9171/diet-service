@@ -2,15 +2,15 @@ package com.health.api.controller;
 
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 
+import com.health.api.application.UserInfoApplication;
 import com.health.api.form.UserDetailsForm;
 import com.health.api.form.UserNicknameForm;
-import com.health.api.application.UserInfoApplication;
 import com.health.api.model.SuccessResponse;
-import com.health.service.userservice.dto.UserServiceDto;
+import com.health.security.authentication.AuthValidatorComponent;
 import com.health.service.mealservice.response.IntakeResponse;
 import com.health.service.userservice.dto.IntakeServiceDto;
+import com.health.service.userservice.dto.UserServiceDto;
 import com.health.service.userservice.response.UserInfoResponse;
-import com.health.security.authentication.AuthValidatorComponent;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;

@@ -1,7 +1,7 @@
 package com.health.api.form;
 
-import com.health.service.mealservice.form.FoodServiceForm;
 import com.health.domain.type.ConsumeAmount;
+import com.health.service.mealservice.form.FoodServiceForm;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

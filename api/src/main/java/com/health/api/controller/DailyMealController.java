@@ -5,9 +5,9 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 import com.health.api.application.DailyMealApplication;
 import com.health.api.model.SuccessResponse;
+import com.health.security.authentication.AuthValidatorComponent;
 import com.health.service.mealservice.dto.DailyMealServiceDto;
 import com.health.service.mealservice.response.DailyMealResponse;
-import com.health.security.authentication.AuthValidatorComponent;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

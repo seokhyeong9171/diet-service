@@ -1,8 +1,8 @@
 package com.health.service.meetingservice.response;
 
-import com.health.service.meetingservice.dto.MeetingServiceDto;
 import com.health.domain.entity.GeoInformation;
 import com.health.domain.type.MeetingStatus;
+import com.health.service.meetingservice.dto.MeetingServiceDto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

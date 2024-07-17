@@ -1,7 +1,7 @@
 package com.health.security.authentication;
 
 
-import static com.health.domain.exception.ErrorCode.*;
+import static com.health.domain.exception.ErrorCode.USER_INVALID_ACCESS;
 
 import com.health.domain.exception.CustomException;
 import com.health.security.jwt.JwtComponent;

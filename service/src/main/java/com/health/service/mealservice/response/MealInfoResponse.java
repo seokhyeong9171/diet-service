@@ -1,8 +1,8 @@
 package com.health.service.mealservice.response;
 
+import com.health.domain.type.MealType;
 import com.health.service.mealservice.dto.MealServiceDto;
 import com.health.service.mealservice.dto.NutrientServiceDto;
-import com.health.domain.type.MealType;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

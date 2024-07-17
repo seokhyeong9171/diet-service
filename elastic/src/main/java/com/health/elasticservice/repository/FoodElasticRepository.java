@@ -1,11 +1,9 @@
 package com.health.elasticservice.repository;
 
 import com.health.elasticservice.dto.FoodElasticDto;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

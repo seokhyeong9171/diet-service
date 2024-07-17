@@ -1,18 +1,19 @@
 package com.health.service.userservice.service.impl;
 
-import static com.health.domain.exception.ErrorCode.*;
+import static com.health.domain.exception.ErrorCode.USER_NICKNAME_DUPLICATED;
+import static com.health.domain.exception.ErrorCode.USER_NOT_FOUND;
 
+import com.health.domain.entity.DailyMealEntity;
+import com.health.domain.entity.UserEntity;
+import com.health.domain.exception.CustomException;
+import com.health.domain.repository.DailyMealRepository;
+import com.health.domain.repository.UserRepository;
+import com.health.service.userservice.dto.IntakeServiceDto;
 import com.health.service.userservice.dto.UserServiceDto;
 import com.health.service.userservice.form.UserDetailsServiceForm;
 import com.health.service.userservice.form.UserNicknameServiceForm;
 import com.health.service.userservice.service.UserInfoService;
 import com.health.service.userservice.util.UserCalorieUtil;
-import com.health.domain.entity.DailyMealEntity;
-import com.health.domain.entity.UserEntity;
-import com.health.domain.exception.CustomException;
-import com.health.service.userservice.dto.IntakeServiceDto;
-import com.health.domain.repository.DailyMealRepository;
-import com.health.domain.repository.UserRepository;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;

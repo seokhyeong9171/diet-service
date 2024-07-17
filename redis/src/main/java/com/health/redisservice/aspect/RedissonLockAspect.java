@@ -1,7 +1,8 @@
 package com.health.redisservice.aspect;
 
-import static com.health.domain.exception.ErrorCode.*;
-import static com.health.redisservice.component.RedisKeyComponent.*;
+import static com.health.domain.exception.ErrorCode.REDIS_LOCK_KEY_INVALID;
+import static com.health.domain.exception.ErrorCode.REDIS_LOCK_TIMEOUT;
+import static com.health.redisservice.component.RedisKeyComponent.meetingEnrollRock;
 
 import com.health.domain.exception.CustomException;
 import com.health.redisservice.annotation.KeyType;

@@ -1,9 +1,8 @@
 package com.health.service.meetingservice.component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.health.service.meetingservice.client.NaverCalendarClient;
 import com.health.service.meetingservice.dto.CalendarDto;
-import com.health.service.meetingservice.dto.CalendarDto.*;
+import com.health.service.meetingservice.dto.CalendarDto.Request;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;

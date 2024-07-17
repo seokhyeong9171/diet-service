@@ -1,16 +1,23 @@
 package com.health.service.forumservice.service.impl;
 
-import static com.health.domain.exception.ErrorCode.*;
+import static com.health.domain.exception.ErrorCode.COMMENT_AND_POST_NOT_MATCH;
+import static com.health.domain.exception.ErrorCode.COMMENT_AND_USER_NOT_MATCH;
+import static com.health.domain.exception.ErrorCode.COMMENT_CHILD_AND_PARENT_NOT_MATCH;
+import static com.health.domain.exception.ErrorCode.COMMENT_IS_CHILD;
+import static com.health.domain.exception.ErrorCode.COMMENT_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.COMMENT_PARENT_DELETED;
+import static com.health.domain.exception.ErrorCode.POST_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.USER_NOT_FOUND;
 
-import com.health.domain.exception.CustomException;
-import com.health.service.forumservice.dto.CommentServiceDto;
 import com.health.domain.entity.CommentEntity;
 import com.health.domain.entity.PostEntity;
 import com.health.domain.entity.UserEntity;
-import com.health.service.forumservice.form.CommentServiceForm;
+import com.health.domain.exception.CustomException;
 import com.health.domain.repository.CommentRepository;
 import com.health.domain.repository.PostRepository;
 import com.health.domain.repository.UserRepository;
+import com.health.service.forumservice.dto.CommentServiceDto;
+import com.health.service.forumservice.form.CommentServiceForm;
 import com.health.service.forumservice.service.CommentService;
 import java.util.Comparator;
 import java.util.List;

@@ -2,8 +2,8 @@ package com.health.api.application;
 
 import com.health.api.form.UserDetailsForm;
 import com.health.api.form.UserNicknameForm;
-import com.health.service.userservice.dto.UserServiceDto;
 import com.health.service.userservice.dto.IntakeServiceDto;
+import com.health.service.userservice.dto.UserServiceDto;
 import com.health.service.userservice.service.UserInfoService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;

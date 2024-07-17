@@ -1,8 +1,8 @@
 package com.health.service.userservice.response;
 
-import com.health.service.userservice.dto.UserServiceDto;
 import com.health.domain.type.Gender;
 import com.health.domain.type.Region;
+import com.health.service.userservice.dto.UserServiceDto;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

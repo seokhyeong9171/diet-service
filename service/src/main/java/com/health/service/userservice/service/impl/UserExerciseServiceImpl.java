@@ -1,15 +1,19 @@
 package com.health.service.userservice.service.impl;
 
-import static com.health.domain.exception.ErrorCode.*;
+import static com.health.domain.exception.ErrorCode.EXERCISE_RECORD_ALREADY_POSTED;
+import static com.health.domain.exception.ErrorCode.EXERCISE_RECORD_EXCEED_DELETE_DATE;
+import static com.health.domain.exception.ErrorCode.EXERCISE_RECORD_NOT_FOUND;
+import static com.health.domain.exception.ErrorCode.EXERCISE_RECORD_NOT_OWNED_USER;
+import static com.health.domain.exception.ErrorCode.USER_NOT_FOUND;
 
-import com.health.service.userservice.service.UserExerciseService;
-import com.health.service.userservice.dto.ExerciseRecordServiceDto;
 import com.health.domain.entity.ExerciseRecordEntity;
 import com.health.domain.entity.UserEntity;
 import com.health.domain.exception.CustomException;
-import com.health.service.userservice.form.ExerciseRecordServiceForm;
 import com.health.domain.repository.ExerciseRecordRepository;
 import com.health.domain.repository.UserRepository;
+import com.health.service.userservice.dto.ExerciseRecordServiceDto;
+import com.health.service.userservice.form.ExerciseRecordServiceForm;
+import com.health.service.userservice.service.UserExerciseService;
 import java.time.LocalDate;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;

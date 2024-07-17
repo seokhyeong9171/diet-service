@@ -27,7 +27,7 @@ public class FoodPublicDataComponent {
     FoodPublicDataMap jsonMap =
         foodPublicDataClient.getFoodList(serviceKey, pageNum, 100, "json").getBody();
 
-//    log.info("{}", pageNum);
+    log.info("{}", pageNum);
 
     return getFoodDto(jsonMap);
   }
@@ -46,7 +46,12 @@ public class FoodPublicDataComponent {
 
   private Integer getNutrientValue(String str) {
 
-    return Integer.parseInt(str.isEmpty() || str.isBlank() ? "0" : str);
+    try {
+      return Integer.parseInt(str.isEmpty() || str.isBlank() ? "0" : str);
+
+    } catch (RuntimeException e) {
+      return 0;
+    }
   }
 
   private Integer getAmountValue(String str) {
@@ -57,14 +62,20 @@ public class FoodPublicDataComponent {
       str = str.replaceAll("[^0-9]", "");
     }
 
-    // 총 중량 데이터 없는 식품들은 100g당 열량 데이터만 들어 있음으로 중량을 100으로 설정
-    return Integer.parseInt(str.isEmpty() || str.isBlank() ? "100" : str);
+    try {
+
+      // 총 중량 데이터 없는 식품들은 100g당 열량 데이터만 들어 있음으로 중량을 100으로 설정
+      return Integer.parseInt(str.isEmpty() || str.isBlank() ? "100" : str);
+    } catch (RuntimeException e) {
+      return 0;
+    }
   }
 
   private ItemDto convertValueFromItem(Item item) {
     String code = item.getFoodCode();
     String name = item.getName();
-    log.info("{}", name);
+//    log.info("{}",/ name);
+
 
     Integer weight = getAmountValue(item.getWeight());
     Integer kcal = getNutrientValue(item.getKCal());

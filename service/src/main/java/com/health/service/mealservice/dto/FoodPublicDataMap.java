@@ -1,5 +1,6 @@
 package com.health.service.mealservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.health.service.mealservice.type.FoodPublicDataConst;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FoodPublicDataMap {
 
   private Body body;
@@ -22,6 +24,7 @@ public class FoodPublicDataMap {
   @AllArgsConstructor
   @NoArgsConstructor
   @Builder
+  @JsonIgnoreProperties(ignoreUnknown = true)
   public static class Body {
 
       private Integer pageNo;
@@ -35,6 +38,7 @@ public class FoodPublicDataMap {
   @AllArgsConstructor
   @NoArgsConstructor
   @Builder
+  @JsonIgnoreProperties(ignoreUnknown = true)
   public static class Item {
 
     @JsonProperty(value = FoodPublicDataConst.CODE)

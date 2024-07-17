@@ -26,7 +26,7 @@ public class FoodPublicDataServiceImpl implements FoodDataService {
     // 공공데이터에서 한번에 식품 정보 최대 100개 까지 가져올 수 있음
     int index = 1;
 
-    while (true) {
+    while (index <= 307) {
 
       List<FoodPublicDataDto> foodInfoList = foodPublicDataComponent.getApiDtoList(index++);
 
